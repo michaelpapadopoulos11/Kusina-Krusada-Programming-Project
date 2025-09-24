@@ -3,8 +3,8 @@ using UnityEngine;
 public class PathSpawner : MonoBehaviour
 {
     public GameObject pathPrefab;
-    public float segmentLength = 200f;
-    public float fixedX = -6f;
+    public float segmentLength = 160f;
+    public float fixedX = -5f;
 
     [SerializeField] Transform parentRef;
 
