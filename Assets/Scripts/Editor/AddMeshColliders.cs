@@ -66,7 +66,7 @@ public static class AddMeshColliders
             {
                 var mc = mf.gameObject.AddComponent<MeshCollider>();
                 mc.sharedMesh = mf.sharedMesh;   // important so it sticks after reload
-                mc.convex = false;               // floors/props usually static
+                mc.convex = true;               // floors/props usually static
                 count++;
             }
         }

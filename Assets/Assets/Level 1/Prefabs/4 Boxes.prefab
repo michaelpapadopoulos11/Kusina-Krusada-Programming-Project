@@ -136,7 +136,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5495902117074765545, guid: 608d50fefb2a646eb917f7f57b5d12c1, type: 3}
 --- !u!1 &445002015701788319
@@ -336,7 +336,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5495902117074765545, guid: 608d50fefb2a646eb917f7f57b5d12c1, type: 3}
 --- !u!1 &734196410223362551
@@ -442,7 +442,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5943450190534595064, guid: 103d89eb518064394b0e5c748d37c228, type: 3}
 --- !u!1 &902245835583022071
@@ -473,7 +473,7 @@ Transform:
   m_GameObject: {fileID: 902245835583022071}
   serializedVersion: 2
   m_LocalRotation: {x: -0.6684471, y: -0.11810373, z: -0.712243, w: 0.1787174}
-  m_LocalPosition: {x: -0.02, y: 0.16, z: -0.077960394}
+  m_LocalPosition: {x: -0.151, y: 0.325, z: -0.078}
   m_LocalScale: {x: 112.23289, y: 112.23289, z: 112.232895}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -548,7 +548,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 6168717298575975143, guid: 9820ee8a472b9426ea8a80d6cb1405b7, type: 3}
 --- !u!1 &1295299180313455963
@@ -560,7 +560,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 490607529801839817}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -576,7 +576,7 @@ Transform:
   m_GameObject: {fileID: 1295299180313455963}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 16.86177, y: 1.5938964, z: -18.747942}
+  m_LocalPosition: {x: 16.86177, y: 1, z: -18.747942}
   m_LocalScale: {x: 0.9858914, y: 1, z: 0.8102543}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -689,7 +689,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5495902117074765545, guid: 608d50fefb2a646eb917f7f57b5d12c1, type: 3}
 --- !u!1 &2373319978195114082
@@ -858,7 +858,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 872229124322122809, guid: 103d89eb518064394b0e5c748d37c228, type: 3}
 --- !u!1 &2733345466394804270
@@ -964,7 +964,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 6168717298575975143, guid: 9820ee8a472b9426ea8a80d6cb1405b7, type: 3}
 --- !u!1 &2817809858592315767
@@ -1134,7 +1134,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -4195455637888057248, guid: 103d89eb518064394b0e5c748d37c228, type: 3}
 --- !u!1 &3267153364551135874
@@ -1240,7 +1240,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 6168717298575975143, guid: 9820ee8a472b9426ea8a80d6cb1405b7, type: 3}
 --- !u!1 &3399977908475836375
@@ -1474,7 +1474,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5495902117074765545, guid: 608d50fefb2a646eb917f7f57b5d12c1, type: 3}
 --- !u!1 &4912052139613255533
@@ -1996,8 +1996,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 490607529801839817}
   m_Father: {fileID: 0}

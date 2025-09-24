@@ -1114,7 +1114,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7299977148544493664}
-  - component: {fileID: 3238620595125316815}
+  - component: {fileID: 66586324749478521}
   m_Layer: 0
   m_Name: Path Piece
   m_TagString: Untagged
@@ -1139,7 +1139,7 @@ Transform:
   - {fileID: 3181877196422039298}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3238620595125316815
+--- !u!114 &66586324749478521
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1161,26 +1161,61 @@ MonoBehaviour:
   blockMask:
     serializedVersion: 2
     m_Bits: 384
-  prefabs:
-  - {fileID: 7764598174403330695, guid: d793b810c4013b94e9b3d0a0fe5abb8a, type: 3}
-  - {fileID: 9137851649070517915, guid: 171635f3e95ae9d40bc139bc437ce771, type: 3}
-  - {fileID: 6081072071195679987, guid: 7e3279bf076862844b86814a10809415, type: 3}
-  - {fileID: 1124804753257479041, guid: 8fea14c64b2bc824fa945b7acf3a1c18, type: 3}
-  - {fileID: 6081072071195679987, guid: 7e3279bf076862844b86814a10809415, type: 3}
-  - {fileID: 9111225761695742242, guid: cc252373af488104eacfd0f4f55dacbe, type: 3}
-  - {fileID: 5169287712031289468, guid: f35a9e7f693a23c46abe8925b5302578, type: 3}
-  - {fileID: 6670537419902794720, guid: 30a1750b45c9c8e45b09ad6e689bae96, type: 3}
-  - {fileID: 3419747268391917721, guid: 76217a0eed0ce81468def0dd3bc43d4f, type: 3}
-  - {fileID: 3132650737213663226, guid: 1725c91206560244bbbef1bbdd833cb1, type: 3}
-  - {fileID: 1321352716879233883, guid: 1b5fc9f4306a79248809fff0f0c429be, type: 3}
-  - {fileID: 2865854401601348665, guid: 0f11f32e8735e8c488d680cbae128ecc, type: 3}
+  props:
+  - prefab: {fileID: 2281835894480980036, guid: bdad9a0623d488c43bf0dd0155d23631,
+      type: 3}
+    weight: 3
+  - prefab: {fileID: 2865854401601348665, guid: 0f11f32e8735e8c488d680cbae128ecc,
+      type: 3}
+    weight: 3
+  - prefab: {fileID: 1124804753257479041, guid: 8fea14c64b2bc824fa945b7acf3a1c18,
+      type: 3}
+    weight: 3
+  - prefab: {fileID: 7764598174403330695, guid: d793b810c4013b94e9b3d0a0fe5abb8a,
+      type: 3}
+    weight: 1
+  - prefab: {fileID: 9137851649070517915, guid: 171635f3e95ae9d40bc139bc437ce771,
+      type: 3}
+    weight: 1
+  - prefab: {fileID: 895502770539266121, guid: 23935583cdb6cef4da7de830b6bc07dd, type: 3}
+    weight: 1
+  - prefab: {fileID: 3132650737213663226, guid: 1725c91206560244bbbef1bbdd833cb1,
+      type: 3}
+    weight: 1
+  - prefab: {fileID: 1321352716879233883, guid: 1b5fc9f4306a79248809fff0f0c429be,
+      type: 3}
+    weight: 1
+  - prefab: {fileID: 9111225761695742242, guid: cc252373af488104eacfd0f4f55dacbe,
+      type: 3}
+    weight: 1
+  - prefab: {fileID: 5169287712031289468, guid: f35a9e7f693a23c46abe8925b5302578,
+      type: 3}
+    weight: 1
+  - prefab: {fileID: 6670537419902794720, guid: 30a1750b45c9c8e45b09ad6e689bae96,
+      type: 3}
+    weight: 1
+  - prefab: {fileID: 3419747268391917721, guid: 76217a0eed0ce81468def0dd3bc43d4f,
+      type: 3}
+    weight: 1
+  legacyPrefabs:
   - {fileID: 2281835894480980036, guid: bdad9a0623d488c43bf0dd0155d23631, type: 3}
-  minPerSide: 3
-  maxPerSide: 6
+  - {fileID: 2865854401601348665, guid: 0f11f32e8735e8c488d680cbae128ecc, type: 3}
+  - {fileID: 1321352716879233883, guid: 1b5fc9f4306a79248809fff0f0c429be, type: 3}
+  - {fileID: 3132650737213663226, guid: 1725c91206560244bbbef1bbdd833cb1, type: 3}
+  - {fileID: 3419747268391917721, guid: 76217a0eed0ce81468def0dd3bc43d4f, type: 3}
+  - {fileID: 6670537419902794720, guid: 30a1750b45c9c8e45b09ad6e689bae96, type: 3}
+  - {fileID: 5169287712031289468, guid: f35a9e7f693a23c46abe8925b5302578, type: 3}
+  - {fileID: 9111225761695742242, guid: cc252373af488104eacfd0f4f55dacbe, type: 3}
+  - {fileID: 1124804753257479041, guid: 8fea14c64b2bc824fa945b7acf3a1c18, type: 3}
+  - {fileID: 895502770539266121, guid: 23935583cdb6cef4da7de830b6bc07dd, type: 3}
+  - {fileID: 9137851649070517915, guid: 171635f3e95ae9d40bc139bc437ce771, type: 3}
+  - {fileID: 7764598174403330695, guid: d793b810c4013b94e9b3d0a0fe5abb8a, type: 3}
+  minPerSide: 4
+  maxPerSide: 8
   rayStartAbove: 3
   yOffset: 0.02
-  avoidRadius: 1
-  maxAttempts: 200
+  avoidRadius: 0.55
+  maxAttempts: 5
   areaEdgePadding: 0.05
   debugDraw: 1
   debugDuration: 2
@@ -1745,7 +1780,7 @@ Transform:
   m_GameObject: {fileID: 1398188024761269225}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 6, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3033,7 +3068,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathPrefab: {fileID: 1049922567700395985}
-  segmentLength: 200
+  segmentLength: 120
   fixedX: -6
   parentRef: {fileID: 7299977148544493664}
 --- !u!1 &5624550014624337171
