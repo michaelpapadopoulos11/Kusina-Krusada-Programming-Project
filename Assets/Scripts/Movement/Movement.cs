@@ -13,21 +13,36 @@ public class Movement : MonoBehaviour
 
     private bool SwipeLeft;
     private bool SwipeRight;
-    private bool SwipeUp;  // For jumping
+    private bool SwipeUp;
+    private bool SwipeDown;
 
     public float XValue = 2;
     public float forwardSpeed = 5f;
-    public float jumpForce = 8f;     // How strong the jump is
-    public float gravity = -20f;     // Custom gravity
-    public float laneSwitchSpeed = 5f;  // <-- New: controls how fast you move between lanes
+    public float jumpForce = 8f;
+    public float gravity = -20f;
+    public float laneSwitchSpeed = 5f;
+
+    public float crouchScale = 0.5f;       // How much to shrink visually
+    public float crouchDuration = 1.0f;    // How long crouch lasts
 
     [SerializeField] private CharacterController m_char;
 
-    private float verticalVelocity;  // Tracks up/down movement
+    private float verticalVelocity;
+    private Vector3 originalScale;
+    private bool isCrouching = false;
+    private float crouchTimer = 0f;
+
+    // Store original CharacterController settings
+    private float originalHeight;
+    private Vector3 originalCenter;
 
     void Start()
     {
         m_char = GetComponent<CharacterController>();
+        originalScale = transform.localScale;
+
+        originalHeight = m_char.height;
+        originalCenter = m_char.center;
     }
 
     void Update()
@@ -36,6 +51,7 @@ public class Movement : MonoBehaviour
         SwipeLeft = false;
         SwipeRight = false;
         SwipeUp = false;
+        SwipeDown = false;
 
         // Keyboard input
         if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
@@ -44,6 +60,8 @@ public class Movement : MonoBehaviour
             SwipeRight = true;
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space))
             SwipeUp = true;
+        if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+            SwipeDown = true;
 
         // Touch swipe
         if (Input.touchCount == 1)
@@ -69,6 +87,8 @@ public class Movement : MonoBehaviour
                 {
                     if (swipe.y > 50f)
                         SwipeUp = true;
+                    else if (swipe.y < -50f)
+                        SwipeDown = true;
                 }
             }
         }
@@ -115,14 +135,42 @@ public class Movement : MonoBehaviour
             verticalVelocity += gravity * Time.deltaTime;
         }
 
+        // Crouching (only when grounded)
+        if (m_char.isGrounded && SwipeDown && !isCrouching)
+        {
+            // Shrink model
+            transform.localScale = new Vector3(originalScale.x, originalScale.y * crouchScale, originalScale.z);
+
+            // Shrink CharacterController
+            m_char.height = originalHeight * crouchScale;
+            m_char.center = new Vector3(originalCenter.x, originalCenter.y * crouchScale, originalCenter.z);
+
+            isCrouching = true;
+            crouchTimer = crouchDuration;
+        }
+
+        if (isCrouching)
+        {
+            crouchTimer -= Time.deltaTime;
+            if (crouchTimer <= 0f)
+            {
+                // Reset model
+                transform.localScale = originalScale;
+
+                // Reset CharacterController
+                m_char.height = originalHeight;
+                m_char.center = originalCenter;
+
+                isCrouching = false;
+            }
+        }
+
         // Movement
         Vector3 move = Vector3.forward * forwardSpeed * Time.deltaTime;
 
-        // Smoothly move to the lane position
         float targetX = Mathf.Lerp(transform.position.x, NewXPos, laneSwitchSpeed * Time.deltaTime);
         move += (targetX - transform.position.x) * Vector3.right;
 
-        // Vertical (jumping + gravity)
         move.y = verticalVelocity * Time.deltaTime;
 
         m_char.Move(move);

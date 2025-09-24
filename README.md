@@ -16,9 +16,10 @@ If there ever is a time where main branch is not updating based on other branche
 Trello Practises:
 When working on a specific function, make sure that you are adding the work onto Trello too to keep the Sprint Tasks updated. Once you are ready to show it to the team drag the work to "Ready to Present" and let us know of it. Once the team has approved of it, and is also approved by our client, move the item to its relevant sprint collumn.
 
-Setting Up Unity:
+Setting Up Unity: 
 Please ensure you have downloaded the following;
 - Android and iOS support (File > Build Settings > Android and/or iOS downloaded)
 - Editor device is set to any Android or iOS device for testing (Edit > Project Settings > Editor > Unity Remote - Device > Any Android Device / Any iOS device)
 
-- mike added assets into the unity environment
+
+
