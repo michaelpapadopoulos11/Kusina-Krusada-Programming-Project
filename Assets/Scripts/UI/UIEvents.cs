@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 public class UIEvents : MonoBehaviour
 {
@@ -53,6 +54,7 @@ public class UIEvents : MonoBehaviour
     private void OnPlayClick (ClickEvent e)
     {
         Debug.Log("Play Clicked");
+        switchScene();
     }
 
     private void OnQuestionHistoryClick(ClickEvent e)
@@ -73,6 +75,12 @@ public class UIEvents : MonoBehaviour
         _btnPlay.UnregisterCallback<ClickEvent>(OnPlayClick);
         _btnQuestionHistory.UnregisterCallback<ClickEvent>(OnQuestionHistoryClick);
         _btnSettings.UnregisterCallback<ClickEvent>(OnSettingsClick);
+    }
+
+    private void switchScene() 
+    {
+        //UI -> Gameplay 
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); //Check build settings (File -> Build Settings) for indexes
     }
 
     private void detectSwipe()
