@@ -1,9 +1,5 @@
 {
   "dependencies": {
-<<<<<<< HEAD
-    "com.unity.postprocessing": {
-      "version": "3.4.0",
-=======
     "com.unity.burst": {
       "version": "1.8.21",
       "depth": 1,
@@ -23,7 +19,6 @@
     },
     "com.unity.ide.visualstudio": {
       "version": "2.0.23",
->>>>>>> fb41b7c7a49945d48e76c7d7daf612cc291aaa74
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -94,8 +89,6 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
-<<<<<<< HEAD
-=======
     "com.unity.shadergraph": {
       "version": "14.0.12",
       "depth": 1,
@@ -125,7 +118,6 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
->>>>>>> fb41b7c7a49945d48e76c7d7daf612cc291aaa74
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
