@@ -4,7 +4,7 @@ using UnityEngine;
 public class PathManager : MonoBehaviour
 {
     public static PathManager Instance { get; private set; }
-    public int maxSegments = 8;
+    public int maxSegments = 6;
     private readonly Queue<GameObject> active = new Queue<GameObject>();
 
     void Awake()

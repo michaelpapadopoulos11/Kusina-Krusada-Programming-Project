@@ -6,9 +6,9 @@ public class PathBootstrapper : MonoBehaviour
     public Transform firstPreplaced;
 
     [Header("Layout")]
-    public int initialToSpawn = 3;
+    public int initialToSpawn = 4;
     public float segmentLength = 40f;
-    public float fixedX = -5f;
+    public float fixedX = -6f;
     public bool matchRotation = false;
 
     void Start()
