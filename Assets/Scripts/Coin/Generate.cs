@@ -38,13 +38,19 @@ public class Generate : MonoBehaviour
                 coins.RemoveAt(i);
         }
     }
-
     public void OnCoinDestroyed()
-    {
-        // Spawn a new coin immediately when one is destroyed
-        if (coins.Count < maxCoins)
-            SpawnCoin();
-    }
+{
+    // Always spawn 100f ahead of the player
+    int lane = Random.Range(0, xPositions.Length);
+    Vector3 spawnPos = new Vector3(
+        xPositions[lane],
+        coinY,
+        player.position.z + 100f
+    );
+
+    GameObject coin = Instantiate(coinPrefab, spawnPos, coinPrefab.transform.rotation);
+    coins.Add(coin);
+}
 
     void SpawnCoin()
     {
@@ -52,7 +58,7 @@ public class Generate : MonoBehaviour
         Vector3 spawnPos = new Vector3(
             xPositions[lane],
             coinY,
-            player.position.z + 100f
+            player.position.z + 150f
         );
 
         // Use the prefab's original rotation

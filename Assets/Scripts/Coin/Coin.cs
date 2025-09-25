@@ -27,8 +27,7 @@ public class Coin : MonoBehaviour
         {
             // Destroy if collided with the player
             NotifyAndDestroy();
-            // Optional: Add coin collection logic here
-            // GameManager.Instance.AddCoin(1);
+            
         }
     }
 
