@@ -1,5 +1,5 @@
 # Programming-Project
-Food Safety Game Development V24.09.2025
+Food Safety Game Development V25.09.2025
 
 ## Hi guys, please read this to help out on consistent development in Unity!
 
@@ -10,6 +10,7 @@ Relevant Console Commands for commits and push, and to fix GitHub for healthy pr
 - git checkout <branch-name> (used to keep changes in the current branch you're working on when you transition between branches)
 - git checkout -b <branch-name> (to create a new branch with items based on the branch you are currently in)
 - git pull <branch-name> (to pull from the specific branch)
+- git merge <branch-name> (in the branch you're currently in, merge the named branch into the branch you're in)
 
 If there ever is a time where main branch is not updating based on other branches anymore let the team know so that we'll find a way to fix it.
 
