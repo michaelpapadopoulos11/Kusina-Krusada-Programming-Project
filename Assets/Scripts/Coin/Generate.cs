@@ -6,7 +6,7 @@ public class Generate : MonoBehaviour
     public GameObject coinPrefab;
     public Transform player;
     public float coinY = 2f;
-    public float spawnInterval = 9f;
+    public float spawnInterval = 8f;
     public int maxCoins = 2;
 
     private readonly float[] xPositions = { -2.5f, 0.12f, 2.3f };

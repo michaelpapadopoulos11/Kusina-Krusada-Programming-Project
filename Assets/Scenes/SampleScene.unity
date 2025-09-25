@@ -10663,7 +10663,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 007371eadbe011c4d838fdd3dcec0976, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyOffset: 10
 --- !u!114 &1252901200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10671,16 +10670,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1252901195}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fca17a5a2694f6f4db0059995cbf14b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   coinPrefab: {fileID: 1252901195}
-  player: {fileID: 41328469}
+  player: {fileID: 100802020}
   coinY: 2
   spawnInterval: 4
-  maxCoins: 20
+  maxCoins: 5
 --- !u!135 &1252901201
 SphereCollider:
   m_ObjectHideFlags: 0

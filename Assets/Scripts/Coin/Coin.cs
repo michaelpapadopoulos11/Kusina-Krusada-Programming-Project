@@ -2,20 +2,34 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    public float destroyOffset = 10f; // destroy if too far behind
+    private float destroyOffset = 10f; // Distance behind player before destruction
+    private float lifetime = 15f;      // Time before self-destruction
     private Transform player;
     private Generate spawner;
+    private float timer;
 
-    void Start()
+    void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
-        spawner = FindObjectOfType<Generate>(); // reference the spawner
+        spawner = FindObjectOfType<Generate>();
+        timer = 0f; // Initialize timer
     }
 
     void Update()
     {
-        // Destroy if far behind the player
-        if (player != null && transform.position.z < player.position.z - destroyOffset)
+        if (player == null) return;
+
+        // Increment timer
+        timer += Time.deltaTime;
+
+        // Destroy if far behind player
+        if (transform.position.z < player.position.z - destroyOffset)
+        {
+            NotifyAndDestroy();
+        }
+
+        // Destroy after lifetime expires
+        if (timer >= lifetime)
         {
             NotifyAndDestroy();
         }
@@ -25,9 +39,7 @@ public class Coin : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // Destroy if collided with the player
             NotifyAndDestroy();
-            
         }
     }
 
@@ -35,7 +47,9 @@ public class Coin : MonoBehaviour
     {
         // Notify spawner to spawn a new coin
         if (spawner != null)
+        {
             spawner.OnCoinDestroyed();
+        }
 
         Destroy(gameObject);
     }
