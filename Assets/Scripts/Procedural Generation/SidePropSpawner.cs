@@ -54,10 +54,6 @@ public class SidePropStripSpawner : MonoBehaviour
         StartCoroutine(SpawnWhenReady());
     }
 
-    /// <summary>
-    /// Call this from your PathManager immediately AFTER you position the segment.
-    /// Example: spawner.SpawnWithSeed(UnityEngine.Random.Range(int.MinValue, int.MaxValue));
-    /// </summary>
     public void SpawnWithSeed(int seed)
     {
         if (_spawned) return;

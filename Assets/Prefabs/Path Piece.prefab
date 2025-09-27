@@ -572,8 +572,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.11776266, y: 1, z: 0.9999999}
-  m_Center: {x: 0.44226617, y: 0.5, z: 0.49999994}
+  m_Size: {x: 0.1, y: 1, z: 1}
+  m_Center: {x: 0.5, y: 0.5, z: 0.5}
 --- !u!1 &505279179845767802
 GameObject:
   m_ObjectHideFlags: 0
@@ -897,8 +897,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.100854635, y: 1, z: 0.9999999}
-  m_Center: {x: 0.5134564, y: 0.5, z: 0.49999994}
+  m_Size: {x: 0.1, y: 1, z: 1}
+  m_Center: {x: 0.5, y: 0.5, z: 0.5}
 --- !u!1 &721360474963080906
 GameObject:
   m_ObjectHideFlags: 0
@@ -1078,13 +1078,12 @@ MonoBehaviour:
   - {fileID: 895502770539266121, guid: 23935583cdb6cef4da7de830b6bc07dd, type: 3}
   - {fileID: 1321352716879233883, guid: 1b5fc9f4306a79248809fff0f0c429be, type: 3}
   - {fileID: 9111225761695742242, guid: cc252373af488104eacfd0f4f55dacbe, type: 3}
-  - {fileID: 5169287712031289468, guid: f35a9e7f693a23c46abe8925b5302578, type: 3}
   - {fileID: 6670537419902794720, guid: 30a1750b45c9c8e45b09ad6e689bae96, type: 3}
   - {fileID: 3419747268391917721, guid: 76217a0eed0ce81468def0dd3bc43d4f, type: 3}
-  anchorsPerSide: 3
+  anchorsPerSide: 4
   endMargin: 0.08
-  leftStripT: 0.85
-  rightStripT: 0.15
+  leftStripT: 0
+  rightStripT: 1
   rayStartAbove: 3
   yOffset: 0.02
   faceMiddle: 1
