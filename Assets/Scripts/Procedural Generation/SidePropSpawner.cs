@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 [DisallowMultipleComponent]
 public class SidePropStripSpawner : MonoBehaviour
@@ -29,10 +30,7 @@ public class SidePropStripSpawner : MonoBehaviour
     // one-shot guard
     private bool _spawned;
 
-    // per-piece RNG
-    private System.Random _rng;
-    private bool _hasExternalSeed;
-
+    // measured bounds per prefab
     private struct PrefabBounds
     {
         public GameObject prefab;
@@ -43,6 +41,12 @@ public class SidePropStripSpawner : MonoBehaviour
     }
     private PrefabBounds[] cache;
 
+    // ======== GLOBAL SHUFFLE-BAG (shared by all spawners while the game runs) ========
+    private static System.Random s_rng;
+    private static List<int>     s_validIndices; // all valid prefab indices
+    private static List<int>     s_bag;          // current bag (shuffled order we pop from)
+    private static int           s_prefabSetHash; // to detect when the prefab list changed
+
     private void Awake()
     {
         if (!propsRoot) propsRoot = transform;
@@ -50,36 +54,15 @@ public class SidePropStripSpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        // If the PathManager doesn’t call SpawnWithSeed, we’ll spawn ourselves after the piece is positioned.
+        // spawn after the piece is positioned (and only once)
         StartCoroutine(SpawnWhenReady());
-    }
-
-    public void SpawnWithSeed(int seed)
-    {
-        if (_spawned) return;
-        _rng = new System.Random(seed);
-        _hasExternalSeed = true;
-        TrySpawnOnce();
     }
 
     private IEnumerator SpawnWhenReady()
     {
-        // If manager seeds us, do nothing.
-        if (_hasExternalSeed || _spawned) yield break;
-
-        // Wait a couple frames so PathManager can move this piece to its final world position.
-        yield return null;
-        yield return null;
-
         if (_spawned) yield break;
-
-        // Seed from *final* world pose + a tiny time salt so runs differ.
-        int seed = HashCode.Combine(
-            transform.position.GetHashCode(),
-            transform.rotation.eulerAngles.GetHashCode(),
-            Environment.TickCount
-        );
-        _rng = new System.Random(seed);
+        // wait one frame to ensure the segment is moved/parented
+        yield return null;
         TrySpawnOnce();
     }
 
@@ -88,12 +71,13 @@ public class SidePropStripSpawner : MonoBehaviour
         if (_spawned) return;
         if (!propsRoot) propsRoot = transform;
 
-        // idempotent: don’t double-spawn on this piece
+        // idempotent: if propsRoot already has children, skip
         if (propsRoot && propsRoot.childCount > 0) { _spawned = true; return; }
 
         if (prefabs == null || prefabs.Length == 0) { _spawned = true; return; }
 
         BuildBoundsCache();
+        EnsureGlobalBag(); // <-- set up the shared shuffle-bag
 
         PlaceOnStrip(leftArea,  isLeft: true,  leftStripT);
         PlaceOnStrip(rightArea, isLeft: false, rightStripT);
@@ -129,6 +113,62 @@ public class SidePropStripSpawner : MonoBehaviour
         }
     }
 
+    // ---------- GLOBAL BAG ----------
+    private void EnsureGlobalBag()
+    {
+        // Build a signature of the current prefab set (nulls filtered)
+        int hash = 17;
+        unchecked
+        {
+            hash = hash * 31 + (prefabs?.Length ?? 0);
+            if (prefabs != null)
+            {
+                for (int i = 0; i < prefabs.Length; i++)
+                    hash = hash * 31 + (prefabs[i] ? prefabs[i].GetInstanceID() : 0);
+            }
+        }
+
+        if (s_rng == null) s_rng = new System.Random(Guid.NewGuid().GetHashCode());
+
+        // If set changed (different list/ordering/nulls), rebuild valid indices and the bag
+        if (s_validIndices == null || s_prefabSetHash != hash)
+        {
+            s_prefabSetHash = hash;
+            s_validIndices = new List<int>(prefabs.Length);
+            for (int i = 0; i < prefabs.Length; i++)
+                if (prefabs[i] != null) s_validIndices.Add(i);
+
+            // start with a fresh bag
+            s_bag = null;
+        }
+
+        // Refill the bag if empty or not yet created
+        if (s_bag == null || s_bag.Count == 0)
+        {
+            s_bag = new List<int>(s_validIndices);
+            // Fisher–Yates shuffle
+            for (int i = s_bag.Count - 1; i > 0; i--)
+            {
+                int j = s_rng.Next(0, i + 1);
+                (s_bag[i], s_bag[j]) = (s_bag[j], s_bag[i]);
+            }
+        }
+    }
+
+    // Pop one index from the global bag (refills automatically when empty)
+    private int NextIndexFromGlobalBag()
+    {
+        if (s_bag == null || s_bag.Count == 0)
+        {
+            EnsureGlobalBag();
+            if (s_bag == null || s_bag.Count == 0) return -1;
+        }
+        int last = s_bag.Count - 1;
+        int idx = s_bag[last];
+        s_bag.RemoveAt(last);
+        return idx;
+    }
+
     private void PlaceOnStrip(Collider area, bool isLeft, float stripT)
     {
         if (!area || cache == null || cache.Length == 0 || anchorsPerSide <= 0) return;
@@ -162,17 +202,17 @@ public class SidePropStripSpawner : MonoBehaviour
             Vector3 floor = hit.point;
             float desiredBottom = floor.y + Mathf.Max(0f, yOffset);
 
-            int idx = NextValidIndex();
-            if (idx < 0) continue;
-
+            int idx = NextIndexFromGlobalBag();    // <- draw without replacement
+            if (idx < 0 || idx >= cache.Length) continue;
             ref var spec = ref cache[idx];
+            if (spec.prefab == null) continue;
 
             Quaternion rot = ComputeRotation(spec.prefabYaw, isLeft);
 
             Vector3 pivot = new Vector3(floor.x, desiredBottom - spec.localBottom, floor.z);
             var go = Instantiate(spec.prefab, pivot, rot, propsRoot ? propsRoot : null);
 
-            // ensure not static so runtime occlusion/batching doesn’t hide it
+            // ensure dynamic (avoid occlusion culling/static batching issues)
             go.isStatic = false;
             foreach (Transform c in go.transform) c.gameObject.isStatic = false;
 
@@ -181,23 +221,6 @@ public class SidePropStripSpawner : MonoBehaviour
             float dy = desiredBottom - ib.min.y;
             if (Mathf.Abs(dy) > 0.0001f) go.transform.position += Vector3.up * dy;
         }
-    }
-
-    // choose uniformly using our per-piece RNG
-    private int NextValidIndex()
-    {
-        // collect valid indices (cached once per call; small list so cheap)
-        int count = 0;
-        for (int i = 0; i < cache.Length; i++) if (cache[i].prefab) count++;
-        if (count == 0) return -1;
-
-        int pick = _rng.Next(0, count);
-        for (int i = 0; i < cache.Length; i++)
-        {
-            if (!cache[i].prefab) continue;
-            if (pick-- == 0) return i;
-        }
-        return -1;
     }
 
     private Quaternion ComputeRotation(float prefabYaw, bool isLeft)
