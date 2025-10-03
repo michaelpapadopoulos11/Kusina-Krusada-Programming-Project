@@ -1,0 +1,11 @@
+Model Information:
+* title:	Colourful house facade
+* source:	https://sketchfab.com/3d-models/colourful-house-facade-6beac3080c684d048979392c51969b1a
+* author:	Getbreadsticks (https://sketchfab.com/getbreadsticks)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Colourful house facade" (https://sketchfab.com/3d-models/colourful-house-facade-6beac3080c684d048979392c51969b1a) by Getbreadsticks (https://sketchfab.com/getbreadsticks) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
