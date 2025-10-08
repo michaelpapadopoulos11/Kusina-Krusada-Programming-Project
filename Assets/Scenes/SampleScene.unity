@@ -5211,17 +5211,17 @@ PrefabInstance:
     - target: {fileID: 2774220344278030320, guid: 0778f06692dea46dcb650614658f274b,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.04
+      value: 0.12
       objectReference: {fileID: 0}
     - target: {fileID: 2774220344278030320, guid: 0778f06692dea46dcb650614658f274b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.5
+      value: 2.17
       objectReference: {fileID: 0}
     - target: {fileID: 2774220344278030320, guid: 0778f06692dea46dcb650614658f274b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 8.34
+      value: 4.63
       objectReference: {fileID: 0}
     - target: {fileID: 2774220344278030320, guid: 0778f06692dea46dcb650614658f274b,
         type: 3}
@@ -5269,11 +5269,23 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -6689036041284674117, guid: 0778f06692dea46dcb650614658f274b,
         type: 3}
       insertIndex: -1
+      addedObject: {fileID: 790252464}
+    - targetCorrespondingSourceObject: {fileID: -6689036041284674117, guid: 0778f06692dea46dcb650614658f274b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 790252467}
+    - targetCorrespondingSourceObject: {fileID: -6689036041284674117, guid: 0778f06692dea46dcb650614658f274b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 790252466}
+    - targetCorrespondingSourceObject: {fileID: -6689036041284674117, guid: 0778f06692dea46dcb650614658f274b,
+        type: 3}
+      insertIndex: -1
       addedObject: {fileID: 790252462}
     - targetCorrespondingSourceObject: {fileID: -6689036041284674117, guid: 0778f06692dea46dcb650614658f274b,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 790252464}
+      addedObject: {fileID: 790252465}
   m_SourcePrefab: {fileID: -5645937942226959685, guid: 0778f06692dea46dcb650614658f274b,
     type: 3}
 --- !u!1001 &616746226
@@ -5302,7 +5314,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 608d50fefb2a646eb917f7f57b5d12c1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.02
+      value: -3.18
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 608d50fefb2a646eb917f7f57b5d12c1,
         type: 3}
@@ -5797,6 +5809,66 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &790252465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 790252461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5232e0e8538f3446cb6cb6b1a922039d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &790252466
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 790252461}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &790252467
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 790252461}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 17.736908, y: 10.1652155, z: 8.9179735}
+  m_Center: {x: -8.36845, y: 4.582614, z: 3.9589877}
 --- !u!1 &816464007
 GameObject:
   m_ObjectHideFlags: 0
