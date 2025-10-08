@@ -1,9 +1,103 @@
 :root {
 }
 
-.button {
+.button-red {
     height: 15%;
-    width: 100%;
-    font-size: 100px;
+    width: 95%;
+    font-size: 110px;
     background-color: rgb(190, 64, 64);
+    -unity-font-definition: url("project://database/Assets/Assets/UI/Retro%20Gaming.ttf?fileID=12800000&guid=feabd81a87e4cd1489df71b23b1180ab&type=3#Retro Gaming");
+    -unity-text-outline-width: 0;
+    visibility: visible;
+    overflow: visible;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-bottom-left-radius: 50px;
+    border-top-width: 10px;
+    border-right-width: 10px;
+    border-bottom-width: 10px;
+    border-left-width: 10px;
+    border-left-color: rgb(135, 51, 51);
+    border-right-color: rgb(135, 51, 51);
+    border-top-color: rgb(135, 51, 51);
+    border-bottom-color: rgb(135, 51, 51);
+}
+
+.label {
+    align-items: auto;
+    justify-content: flex-start;
+    height: auto;
+    width: auto;
+    font-size: 50px;
+    align-content: auto;
+}
+
+.button-blue {
+    height: 15%;
+    width: 95%;
+    font-size: 110px;
+    background-color: rgb(190, 64, 64);
+    -unity-font-definition: url("project://database/Assets/Assets/UI/Retro%20Gaming.ttf?fileID=12800000&guid=feabd81a87e4cd1489df71b23b1180ab&type=3#Retro Gaming");
+    -unity-text-outline-width: 0;
+    visibility: visible;
+    overflow: visible;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-bottom-left-radius: 50px;
+    border-top-width: 10px;
+    border-right-width: 10px;
+    border-bottom-width: 10px;
+    border-left-width: 10px;
+    border-left-color: rgb(135, 51, 51);
+    border-right-color: rgb(135, 51, 51);
+    border-top-color: rgb(135, 51, 51);
+    border-bottom-color: rgb(135, 51, 51);
+}
+
+.button-green {
+    height: 15%;
+    width: 95%;
+    font-size: 110px;
+    background-color: rgb(106, 168, 88);
+    -unity-font-definition: url("project://database/Assets/Assets/UI/Retro%20Gaming.ttf?fileID=12800000&guid=feabd81a87e4cd1489df71b23b1180ab&type=3#Retro Gaming");
+    -unity-text-outline-width: 0;
+    visibility: visible;
+    overflow: visible;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-bottom-left-radius: 50px;
+    border-top-width: 10px;
+    border-right-width: 10px;
+    border-bottom-width: 10px;
+    border-left-width: 10px;
+    border-left-color: rgb(33, 101, 26);
+    border-right-color: rgb(33, 101, 26);
+    border-top-color: rgb(33, 101, 26);
+    border-bottom-color: rgb(33, 101, 26);
+}
+
+.button-yellow {
+    height: 15%;
+    width: 95%;
+    font-size: 110px;
+    background-color: rgb(106, 168, 88);
+    -unity-font-definition: url("project://database/Assets/Assets/UI/Retro%20Gaming.ttf?fileID=12800000&guid=feabd81a87e4cd1489df71b23b1180ab&type=3#Retro Gaming");
+    -unity-text-outline-width: 0;
+    visibility: visible;
+    overflow: visible;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-bottom-left-radius: 50px;
+    border-top-width: 10px;
+    border-right-width: 10px;
+    border-bottom-width: 10px;
+    border-left-width: 10px;
+    border-left-color: rgb(33, 101, 26);
+    border-right-color: rgb(33, 101, 26);
+    border-top-color: rgb(33, 101, 26);
+    border-bottom-color: rgb(33, 101, 26);
 }

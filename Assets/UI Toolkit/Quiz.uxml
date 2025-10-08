@@ -1,12 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Quiz%20Stylesheet.uss?fileID=7433441132597879392&amp;guid=0e54365085a504e9b9d9dac70b8003d3&amp;type=3#Quiz Stylesheet" />
-    <ui:VisualElement name="screen_container" style="flex-grow: 1;">
-        <ui:VisualElement name="question_container" style="flex-grow: 1; align-items: center; justify-content: space-around; height: 25%; align-content: auto; flex-basis: 20%; top: 0; position: absolute; width: 100%;" />
-        <ui:VisualElement name="button_container" style="flex-grow: 1; align-items: center; justify-content: space-evenly; height: 75%; align-content: auto; flex-basis: 20%; top: auto; position: absolute; width: 100%; bottom: 0; align-self: auto;">
-            <ui:Button text="Button" class="button" />
-            <ui:Button text="Button" class="button" />
-            <ui:Button text="Button" class="button" />
-            <ui:Button text="Button" class="button" />
+    <ui:VisualElement name="screen_container" style="flex-grow: 1; background-color: rgba(255, 255, 255, 0.13); background-image: none; -unity-background-image-tint-color: rgb(0, 0, 0);">
+        <ui:VisualElement name="question_container" style="flex-grow: 1; align-items: center; justify-content: flex-start; height: 25%; align-content: auto; flex-basis: 20%; top: 0; position: absolute; width: 100%;" />
+        <ui:VisualElement name="button_container" style="flex-grow: 1; align-items: center; justify-content: space-around; height: 75%; align-content: auto; flex-basis: 20%; top: auto; position: absolute; width: 100%; bottom: 0; align-self: auto;">
+            <ui:Button text="The food will lose its flavour and texture." name="Button" focusable="false" class="button button-red" style="text-overflow: ellipsis; white-space: pre-wrap; font-size: 50%; padding-right: 100px; padding-left: 100px; margin-left: 90px; margin-right: 90px; width: 95%;" />
+            <ui:Button text="The food will not heat up properly when you reheat it." name="Button" focusable="false" class="button button-red button-blue" style="text-overflow: ellipsis; white-space: pre-wrap; font-size: 50%; padding-right: 100px; padding-left: 100px; margin-left: 90px; margin-right: 90px; width: 95%; border-left-color: rgb(30, 48, 171); border-right-color: rgb(30, 48, 171); border-top-color: rgb(30, 48, 171); border-bottom-color: rgb(30, 48, 171); background-color: rgb(64, 150, 190);" />
+            <ui:Button text="Bacteria that survived cooking can multiply rapidly." name="Button" focusable="false" class="button button-green" style="text-overflow: ellipsis; white-space: pre-wrap; font-size: 50%; padding-right: 100px; padding-left: 100px; margin-left: 90px; margin-right: 90px; width: 95%;" />
+            <ui:Button text="The food will turn a different colour." name="Button" focusable="false" class="button button-yellow" style="text-overflow: ellipsis; white-space: pre-wrap; font-size: 50%; padding-right: 100px; padding-left: 100px; margin-left: 90px; margin-right: 90px; width: 95%; border-left-color: rgb(96, 99, 23); border-right-color: rgb(96, 99, 23); border-top-color: rgb(96, 99, 23); border-bottom-color: rgb(96, 99, 23); background-color: rgb(192, 177, 99);" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
