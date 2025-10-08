@@ -1,0 +1,9 @@
+:root {
+}
+
+.button {
+    height: 15%;
+    width: 100%;
+    font-size: 100px;
+    background-color: rgb(190, 64, 64);
+}
