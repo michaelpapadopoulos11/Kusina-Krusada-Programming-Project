@@ -1,7 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Label tabindex="-1" text="Question" parse-escape-sequences="true" display-tooltip-when-elided="true" style="align-self: center; justify-content: space-between; align-items: center;" />
-    <ui:Button text="Answer 1" parse-escape-sequences="true" display-tooltip-when-elided="true" style="align-self: flex-start; translate: 100px 0; position: relative; left: auto;" />
-    <ui:Button text="Answer 2" parse-escape-sequences="true" display-tooltip-when-elided="true" style="align-self: flex-start; justify-content: flex-start; align-items: auto; translate: 280px -45px;" />
-    <ui:Button text="Answer 3" parse-escape-sequences="true" display-tooltip-when-elided="true" style="translate: 100px 0; align-self: flex-start;" />
-    <ui:Button text="Answer 4" parse-escape-sequences="true" display-tooltip-when-elided="true" style="translate: 280px -45px; align-self: flex-start;" />
+    <ui:VisualElement name="screen_container" style="flex-grow: 1;">
+        <ui:VisualElement name="question_container" style="flex-grow: 1; align-items: center; justify-content: space-around; height: 25%; align-content: auto; flex-basis: 20%; top: 0; position: absolute; width: 100%;" />
+        <ui:VisualElement name="button_container" style="flex-grow: 1; align-items: center; justify-content: space-around; height: 75%; align-content: auto; flex-basis: 20%; top: auto; position: absolute; width: 100%; bottom: 0; align-self: auto;" />
+    </ui:VisualElement>
 </ui:UXML>
