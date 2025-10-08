@@ -11114,6 +11114,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1937094451}
   - component: {fileID: 1937094450}
+  - component: {fileID: 1937094452}
   m_Layer: 5
   m_Name: Quiz
   m_TagString: Untagged
@@ -11153,6 +11154,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1937094452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1937094449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f47582160ef7ce44a9fb55c344c833f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uIDocument: {fileID: 1937094450}
 --- !u!43 &2130537695
 Mesh:
   m_ObjectHideFlags: 0

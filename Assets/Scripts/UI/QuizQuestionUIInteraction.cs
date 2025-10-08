@@ -17,7 +17,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
 
     private void OnClickEvent(ClickEvent evt)
     {
-        
+
     }
 
     // Update is called once per frame
