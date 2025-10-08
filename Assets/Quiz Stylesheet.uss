@@ -2,7 +2,7 @@
 }
 
 .button-red {
-    height: 15%;
+    height: 20%;
     width: 95%;
     font-size: 110px;
     background-color: rgb(190, 64, 64);
@@ -34,7 +34,7 @@
 }
 
 .button-blue {
-    height: 15%;
+    height: 20%;
     width: 95%;
     font-size: 110px;
     background-color: rgb(190, 64, 64);
@@ -57,7 +57,7 @@
 }
 
 .button-green {
-    height: 15%;
+    height: 20%;
     width: 95%;
     font-size: 110px;
     background-color: rgb(106, 168, 88);
@@ -80,7 +80,7 @@
 }
 
 .button-yellow {
-    height: 15%;
+    height: 20%;
     width: 95%;
     font-size: 110px;
     background-color: rgb(106, 168, 88);
