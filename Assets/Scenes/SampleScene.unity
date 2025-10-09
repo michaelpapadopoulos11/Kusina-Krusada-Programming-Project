@@ -11055,6 +11055,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uIDocument: {fileID: 1937094450}
   Quiz: {fileID: 1937094449}
+  questionsCsv: {fileID: 4900000, guid: a43545f365b7ec341a20e7e6a884543b, type: 3}
 --- !u!65 &1846323502
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11305,6 +11306,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uIDocument: {fileID: 1937094450}
   Quiz: {fileID: 1937094449}
+  questionsCsv: {fileID: 4900000, guid: a43545f365b7ec341a20e7e6a884543b, type: 3}
 --- !u!43 &2130537695
 Mesh:
   m_ObjectHideFlags: 0
