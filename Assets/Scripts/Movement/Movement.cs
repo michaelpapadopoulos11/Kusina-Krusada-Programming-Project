@@ -36,6 +36,11 @@ public class Movement : MonoBehaviour
     private float originalHeight;
     private Vector3 originalCenter;
 
+    // MIKE POWER UP
+    public bool isInvincible = false;
+    public float invincibilityTimer = 0f;
+    public float invincibilityDuration = 5f;
+
     void Start()
     {
         m_char = GetComponent<CharacterController>();
@@ -174,5 +179,16 @@ public class Movement : MonoBehaviour
         move.y = verticalVelocity * Time.deltaTime;
 
         m_char.Move(move);
+
+
+
+
+    // MIKE'S INVINCIBILITY POWER UP SECTION:
+    if (isInvincible) {
+        invincibilityTimer -= Time.deltaTime;
+        if (invincibilityTimer <= 0f) {
+            isInvincible = false;
+        }
+    }
     }
 }

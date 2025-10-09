@@ -5120,6 +5120,9 @@ MonoBehaviour:
   crouchScale: 0.5
   crouchDuration: 1
   m_char: {fileID: 100802022}
+  isInvincible: 0
+  invincibilityTimer: 0
+  invincibilityDuration: 5
 --- !u!1 &261849724
 GameObject:
   m_ObjectHideFlags: 0
@@ -5174,7 +5177,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -5211,17 +5214,17 @@ PrefabInstance:
     - target: {fileID: 2774220344278030320, guid: 0778f06692dea46dcb650614658f274b,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.12
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2774220344278030320, guid: 0778f06692dea46dcb650614658f274b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.17
+      value: 2.18
       objectReference: {fileID: 0}
     - target: {fileID: 2774220344278030320, guid: 0778f06692dea46dcb650614658f274b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.63
+      value: 5.3
       objectReference: {fileID: 0}
     - target: {fileID: 2774220344278030320, guid: 0778f06692dea46dcb650614658f274b,
         type: 3}
@@ -5314,7 +5317,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 608d50fefb2a646eb917f7f57b5d12c1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.18
+      value: -0.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 608d50fefb2a646eb917f7f57b5d12c1,
         type: 3}
@@ -5324,7 +5327,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 608d50fefb2a646eb917f7f57b5d12c1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 8.638435
+      value: 15.33
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 608d50fefb2a646eb917f7f57b5d12c1,
         type: 3}
