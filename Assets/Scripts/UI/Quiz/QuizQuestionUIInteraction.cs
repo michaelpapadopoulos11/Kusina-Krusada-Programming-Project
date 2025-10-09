@@ -10,6 +10,8 @@ public class QuizQuestionUIInteraction : MonoBehaviour
     private VisualElement root;
     public GameObject Quiz;
     [SerializeField] TextAsset questionsCsv; // assign questions.csv in the Inspector
+    [SerializeField] TextAsset questionsTlCsv; // assign questions_tl.csv in the Inspector (Tagalog)
+    private TextAsset activeQuestionsCsv; // currently selected CSV (English by default)
 
     // cached UI elements
     private Label questionLabel;
@@ -17,11 +19,15 @@ public class QuizQuestionUIInteraction : MonoBehaviour
     private Button button2;
     private Button button3;
     private Button button4;
+    private Button tagalogButton;
+    private Button englishButton;
 
     private string currentCorrectAnswer;
     private bool handlersAttached = false;
     private List<Question> parsedQuestions = new List<Question>();
+    private List<Question> parsedQuestionsTl = new List<Question>();
     private int lastQuestionIndex = -1;
+    private bool activeIsTagalog = false;
 
     [Serializable]
     private class Question
@@ -50,8 +56,11 @@ public class QuizQuestionUIInteraction : MonoBehaviour
                 Debug.LogWarning("UIDocument.rootVisualElement is null at Start(); the visual tree may not be built yet.");
         }
 
-        // Parse all questions from the CSV at startup (independent from UI visual tree)
-        ParseAllQuestionsFromCsv();
+        // select default CSV (English) and parse both English and Tagalog (if provided)
+        activeQuestionsCsv = questionsCsv;
+        parsedQuestions = ParseQuestionsFromCsv(questionsCsv);
+        if (questionsTlCsv != null)
+            parsedQuestionsTl = ParseQuestionsFromCsv(questionsTlCsv);
 
     }
 
@@ -75,6 +84,9 @@ public class QuizQuestionUIInteraction : MonoBehaviour
             if (!handlersAttached)
                 CacheUIElements();
 
+            // Ensure language buttons show correctly (English by default)
+            UpdateLanguageButtonsVisibility();
+
             // Load a random question from parsed CSV and populate UI
             LoadRandomQuestionFromCsv();
 
@@ -90,12 +102,19 @@ public class QuizQuestionUIInteraction : MonoBehaviour
         button2 = root.Q<Button>("Button2");
         button3 = root.Q<Button>("Button3");
         button4 = root.Q<Button>("Button4");
+        tagalogButton = root.Q<Button>("Tagalog");
 
-        // attach handlers once
+    // attach handlers once
         if (button1 != null) button1.clicked += () => OnAnswerSelected(button1.text);
         if (button2 != null) button2.clicked += () => OnAnswerSelected(button2.text);
         if (button3 != null) button3.clicked += () => OnAnswerSelected(button3.text);
         if (button4 != null) button4.clicked += () => OnAnswerSelected(button4.text);
+    if (tagalogButton != null) tagalogButton.clicked += SwitchToTagalog;
+    englishButton = root.Q<Button>("English");
+    if (englishButton != null) englishButton.clicked += SwitchToEnglish;
+
+    // set initial visibility: English button hidden, Tagalog visible
+    UpdateLanguageButtonsVisibility();
 
         handlersAttached = true;
     }
@@ -105,22 +124,11 @@ public class QuizQuestionUIInteraction : MonoBehaviour
         // Deprecated: previously loaded only the first CSV row. Kept for compatibility but not used.
     }
 
-    private void ParseAllQuestionsFromCsv()
+    private List<Question> ParseQuestionsFromCsv(TextAsset csv)
     {
-        parsedQuestions.Clear();
-        if (questionsCsv == null)
-        {
-            Debug.LogError("questionsCsv TextAsset not assigned. Assign the questions.csv file in the Inspector.");
-            return;
-        }
-
-        var lines = questionsCsv.text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-        if (lines.Length == 0)
-        {
-            Debug.LogError("questions.csv is empty or couldn't be read.");
-            return;
-        }
-
+        var list = new List<Question>();
+        if (csv == null) return list;
+        var lines = csv.text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
         foreach (var rawLine in lines)
         {
             var line = rawLine.Trim();
@@ -136,35 +144,106 @@ public class QuizQuestionUIInteraction : MonoBehaviour
                 a4 = cols[4].Trim(),
                 correct = cols[5].Trim()
             };
-            parsedQuestions.Add(q);
+            list.Add(q);
+        }
+        if (list.Count == 0)
+            Debug.LogError("No valid question rows found in provided CSV");
+        return list;
+    }
+
+    private void SwitchToTagalog()
+    {
+        // switch active CSV to Tagalog and reparse
+        if (questionsTlCsv == null)
+        {
+            Debug.LogError("Tagalog CSV not assigned in Inspector.");
+            return;
         }
 
-        if (parsedQuestions.Count == 0)
-            Debug.LogError("No valid question rows found in questions.csv");
+        activeIsTagalog = true;
+        // Preserve current question index if possible so translations line up
+        if (root != null && root.style.display == DisplayStyle.Flex)
+        {
+            if (lastQuestionIndex >= 0 && parsedQuestionsTl != null && lastQuestionIndex < parsedQuestionsTl.Count)
+                LoadQuestionByIndex(lastQuestionIndex, true);
+            else
+                LoadRandomQuestionFromCsv();
+        }
+        UpdateLanguageButtonsVisibility();
+    }
+
+    private void SwitchToEnglish()
+    {
+        activeIsTagalog = false;
+        if (root != null && root.style.display == DisplayStyle.Flex)
+        {
+            if (lastQuestionIndex >= 0 && parsedQuestions != null && lastQuestionIndex < parsedQuestions.Count)
+                LoadQuestionByIndex(lastQuestionIndex, false);
+            else
+                LoadRandomQuestionFromCsv();
+        }
+        UpdateLanguageButtonsVisibility();
+    }
+
+    private void UpdateLanguageButtonsVisibility()
+    {
+        // When Tagalog is active, show English button and hide Tagalog button, and vice-versa.
+        if (tagalogButton != null)
+            tagalogButton.style.display = activeIsTagalog ? DisplayStyle.None : DisplayStyle.Flex;
+        if (englishButton != null)
+            englishButton.style.display = activeIsTagalog ? DisplayStyle.Flex : DisplayStyle.None;
+    }
+
+    private void LoadQuestionByIndex(int index, bool isTagalog)
+    {
+        var list = isTagalog ? parsedQuestionsTl : parsedQuestions;
+        if (list == null || list.Count == 0)
+        {
+            Debug.LogError("No parsed questions available to load for requested language.");
+            return;
+        }
+
+        if (index < 0 || index >= list.Count)
+        {
+            // fallback to random
+            LoadRandomQuestionFromCsv();
+            return;
+        }
+
+        lastQuestionIndex = index;
+        var item = list[index];
+        currentCorrectAnswer = item.correct;
+
+        if (questionLabel != null) questionLabel.text = item.q;
+        if (button1 != null) button1.text = item.a1;
+        if (button2 != null) button2.text = item.a2;
+        if (button3 != null) button3.text = item.a3;
+        if (button4 != null) button4.text = item.a4;
     }
 
     private void LoadRandomQuestionFromCsv()
     {
-        if (parsedQuestions == null || parsedQuestions.Count == 0)
+        var list = activeIsTagalog ? parsedQuestionsTl : parsedQuestions;
+        if (list == null || list.Count == 0)
         {
-            Debug.LogError("No parsed questions available to load.");
+            Debug.LogError("No parsed questions available to load for current language.");
             return;
         }
 
-        int index = UnityEngine.Random.Range(0, parsedQuestions.Count);
+        int index = UnityEngine.Random.Range(0, list.Count);
         // avoid immediate repeat when possible
-        if (parsedQuestions.Count > 1 && index == lastQuestionIndex)
+        if (list.Count > 1 && index == lastQuestionIndex)
         {
             int attempts = 0;
             while (index == lastQuestionIndex && attempts < 5)
             {
-                index = UnityEngine.Random.Range(0, parsedQuestions.Count);
+                index = UnityEngine.Random.Range(0, list.Count);
                 attempts++;
             }
         }
 
         lastQuestionIndex = index;
-        var item = parsedQuestions[index];
+        var item = list[index];
         currentCorrectAnswer = item.correct;
 
         if (questionLabel != null) questionLabel.text = item.q;
