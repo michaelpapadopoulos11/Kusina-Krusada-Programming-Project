@@ -5148,7 +5148,7 @@ Transform:
   m_GameObject: {fileID: 198916368}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 58, y: -11.1, z: 68.6}
+  m_LocalPosition: {x: 58.1, y: -10.9, z: 62.7}
   m_LocalScale: {x: 1.0088, y: 1.0088, z: 1.0088}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10907,7 +10907,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 50
-  hoverAmplitude: 0.3
+  hoverAmplitude: 0.5
   hoverFrequency: 1
 --- !u!54 &1409146909
 Rigidbody:
