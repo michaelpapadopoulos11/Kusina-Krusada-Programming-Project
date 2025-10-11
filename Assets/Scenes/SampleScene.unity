@@ -11404,7 +11404,7 @@ GameObject:
   - component: {fileID: 1991928881}
   - component: {fileID: 1991928883}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
