@@ -29,6 +29,8 @@ public class QuizQuestionUIInteraction : MonoBehaviour
     private int lastQuestionIndex = -1;
     private bool activeIsTagalog = false;
 
+    [SerializeField] private GameObject UIFade;
+
     [Serializable]
     private class Question
     {
@@ -43,6 +45,8 @@ public class QuizQuestionUIInteraction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        UIFade.SetActive(false);
+
         if (uIDocument == null)
         {
             Debug.LogError("UIDocument is not assigned on " + gameObject.name);
@@ -64,22 +68,14 @@ public class QuizQuestionUIInteraction : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter(Collider other)
+    IEnumerator NewRoutine()
     {
-        if (other.CompareTag("Player"))
-        {
-            Time.timeScale = 0f; // Pause the game
+        yield return new WaitForSeconds(2.5f);
+        UIFade.SetActive(true);
+
+        Time.timeScale = 0f; // Pause the game
             UnityEngine.Cursor.lockState = CursorLockMode.None; // Unlock the cursor
             UnityEngine.Cursor.visible = true; // Make the cursor visible
-            // Ensure UI elements are cached
-            if (root == null && uIDocument != null)
-                root = uIDocument.rootVisualElement;
-
-            if (root == null)
-            {
-                Debug.LogWarning("Cannot show quiz UI because the UIDocument root is null.");
-                return;
-            }
 
             if (!handlersAttached)
                 CacheUIElements();
@@ -92,6 +88,17 @@ public class QuizQuestionUIInteraction : MonoBehaviour
 
             // Show UI
             root.style.display = DisplayStyle.Flex;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+
+        if (other.CompareTag("Player"))
+        {
+            UIFade.SetActive(true);
+            StartCoroutine(NewRoutine());
+
+            UIScore.gameIsPaused = true;
         }
     }
 
@@ -300,6 +307,11 @@ public class QuizQuestionUIInteraction : MonoBehaviour
             UnityEngine.Cursor.visible = false; // Hide the cursor
             if (root != null)
                 root.style.display = DisplayStyle.None; // Hide the UI
+
+            UIScore.gameIsPaused = false;
+            UIFade.SetActive(false);
+
+            
         }
         else
         {
@@ -330,6 +342,8 @@ public class QuizQuestionUIInteraction : MonoBehaviour
         {
             Debug.LogWarning("Button1 not found. Make sure the UXML name is Button1 and the UIDocument is active.");
         }
+
+        UIFade.SetActive(true);
 
         // then show the UI (if not already)
         root.style.display = DisplayStyle.Flex;

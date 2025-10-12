@@ -15,6 +15,8 @@ public class UIScore : MonoBehaviour
     [SerializeField] private float cur = 0f;
     [SerializeField] private float drainRate = 14.5f;
 
+    public static bool gameIsPaused = false;
+
     // Start is called before the first frame update
     void Start()
     {

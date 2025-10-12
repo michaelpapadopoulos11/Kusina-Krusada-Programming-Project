@@ -165,14 +165,22 @@ public class Movement : MonoBehaviour
             }
         }
 
-        // Movement
-        Vector3 move = Vector3.forward * forwardSpeed * Time.deltaTime;
+        if (UIScore.gameIsPaused)
+        {
+            verticalVelocity = -1f;
+            m_char.Move(Vector3.zero);
+        }
+        else if (!UIScore.gameIsPaused)
+        {
+             // Movement
+            Vector3 move = Vector3.forward * forwardSpeed * Time.deltaTime;
 
-        float targetX = Mathf.Lerp(transform.position.x, NewXPos, laneSwitchSpeed * Time.deltaTime);
-        move += (targetX - transform.position.x) * Vector3.right;
+            float targetX = Mathf.Lerp(transform.position.x, NewXPos, laneSwitchSpeed * Time.deltaTime);
+            move += (targetX - transform.position.x) * Vector3.right;
 
-        move.y = verticalVelocity * Time.deltaTime;
+            move.y = verticalVelocity * Time.deltaTime;
 
-        m_char.Move(move);
+            m_char.Move(move);
+        }
     }
 }
