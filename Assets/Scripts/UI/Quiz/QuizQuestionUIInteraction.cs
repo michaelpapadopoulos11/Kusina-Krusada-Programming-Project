@@ -25,6 +25,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
     private string currentCorrectAnswer;
     private bool handlersAttached = false;
     private bool answerAccepted = false; // when true, further answer clicks are ignored until next question
+    private Dictionary<Button, bool> buttonIsCorrect = new Dictionary<Button, bool>();
     private List<Question> parsedQuestions = new List<Question>();
     private List<Question> parsedQuestionsTl = new List<Question>();
     private int lastQuestionIndex = -1;
@@ -113,10 +114,10 @@ public class QuizQuestionUIInteraction : MonoBehaviour
         tagalogButton = root.Q<Button>("Tagalog");
 
     // attach handlers once
-        if (button1 != null) button1.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button1.text)); };
-        if (button2 != null) button2.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button2.text)); };
-        if (button3 != null) button3.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button3.text)); };
-        if (button4 != null) button4.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button4.text)); };
+    if (button1 != null) button1.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button1)); };
+    if (button2 != null) button2.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button2)); };
+    if (button3 != null) button3.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button3)); };
+    if (button4 != null) button4.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button4)); };
     if (tagalogButton != null) tagalogButton.clicked += SwitchToTagalog;
     englishButton = root.Q<Button>("English");
     if (englishButton != null) englishButton.clicked += SwitchToEnglish;
@@ -218,22 +219,25 @@ public class QuizQuestionUIInteraction : MonoBehaviour
             return;
         }
 
+        // prepare and clear any leftover state from previous questions
+        ResetButtons();
+
         lastQuestionIndex = index;
         var item = list[index];
         currentCorrectAnswer = item.correct;
 
-    // reset answer acceptance for the new question and re-enable buttons
-    answerAccepted = false;
-    if (button1 != null) button1.SetEnabled(true);
-    if (button2 != null) button2.SetEnabled(true);
-    if (button3 != null) button3.SetEnabled(true);
-    if (button4 != null) button4.SetEnabled(true);
+    // reset answer acceptance for the new question and ensure buttons enabled
+        answerAccepted = false;
+        if (button1 != null) button1.SetEnabled(true);
+        if (button2 != null) button2.SetEnabled(true);
+        if (button3 != null) button3.SetEnabled(true);
+        if (button4 != null) button4.SetEnabled(true);
 
         if (questionLabel != null) questionLabel.text = item.q;
-        if (button1 != null) button1.text = item.a1;
-        if (button2 != null) button2.text = item.a2;
-        if (button3 != null) button3.text = item.a3;
-        if (button4 != null) button4.text = item.a4;
+    if (button1 != null) { button1.text = item.a1; buttonIsCorrect[button1] = string.Equals(item.a1.Trim(), item.correct.Trim(), StringComparison.Ordinal); }
+    if (button2 != null) { button2.text = item.a2; buttonIsCorrect[button2] = string.Equals(item.a2.Trim(), item.correct.Trim(), StringComparison.Ordinal); }
+    if (button3 != null) { button3.text = item.a3; buttonIsCorrect[button3] = string.Equals(item.a3.Trim(), item.correct.Trim(), StringComparison.Ordinal); }
+    if (button4 != null) { button4.text = item.a4; buttonIsCorrect[button4] = string.Equals(item.a4.Trim(), item.correct.Trim(), StringComparison.Ordinal); }
     }
 
     private void LoadRandomQuestionFromCsv()
@@ -257,22 +261,25 @@ public class QuizQuestionUIInteraction : MonoBehaviour
             }
         }
 
-        lastQuestionIndex = index;
-        var item = list[index];
-        currentCorrectAnswer = item.correct;
+    // prepare and clear any leftover state from previous questions
+    ResetButtons();
 
-        // reset answer acceptance for the new question and re-enable buttons
-        answerAccepted = false;
-        if (button1 != null) button1.SetEnabled(true);
-        if (button2 != null) button2.SetEnabled(true);
-        if (button3 != null) button3.SetEnabled(true);
-        if (button4 != null) button4.SetEnabled(true);
+    lastQuestionIndex = index;
+    var item = list[index];
+    currentCorrectAnswer = item.correct;
 
-        if (questionLabel != null) questionLabel.text = item.q;
-        if (button1 != null) button1.text = item.a1;
-        if (button2 != null) button2.text = item.a2;
-        if (button3 != null) button3.text = item.a3;
-        if (button4 != null) button4.text = item.a4;
+    // reset answer acceptance for the new question and ensure buttons enabled
+    answerAccepted = false;
+    if (button1 != null) button1.SetEnabled(true);
+    if (button2 != null) button2.SetEnabled(true);
+    if (button3 != null) button3.SetEnabled(true);
+    if (button4 != null) button4.SetEnabled(true);
+
+    if (questionLabel != null) questionLabel.text = item.q;
+    if (button1 != null) { button1.text = item.a1; buttonIsCorrect[button1] = string.Equals(item.a1.Trim(), item.correct.Trim(), StringComparison.Ordinal); }
+    if (button2 != null) { button2.text = item.a2; buttonIsCorrect[button2] = string.Equals(item.a2.Trim(), item.correct.Trim(), StringComparison.Ordinal); }
+    if (button3 != null) { button3.text = item.a3; buttonIsCorrect[button3] = string.Equals(item.a3.Trim(), item.correct.Trim(), StringComparison.Ordinal); }
+    if (button4 != null) { button4.text = item.a4; buttonIsCorrect[button4] = string.Equals(item.a4.Trim(), item.correct.Trim(), StringComparison.Ordinal); }
     }
 
     private string[] SplitCsvLine(string line)
@@ -311,78 +318,81 @@ public class QuizQuestionUIInteraction : MonoBehaviour
         return fields.ToArray();
     }
 
-    private IEnumerator OnAnswerSelected(string selectedText)
+    private IEnumerator OnAnswerSelected(Button clicked)
     {
-        if (string.Equals(selectedText.Trim(), currentCorrectAnswer.Trim(), StringComparison.Ordinal))
+        // use the precomputed correctness mapping to avoid relying on button text
+        bool isCorrect = false;
+        if (buttonIsCorrect != null && clicked != null && buttonIsCorrect.ContainsKey(clicked))
+            isCorrect = buttonIsCorrect[clicked];
+
+        if (isCorrect)
         {
             // correct
-            Debug.Log("Correct answer selected: " + selectedText);
-            // Show "CORRECT!" on the button that was pressed
-            if (button1.text == selectedText)
-            {
-                UnityEngine.Cursor.lockState = CursorLockMode.Locked; // Lock the cursor
-                UnityEngine.Cursor.visible = false; // Hide the cursor
-                answerAccepted = true; // prevent further input until next question
-                button1.text = "CORRECT!";
-                button1.style.fontSize = new Length(200, LengthUnit.Percent);
-            }
-            else if (button2.text == selectedText)
-            {
-                UnityEngine.Cursor.lockState = CursorLockMode.Locked; // Lock the cursor
-                UnityEngine.Cursor.visible = false; // Hide the cursor
-                answerAccepted = true; // prevent further input until next question
-                button2.text = "CORRECT!";
-                button2.style.fontSize = new Length(200, LengthUnit.Percent);
-            }
-            else if (button3.text == selectedText)
-            {
-                UnityEngine.Cursor.lockState = CursorLockMode.Locked; // Lock the cursor
-                UnityEngine.Cursor.visible = false; // Hide the cursor
-                answerAccepted = true; // prevent further input until next question
-                button3.text = "CORRECT!";
-                button3.style.fontSize = new Length(200, LengthUnit.Percent);
-            }
-            else if (button4.text == selectedText)
-            {
-                UnityEngine.Cursor.lockState = CursorLockMode.Locked; // Lock the cursor
-                UnityEngine.Cursor.visible = false; // Hide the cursor
-                answerAccepted = true; // prevent further input until next question
-                button4.text = "CORRECT!";
-                button4.style.fontSize = new Length(200, LengthUnit.Percent);
-            }
+            Debug.Log("Correct answer selected.");
+            // prevent further input
+            answerAccepted = true;
+
+            UnityEngine.Cursor.lockState = CursorLockMode.Locked; // Lock the cursor
+            UnityEngine.Cursor.visible = false; // Hide the cursor
+
+            // Update only the clicked button
+            clicked.text = "CORRECT!";
+            clicked.style.fontSize = new Length(200, LengthUnit.Percent);
+
+            // disable other buttons to avoid further clicks
+            if (button1 != null && button1 != clicked) button1.SetEnabled(false);
+            if (button2 != null && button2 != clicked) button2.SetEnabled(false);
+            if (button3 != null && button3 != clicked) button3.SetEnabled(false);
+            if (button4 != null && button4 != clicked) button4.SetEnabled(false);
 
             Time.timeScale = 1f; // Resume the game
             yield return new WaitForSeconds(1.5f); // wait a moment to show "Correct!" message
             if (root != null)
                 root.style.display = DisplayStyle.None; // Hide the UI
 
+            ResetButtons();
             UIScore.gameIsPaused = false;
             UIFade.SetActive(false);
+            answerAccepted = false;
         }
         else
         {
             Debug.Log("Incorrect");
+            // mark only the clicked button as incorrect
+            clicked.text = "INCORRECT!";
+            clicked.style.fontSize = new Length(200, LengthUnit.Percent);
             // keep game paused and UI shown
-            if (button1.text == selectedText)
-            {
-                button1.text = "INCORRECT!";
-                button1.style.fontSize = new Length(200, LengthUnit.Percent);
-            }
-            else if (button2.text == selectedText)
-            {
-                button2.text = "INCORRECT!";
-                button2.style.fontSize = new Length(200, LengthUnit.Percent);
-            }
-            else if (button3.text == selectedText)
-            {
-                button3.text = "INCORRECT!";
-                button3.style.fontSize = new Length(200, LengthUnit.Percent);
-            }
-            else if (button4.text == selectedText)
-            {
-                button4.text = "INCORRECT!";
-                button4.style.fontSize = new Length(200, LengthUnit.Percent);
-            }
+        }
+    }
+
+    // Reset visual state of answer buttons so new questions start clean
+    private void ResetButtons()
+    {
+        // clear previous correctness mapping
+        buttonIsCorrect.Clear();
+        if (button1 != null)
+        {
+            button1.text = string.Empty;
+            button1.style.fontSize = new Length(75, LengthUnit.Percent);
+            button1.SetEnabled(true);
+        }
+        if (button2 != null)
+        {
+            button2.text = string.Empty;
+            button2.style.fontSize = new Length(75, LengthUnit.Percent);
+            button2.SetEnabled(true);
+        }
+        if (button3 != null)
+        {
+            button3.text = string.Empty;
+            button3.style.fontSize = new Length(75, LengthUnit.Percent);
+            button3.SetEnabled(true);
+        }
+        if (button4 != null)
+        {
+            button4.text = string.Empty;
+            button4.style.fontSize = new Length(75, LengthUnit.Percent);
+            button4.SetEnabled(true);
         }
     }
 
