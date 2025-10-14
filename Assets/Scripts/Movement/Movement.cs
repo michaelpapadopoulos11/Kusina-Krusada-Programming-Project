@@ -18,6 +18,8 @@ public class Movement : MonoBehaviour
 
     public float XValue = 2;
     public float forwardSpeed = 5f;
+    // Store the base speed so we can restore after slow effects
+    private float baseForwardSpeed;
     public float jumpForce = 8f;
     public float gravity = -20f;
     public float laneSwitchSpeed = 5f;
@@ -41,18 +43,22 @@ public class Movement : MonoBehaviour
     public float invincibilityTimer = 0f;
     public float invincibilityDuration = 5f;
 
-    void Start()
-    {
+    public bool isSlowed = false;
+    public float slowTimer = 0f;
+    public float slowDuration = 5f;
+
+    void Start() {
         m_char = GetComponent<CharacterController>();
         originalScale = transform.localScale;
 
         originalHeight = m_char.height;
         originalCenter = m_char.center;
         isInvincible = false;
+        isSlowed = false;
+        baseForwardSpeed = forwardSpeed;
     }
 
-    void Update()
-    {
+    void Update() {
         // Reset swipes
         SwipeLeft = false;
         SwipeRight = false;
@@ -181,16 +187,26 @@ public class Movement : MonoBehaviour
 
         m_char.Move(move);
 
-        // Invincibility timer handling
-        if (isInvincible)
-        {
+        // Invincibility powerup handling
+        if (isInvincible) {
             invincibilityTimer -= Time.deltaTime;
-            if (invincibilityTimer <= 0f)
-            {
+            if (invincibilityTimer <= 0f) {
                 isInvincible = false;
                 invincibilityTimer = 0f;
-                Debug.Log("Invincibility expired");
+                Debug.Log("Invincibility powerup expired");
             }
         }
+
+    // Slowdown powerup handling
+    if (isSlowed) {
+        slowTimer -= Time.deltaTime;
+        if (slowTimer <= 0f) {
+            isSlowed = false;
+            slowTimer = 0f;
+            // Restore forward speed to base value
+            forwardSpeed = baseForwardSpeed;
+            Debug.Log("Slowdown powerup expired — speed restored");
+        }
+    }
     }
 }
