@@ -80,10 +80,9 @@ public class Generate : MonoBehaviour
                 if (go.GetComponent<UnityEngine.RectTransform>() != null) continue;
 
                 bool isCoinCloneByName = string.Equals(go.name, cloneName, System.StringComparison.Ordinal);
-                bool isCoinByTag = false;
-                try { isCoinByTag = go.CompareTag("Coin"); } catch { isCoinByTag = false; }
+                bool isCoinByComponent = go.GetComponent<Coin>() != null;
 
-                if (isCoinCloneByName || isCoinByTag)
+                if (isCoinCloneByName || isCoinByComponent)
                 {
                     // If it's already tracked, skip here — tracked ones were already processed above.
                     if (coins.Contains(go)) continue;
