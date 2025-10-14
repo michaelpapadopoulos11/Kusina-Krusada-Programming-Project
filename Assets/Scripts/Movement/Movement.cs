@@ -48,6 +48,7 @@ public class Movement : MonoBehaviour
 
         originalHeight = m_char.height;
         originalCenter = m_char.center;
+        isInvincible = false;
     }
 
     void Update()
@@ -180,15 +181,16 @@ public class Movement : MonoBehaviour
 
         m_char.Move(move);
 
-
-
-
-    // MIKE'S INVINCIBILITY POWER UP SECTION:
-    if (isInvincible) {
-        invincibilityTimer -= Time.deltaTime;
-        if (invincibilityTimer <= 0f) {
-            isInvincible = false;
+        // Invincibility timer handling
+        if (isInvincible)
+        {
+            invincibilityTimer -= Time.deltaTime;
+            if (invincibilityTimer <= 0f)
+            {
+                isInvincible = false;
+                invincibilityTimer = 0f;
+                Debug.Log("Invincibility expired");
+            }
         }
-    }
     }
 }
