@@ -7,8 +7,13 @@ using UnityEngine.SceneManagement;
 
 public class UIMainMenuButtons : MonoBehaviour
 {
+    [SerializeField] private GameObject SettingsCanvas;
 
-    public void OnPlayClick ()
+    void Start()
+    {
+        if (SettingsCanvas is not null) { SettingsCanvas.SetActive(false); }
+    }
+    public void OnPlayClick()
     {
         Debug.Log("Play Clicked");
         switchScene();
@@ -24,6 +29,12 @@ public class UIMainMenuButtons : MonoBehaviour
     {
         //Function of Settings
         Debug.Log("Settings Clicked");
+        showSettingsPanel();
+    }
+
+    private void showSettingsPanel()
+    {
+        SettingsCanvas.SetActive(true);
     }
 
     private void switchScene() 
