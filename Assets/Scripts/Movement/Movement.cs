@@ -42,6 +42,13 @@ public class Movement : MonoBehaviour
     public float invincibilityDuration = 5f;
     public float invincibleAlpha = 0.5f;
 
+    // Flicker settings: start flickering this many seconds before the end
+    [Tooltip("Seconds before invincibility end when flicker starts (e.g. 2)")]
+    public float flickerStart = 2f;
+    // Flicker frequency range (Hz)
+    public float flickerMinFreq = 4f;
+    public float flickerMaxFreq = 12f;
+
     private Renderer[] _renderers;
     private Color[][] _originalColors;
     private bool _prevInvincible = false;
@@ -214,10 +221,17 @@ public class Movement : MonoBehaviour
             }
         }
 
+        // If invincibility state changed, apply immediate visual (sets base alpha)
         if (isInvincible != _prevInvincible)
         {
             ApplyInvincibilityVisual(isInvincible);
             _prevInvincible = isInvincible;
+        }
+
+        // Update per-frame visuals (handles flicker when near expiry)
+        if (isInvincible)
+        {
+            UpdateInvincibilityFlicker();
         }
     }
 
@@ -240,6 +254,45 @@ public class Movement : MonoBehaviour
                 }
                 // when off, restore original alpha
                 mats[j].color = col;
+            }
+        }
+    }
+
+    private void UpdateInvincibilityFlicker()
+    {
+        if (_renderers == null || _originalColors == null) return;
+
+        float timeLeft = invincibilityTimer;
+        if (timeLeft <= 0f) return;
+
+        // If not yet in flicker window, ensure base invincible alpha is applied
+        if (timeLeft > flickerStart)
+        {
+            // base alpha already applied by ApplyInvincibilityVisual when state changed
+            return;
+        }
+
+        // Map timeLeft in [flickerStart..0] to frequency range [flickerMinFreq..flickerMaxFreq]
+        float t = Mathf.Clamp01(1f - (timeLeft / flickerStart));
+        float freq = Mathf.Lerp(flickerMinFreq, flickerMaxFreq, t);
+
+        // Create a 0..1 pingpong value at 'freq' Hz
+        float signal = Mathf.PingPong(Time.time * freq, 2f);
+
+        // When signal > 0.5 show the invincibleAlpha, otherwise show fully visible (or original alpha)
+        float targetAlpha = signal > 0.5f ? Mathf.Clamp01(invincibleAlpha) : 1f;
+
+        for (int i = 0; i < _renderers.Length; i++)
+        {
+            var renderer = _renderers[i];
+            var mats = renderer.materials;
+            for (int j = 0; j < mats.Length; j++)
+            {
+                if (!mats[j].HasProperty("_Color")) continue;
+
+                Color baseCol = _originalColors[i][j];
+                baseCol.a = targetAlpha;
+                mats[j].color = baseCol;
             }
         }
     }
