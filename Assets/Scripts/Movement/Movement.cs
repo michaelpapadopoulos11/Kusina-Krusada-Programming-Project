@@ -40,6 +40,11 @@ public class Movement : MonoBehaviour
     public bool isInvincible = false;
     public float invincibilityTimer = 0f;
     public float invincibilityDuration = 5f;
+    public float invincibleAlpha = 0.5f;
+
+    private Renderer[] _renderers;
+    private Color[][] _originalColors;
+    private bool _prevInvincible = false;
 
     void Start()
     {
@@ -49,6 +54,22 @@ public class Movement : MonoBehaviour
         originalHeight = m_char.height;
         originalCenter = m_char.center;
         isInvincible = false;
+
+        // Cache renderers and original colors for visual feedback
+        _renderers = GetComponentsInChildren<Renderer>(true);
+        _originalColors = new Color[_renderers.Length][];
+        for (int i = 0; i < _renderers.Length; i++)
+        {
+            var mats = _renderers[i].materials;
+            _originalColors[i] = new Color[mats.Length];
+            for (int j = 0; j < mats.Length; j++)
+            {
+                if (mats[j].HasProperty("_Color"))
+                    _originalColors[i][j] = mats[j].color;
+                else
+                    _originalColors[i][j] = Color.white;
+            }
+        }
     }
 
     void Update()
@@ -190,6 +211,35 @@ public class Movement : MonoBehaviour
                 isInvincible = false;
                 invincibilityTimer = 0f;
                 Debug.Log("Invincibility expired");
+            }
+        }
+
+        if (isInvincible != _prevInvincible)
+        {
+            ApplyInvincibilityVisual(isInvincible);
+            _prevInvincible = isInvincible;
+        }
+    }
+
+    private void ApplyInvincibilityVisual(bool on)
+    {
+        if (_renderers == null || _originalColors == null) return;
+
+        for (int i = 0; i < _renderers.Length; i++)
+        {
+            var renderer = _renderers[i];
+            var mats = renderer.materials; // creates instances if needed
+            for (int j = 0; j < mats.Length; j++)
+            {
+                if (!mats[j].HasProperty("_Color")) continue;
+
+                Color col = _originalColors[i][j];
+                if (on)
+                {
+                    col.a = Mathf.Clamp01(invincibleAlpha);
+                }
+                // when off, restore original alpha
+                mats[j].color = col;
             }
         }
     }
