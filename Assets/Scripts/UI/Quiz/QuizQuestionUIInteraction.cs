@@ -33,6 +33,14 @@ public class QuizQuestionUIInteraction : MonoBehaviour
 
     [SerializeField] private GameObject UIFade;
 
+    // stored delegates so we can unsubscribe cleanly
+    private System.Action onBtn1;
+    private System.Action onBtn2;
+    private System.Action onBtn3;
+    private System.Action onBtn4;
+    private System.Action onTagalog;
+    private System.Action onEnglish;
+
     [Serializable]
     private class Question
     {
@@ -73,7 +81,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
     IEnumerator NewRoutine()
     {
         yield return new WaitForSeconds(2.5f);
-        UIFade.SetActive(true);
+        if (UIFade != null) UIFade.SetActive(true);
 
         Time.timeScale = 0f; // Pause the game
             UnityEngine.Cursor.lockState = CursorLockMode.None; // Unlock the cursor
@@ -88,8 +96,8 @@ public class QuizQuestionUIInteraction : MonoBehaviour
             // Load a random question from parsed CSV and populate UI
             LoadRandomQuestionFromCsv();
 
-            // Show UI
-            root.style.display = DisplayStyle.Flex;
+        // Show UI
+        if (root != null) root.style.display = DisplayStyle.Flex;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -113,19 +121,48 @@ public class QuizQuestionUIInteraction : MonoBehaviour
         button4 = root.Q<Button>("Button4");
         tagalogButton = root.Q<Button>("Tagalog");
 
-    // attach handlers once
-    if (button1 != null) button1.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button1)); };
-    if (button2 != null) button2.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button2)); };
-    if (button3 != null) button3.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button3)); };
-    if (button4 != null) button4.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button4)); };
-    if (tagalogButton != null) tagalogButton.clicked += SwitchToTagalog;
+    // attach handlers once (store Actions so we can unsubscribe later)
+    onBtn1 = () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button1)); };
+    onBtn2 = () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button2)); };
+    onBtn3 = () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button3)); };
+    onBtn4 = () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button4)); };
+    onTagalog = SwitchToTagalog;
+    onEnglish = SwitchToEnglish;
+
+    if (button1 != null) button1.clicked += onBtn1;
+    if (button2 != null) button2.clicked += onBtn2;
+    if (button3 != null) button3.clicked += onBtn3;
+    if (button4 != null) button4.clicked += onBtn4;
+    if (tagalogButton != null) tagalogButton.clicked += onTagalog;
     englishButton = root.Q<Button>("English");
-    if (englishButton != null) englishButton.clicked += SwitchToEnglish;
+    if (englishButton != null) englishButton.clicked += onEnglish;
 
     // set initial visibility: English button hidden, Tagalog visible
     UpdateLanguageButtonsVisibility();
 
         handlersAttached = true;
+    }
+
+    private void OnDisable()
+    {
+        // Unsubscribe UI handlers to avoid callbacks into destroyed objects
+        if (handlersAttached)
+        {
+            if (button1 != null && onBtn1 != null) button1.clicked -= onBtn1;
+            if (button2 != null && onBtn2 != null) button2.clicked -= onBtn2;
+            if (button3 != null && onBtn3 != null) button3.clicked -= onBtn3;
+            if (button4 != null && onBtn4 != null) button4.clicked -= onBtn4;
+            if (tagalogButton != null && onTagalog != null) tagalogButton.clicked -= onTagalog;
+            if (englishButton != null && onEnglish != null) englishButton.clicked -= onEnglish;
+            handlersAttached = false;
+        }
+
+        StopAllCoroutines();
+    }
+
+    private void OnDestroy()
+    {
+        OnDisable();
     }
 
     private void LoadFirstQuestionFromCsv()

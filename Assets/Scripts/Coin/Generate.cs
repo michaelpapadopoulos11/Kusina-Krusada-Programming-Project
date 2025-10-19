@@ -13,6 +13,8 @@ public class Generate : MonoBehaviour
     public int maxCoins = 5;
 
     private readonly float[] xPositions = { -2.5f, 0.12f, 2.3f };
+    // possible Y positions for spawned coins
+    public float[] yPositions = new float[] { 2f, 4f };
     private List<GameObject> coins = new List<GameObject>();
     private float timer = 0f;
     // How far behind the player a clone must be before it's destroyed
@@ -152,9 +154,13 @@ public class Generate : MonoBehaviour
     void SpawnCoin()
     {
         int lane = Random.Range(0, xPositions.Length);
+        float y = coinY;
+        if (yPositions != null && yPositions.Length > 0)
+            y = yPositions[Random.Range(0, yPositions.Length)];
+
         Vector3 spawnPos = new Vector3(
             xPositions[lane],
-            coinY,
+            y,
             player.position.z + 150f
         );
 
