@@ -7,7 +7,6 @@ using System;
 public class UIScore : MonoBehaviour
 {
     [SerializeField] private Text txtScore;
-    [SerializeField] private int multiplier = 100;
     [SerializeField] private float score = 0;
     [SerializeField] private Image container;
     [SerializeField] private Image mask;
@@ -26,7 +25,6 @@ public class UIScore : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        increaseScore();
         drainBar();
         setScoreText();
     }
@@ -45,12 +43,11 @@ public class UIScore : MonoBehaviour
         mask.fillAmount = fillAmount; //changes the fill mask on the inner soap bar
     }
 
-    private void increaseScore()
-    {
-        score += multiplier * Time.deltaTime * (cur/100);
-    }
+    // Time-based scoring removed. Score is now driven by pickups (ScoreManager).
     private void setScoreText()
     {
-        txtScore.text = Convert.ToString(Math.Round(score, 0));
+        // Use ScoreManager.Score (static). If ScoreManager isn't set up, fallback to the local score field.
+        int display = ScoreManager.Score != 0 ? ScoreManager.Score : Mathf.RoundToInt(score);
+        txtScore.text = Convert.ToString(display);
     }
 }

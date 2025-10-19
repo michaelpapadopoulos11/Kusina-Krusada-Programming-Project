@@ -6,14 +6,16 @@ public class Generate : MonoBehaviour
     public GameObject coinPrefab;
     public Transform player;
     public float coinY = 2f;
-    public float spawnInterval = 8f;
-    public int maxCoins = 2;
+    [Tooltip("Seconds between automatic spawns")]
+    public float spawnInterval = 5f;
+    [Tooltip("Maximum clones allowed in scene from this spawner")]
+    public int maxCoins = 5;
 
     private readonly float[] xPositions = { -2.5f, 0.12f, 2.3f };
     private List<GameObject> coins = new List<GameObject>();
     private float timer = 0f;
-    // How far behind the player a coin must be before it's destroyed
-    public float destroyDistanceBehind = 10f;
+    // How far behind the player a clone must be before it's destroyed
+    public float destroyDistanceBehind = 20f;
     // Prevent rapid respawn storms when many coins are destroyed at once
     [Tooltip("Minimum seconds between spawns triggered by OnCoinDestroyed to avoid flooding")]
     public float onDestroyedSpawnCooldown = 0.2f;
@@ -37,7 +39,7 @@ public class Generate : MonoBehaviour
                 SpawnCoin();
         }
 
-        // Cleanup null coins (destroyed via collision)
+        // Cleanup null coins (destroyed via collision or self-destroy)
         // Remove destroyed (null) entries and explicit out-of-range coins tracked by this spawner
         for (int i = coins.Count - 1; i >= 0; i--)
         {
@@ -138,7 +140,24 @@ public class Generate : MonoBehaviour
         player.position.z + 150f
     );
 
-    GameObject coin = Instantiate(coinPrefab, spawnPos, coinPrefab.transform.rotation);
+    GameObject prefabToUse = coinPrefab != null ? coinPrefab : this.gameObject;
+    GameObject coin = Instantiate(prefabToUse, spawnPos, prefabToUse.transform.rotation);
+
+    // If we instantiated this spawner's own GameObject, remove Generate from the clone to prevent recursive spawning
+    if (prefabToUse == this.gameObject)
+    {
+        var gen = coin.GetComponent<Generate>();
+        if (gen != null) Destroy(gen);
+    }
+
+    // Ensure the clone has a SpawnedEntity to self-manage lifetime
+    if (coin.GetComponent<SpawnedEntity>() == null)
+    {
+        var se = coin.AddComponent<SpawnedEntity>();
+        se.player = this.player;
+        se.destroyDistanceBehind = this.destroyDistanceBehind;
+    }
+
     coins.Add(coin);
 }
 
@@ -152,7 +171,22 @@ public class Generate : MonoBehaviour
         );
 
         // Use the prefab's original rotation
-        GameObject coin = Instantiate(coinPrefab, spawnPos, coinPrefab.transform.rotation);
+        GameObject prefabToUse = coinPrefab != null ? coinPrefab : this.gameObject;
+        GameObject coin = Instantiate(prefabToUse, spawnPos, prefabToUse.transform.rotation);
+
+        if (prefabToUse == this.gameObject)
+        {
+            var gen = coin.GetComponent<Generate>();
+            if (gen != null) Destroy(gen);
+        }
+
+        if (coin.GetComponent<SpawnedEntity>() == null)
+        {
+            var se = coin.AddComponent<SpawnedEntity>();
+            se.player = this.player;
+            se.destroyDistanceBehind = this.destroyDistanceBehind;
+        }
+
         coins.Add(coin);
     }
 
