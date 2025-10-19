@@ -15,13 +15,6 @@ public class SpawnedEntity : MonoBehaviour
 
         if (transform.position.z < player.position.z - destroyDistanceBehind)
         {
-            // Notify spawners (so they can choose to replace)
-            var spawners = GameObject.FindObjectsOfType<Generate>();
-            foreach (var s in spawners)
-            {
-                s.OnCoinDestroyed();
-            }
-
             Destroy(gameObject);
         }
     }

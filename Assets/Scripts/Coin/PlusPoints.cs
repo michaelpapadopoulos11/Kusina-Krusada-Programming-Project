@@ -21,14 +21,7 @@ public class PlusPoints : MonoBehaviour
 
         ScoreManager.AddPoints(points);
 
-        // If there is a Generate component in the scene that wants to know, call its OnCoinDestroyed.
-        // We'll try to find a Generate on the root spawner(s) to notify.
-        var spawners = GameObject.FindObjectsOfType<Generate>();
-        foreach (var s in spawners)
-        {
-            s.OnCoinDestroyed();
-        }
-
+        // Destroy the pickup on collection so clones are removed immediately
         Destroy(gameObject);
     }
 
@@ -42,12 +35,8 @@ public class PlusPoints : MonoBehaviour
         }
 
         ScoreManager.AddPoints(points);
-        var spawners = GameObject.FindObjectsOfType<Generate>();
-        foreach (var s in spawners)
-        {
-            s.OnCoinDestroyed();
-        }
 
+        // Destroy the pickup on collection so clones are removed immediately
         Destroy(gameObject);
     }
 }

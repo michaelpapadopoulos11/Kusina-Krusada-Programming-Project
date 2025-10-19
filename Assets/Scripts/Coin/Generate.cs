@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
 public class Generate : MonoBehaviour
@@ -16,10 +17,7 @@ public class Generate : MonoBehaviour
     private float timer = 0f;
     // How far behind the player a clone must be before it's destroyed
     public float destroyDistanceBehind = 20f;
-    // Prevent rapid respawn storms when many coins are destroyed at once
-    [Tooltip("Minimum seconds between spawns triggered by OnCoinDestroyed to avoid flooding")]
-    public float onDestroyedSpawnCooldown = 0.2f;
-    private float lastOnDestroyedSpawnTime = -Mathf.Infinity;
+    // (Removed unused OnDestroyed spawn cooldown fields — spawning now only occurs on the timer)
 
     void Start()
     {
@@ -81,16 +79,22 @@ public class Generate : MonoBehaviour
                 // Skip UI elements (they use RectTransform)
                 if (go.GetComponent<UnityEngine.RectTransform>() != null) continue;
 
-                bool isCoinCloneByName = string.Equals(go.name, cloneName, System.StringComparison.Ordinal);
+                bool isCoinCloneByName = string.Equals(go.name, cloneName, System.StringComparison.Ordinal) || go.name.StartsWith(coinPrefab.name);
+                // Consider PlusPoints as the marker component for point-like pickups
+                bool isPointByComponent = go.GetComponent<PlusPoints>() != null;
                 bool isCoinByComponent = go.GetComponent<Coin>() != null;
 
-                if (isCoinCloneByName || isCoinByComponent)
+                if (isCoinCloneByName || isCoinByComponent || isPointByComponent)
                 {
                     // If it's already tracked, skip here — tracked ones were already processed above.
                     if (coins.Contains(go)) continue;
 
-                    // If it's behind the player past threshold, destroy it
-                    if (go.transform.position.z < behindZAll)
+                    // Don't destroy the original scene object that is explicitly named "Point"
+                    if (go.name == coinPrefab.name)
+                        continue;
+
+                    // If it's behind the player past threshold OR it's not in the active scene (e.g. under DontDestroyOnLoad), destroy it
+                    if (go.transform.position.z < behindZAll || go.scene != SceneManager.GetActiveScene())
                     {
                         Destroy(go);
                     }
@@ -99,13 +103,13 @@ public class Generate : MonoBehaviour
         }
     }
     public void OnCoinDestroyed()
-{
-    // Early sanity checks
-    if (coinPrefab == null)
     {
-        Debug.LogWarning("Generate.OnCoinDestroyed: coinPrefab not assigned");
-        return;
-    }
+        // Early sanity checks
+        if (coinPrefab == null)
+        {
+            Debug.LogWarning("Generate.OnCoinDestroyed: coinPrefab not assigned - cannot spawn replacement.");
+            return;
+        }
     if (player == null)
     {
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
@@ -115,7 +119,6 @@ public class Generate : MonoBehaviour
             return;
         }
     }
-
     // prune any null entries first to get an accurate count
     for (int i = coins.Count - 1; i >= 0; i--)
     {
@@ -123,42 +126,7 @@ public class Generate : MonoBehaviour
             coins.RemoveAt(i);
     }
 
-    // Respect maxCoins so we don't spawn more than allowed
-    if (coins.Count >= maxCoins)
-        return;
-
-    // Enforce a tiny cooldown to avoid many simultaneous spawn calls
-    if (Time.time - lastOnDestroyedSpawnTime < onDestroyedSpawnCooldown)
-        return;
-    lastOnDestroyedSpawnTime = Time.time;
-
-    // Spawn a replacement coin ahead of the player (use same distance as SpawnCoin)
-    int lane = Random.Range(0, xPositions.Length);
-    Vector3 spawnPos = new Vector3(
-        xPositions[lane],
-        coinY,
-        player.position.z + 150f
-    );
-
-    GameObject prefabToUse = coinPrefab != null ? coinPrefab : this.gameObject;
-    GameObject coin = Instantiate(prefabToUse, spawnPos, prefabToUse.transform.rotation);
-
-    // If we instantiated this spawner's own GameObject, remove Generate from the clone to prevent recursive spawning
-    if (prefabToUse == this.gameObject)
-    {
-        var gen = coin.GetComponent<Generate>();
-        if (gen != null) Destroy(gen);
-    }
-
-    // Ensure the clone has a SpawnedEntity to self-manage lifetime
-    if (coin.GetComponent<SpawnedEntity>() == null)
-    {
-        var se = coin.AddComponent<SpawnedEntity>();
-        se.player = this.player;
-        se.destroyDistanceBehind = this.destroyDistanceBehind;
-    }
-
-    coins.Add(coin);
+    // We do not spawn replacements here. Spawning is handled only by the timer in Update (SpawnCoin).
 }
 
     void SpawnCoin()
@@ -170,15 +138,17 @@ public class Generate : MonoBehaviour
             player.position.z + 150f
         );
 
-        // Use the prefab's original rotation
-        GameObject prefabToUse = coinPrefab != null ? coinPrefab : this.gameObject;
-        GameObject coin = Instantiate(prefabToUse, spawnPos, prefabToUse.transform.rotation);
-
-        if (prefabToUse == this.gameObject)
+        if (coinPrefab == null)
         {
-            var gen = coin.GetComponent<Generate>();
-            if (gen != null) Destroy(gen);
+            Debug.LogWarning("Generate.SpawnCoin: coinPrefab not assigned — cannot spawn.");
+            return;
         }
+
+        // Use the prefab's original rotation
+    GameObject coin = Instantiate(coinPrefab, spawnPos, coinPrefab.transform.rotation);
+    // Move the clone into the active scene so it behaves the same as VIRUS clones
+    SceneManager.MoveGameObjectToScene(coin, SceneManager.GetActiveScene());
+    coin.transform.SetParent(null);
 
         if (coin.GetComponent<SpawnedEntity>() == null)
         {
