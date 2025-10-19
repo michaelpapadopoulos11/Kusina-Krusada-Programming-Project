@@ -21,8 +21,11 @@ public class PlusPoints : MonoBehaviour
 
         ScoreManager.AddPoints(points);
 
-        // Destroy the pickup on collection so clones are removed immediately
-        Destroy(gameObject);
+        // Destroy the pickup on collection so clones are removed immediately, but only if this is a clone
+        if (gameObject.name != null && gameObject.name.EndsWith("(Clone)"))
+            Destroy(gameObject);
+        else if (gameObject.GetComponent<CloneMarker>() != null)
+            Destroy(gameObject);
     }
 
     // Support physics collisions (2D if used) - optional
@@ -36,7 +39,10 @@ public class PlusPoints : MonoBehaviour
 
         ScoreManager.AddPoints(points);
 
-        // Destroy the pickup on collection so clones are removed immediately
-        Destroy(gameObject);
+        // Destroy the pickup on collection so clones are removed immediately, but only if this is a clone
+        if (gameObject.name != null && gameObject.name.EndsWith("(Clone)"))
+            Destroy(gameObject);
+        else if (gameObject.GetComponent<CloneMarker>() != null)
+            Destroy(gameObject);
     }
 }

@@ -15,7 +15,15 @@ public class SpawnedEntity : MonoBehaviour
 
         if (transform.position.z < player.position.z - destroyDistanceBehind)
         {
-            Destroy(gameObject);
+            // Only destroy if this is a spawned clone
+            if (gameObject.name != null && gameObject.name.EndsWith("(Clone)"))
+            {
+                Destroy(gameObject);
+            }
+            else if (gameObject.GetComponent<CloneMarker>() != null)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

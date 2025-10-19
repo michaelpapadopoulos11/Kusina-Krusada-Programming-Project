@@ -23,6 +23,14 @@ public class Generate : MonoBehaviour
     {
         if (player == null)
             player = GameObject.FindGameObjectWithTag("Player")?.transform;
+
+        // Warn if the assigned coinPrefab is a scene instance rather than a project prefab asset.
+        #if UNITY_EDITOR
+        if (coinPrefab != null && coinPrefab.scene.IsValid())
+        {
+            Debug.LogWarning("Generate: coinPrefab appears to be a scene instance. Assign the prefab asset from the Project window to avoid duplicating scene objects.");
+        }
+        #endif
     }
 
     void Update()
@@ -33,7 +41,20 @@ public class Generate : MonoBehaviour
         if (timer >= spawnInterval)
         {
             timer = 0f;
-            if (coins.Count < maxCoins)
+            // Count existing spawned clones (global) using CloneMarker to avoid multiple spawners creating duplicates
+            int existing = 0;
+            if (coinPrefab != null)
+            {
+                var markers = FindObjectsOfType<CloneMarker>();
+                for (int m = 0; m < markers.Length; m++)
+                {
+                    var go = markers[m].gameObject;
+                    if (go == null) continue;
+                    if (go.name.StartsWith(coinPrefab.name)) existing++;
+                }
+            }
+
+            if (existing < maxCoins)
                 SpawnCoin();
         }
 
@@ -79,19 +100,18 @@ public class Generate : MonoBehaviour
                 // Skip UI elements (they use RectTransform)
                 if (go.GetComponent<UnityEngine.RectTransform>() != null) continue;
 
-                bool isCoinCloneByName = string.Equals(go.name, cloneName, System.StringComparison.Ordinal) || go.name.StartsWith(coinPrefab.name);
-                // Consider PlusPoints as the marker component for point-like pickups
-                bool isPointByComponent = go.GetComponent<PlusPoints>() != null;
-                bool isCoinByComponent = go.GetComponent<Coin>() != null;
+                // Only consider objects that look like Unity clones (name ends with '(Clone)') or that were explicitly marked by us
+                bool nameLooksLikeClone = go.name != null && go.name.EndsWith("(Clone)");
+                bool isCoinCloneByName = nameLooksLikeClone && go.name.StartsWith(coinPrefab.name);
+                // Consider PlusPoints or Coin components only when the object is actually a clone (avoid removing original scene objects)
+                bool isPointByComponent = nameLooksLikeClone && go.GetComponent<PlusPoints>() != null;
+                bool isCoinByComponent = nameLooksLikeClone && go.GetComponent<Coin>() != null;
+                bool hasCloneMarker = go.GetComponent<CloneMarker>() != null;
 
-                if (isCoinCloneByName || isCoinByComponent || isPointByComponent)
+                if (isCoinCloneByName || isCoinByComponent || isPointByComponent || hasCloneMarker)
                 {
                     // If it's already tracked, skip here — tracked ones were already processed above.
                     if (coins.Contains(go)) continue;
-
-                    // Don't destroy the original scene object that is explicitly named "Point"
-                    if (go.name == coinPrefab.name)
-                        continue;
 
                     // If it's behind the player past threshold OR it's not in the active scene (e.g. under DontDestroyOnLoad), destroy it
                     if (go.transform.position.z < behindZAll || go.scene != SceneManager.GetActiveScene())
@@ -149,6 +169,25 @@ public class Generate : MonoBehaviour
     // Move the clone into the active scene so it behaves the same as VIRUS clones
     SceneManager.MoveGameObjectToScene(coin, SceneManager.GetActiveScene());
     coin.transform.SetParent(null);
+
+    // Normalize name: Unity can sometimes append multiple (Clone)(Clone). Keep a single (Clone)
+    if (coin.name.Contains("(Clone)"))
+    {
+        var baseName = coin.name.Replace("(Clone)", "");
+        coin.name = baseName + "(Clone)";
+    }
+
+    // Remove any Generate components on the clone or its children to avoid recursive spawning
+    var gens = coin.GetComponentsInChildren<Generate>(true);
+    foreach (var g in gens)
+    {
+        if (g != this)
+            Destroy(g);
+    }
+
+    // Attach marker so this object is recognized as a spawned clone
+    if (coin.GetComponent<CloneMarker>() == null)
+        coin.AddComponent<CloneMarker>();
 
         if (coin.GetComponent<SpawnedEntity>() == null)
         {
