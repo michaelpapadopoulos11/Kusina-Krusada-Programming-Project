@@ -3,38 +3,46 @@ using UnityEngine;
 public class PathBootstrapper : MonoBehaviour
 {
     public GameObject pathPrefab;
-    public Transform firstPreplaced;
-
-    [Header("Layout")]
     public int initialToSpawn = 4;
     public float segmentLength = 40f;
     public float fixedX = -6f;
+    public float startY = 0f;
+    public float startZ = -10f;
     public bool matchRotation = false;
 
     void Start()
     {
-        if (PathManager.Instance == null)
-        {
-            Debug.LogWarning("PathManager not found in scene.");
-            return;
-        }
+        RemoveExistingPathPiecesByName("Path Piece");
 
-        if (firstPreplaced) PathManager.Instance.Register(firstPreplaced.gameObject);
-
-        Transform anchor = firstPreplaced != null ? firstPreplaced : transform;
-        Vector3 lastPos = anchor.position;
-
+        float nextZ = startZ;
         for (int i = 0; i < initialToSpawn; i++)
         {
-            Vector3 spawnPos = new Vector3(fixedX, lastPos.y, lastPos.z + segmentLength);
-            Quaternion rot = matchRotation ? anchor.rotation : Quaternion.identity;
+            Vector3 spawnPos = new Vector3(fixedX, startY, nextZ);
+            Quaternion rot = matchRotation ? transform.rotation : Quaternion.identity;
 
-            GameObject seg = Instantiate(pathPrefab, spawnPos, rot);
+            Transform parent = GameObject.FindWithTag("PathParent")?.transform;
+            GameObject seg = Instantiate(pathPrefab, spawnPos, rot, parent);
             PathManager.Instance.Register(seg);
 
-            // next one goes after the one we just placed
-            lastPos = seg.transform.position;
-            anchor = seg.transform;
+            nextZ += segmentLength;
+        }
+    }
+    private void RemoveExistingPathPiecesByName(string targetName)
+    {
+        int removed = 0;
+        var all = Resources.FindObjectsOfTypeAll<GameObject>();
+        for (int i = 0; i < all.Length; i++)
+        {
+            GameObject go = all[i];
+            if (go == null) continue;
+
+            if (!go.scene.IsValid()) continue;
+
+            if (go.name == targetName)
+            {
+                Destroy(go);
+                removed++;
+            }
         }
     }
 }
