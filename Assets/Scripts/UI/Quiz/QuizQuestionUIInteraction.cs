@@ -56,6 +56,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Debug.Log(UISettings.isEnglish); //This is a check for the global variable
         UIFade.SetActive(false);
 
         if (uIDocument == null)
@@ -121,25 +122,22 @@ public class QuizQuestionUIInteraction : MonoBehaviour
         button3 = root.Q<Button>("Button3");
         button4 = root.Q<Button>("Button4");
         tagalogButton = root.Q<Button>("Tagalog");
+        if (UISettings.isEnglish is false)
+        {
+            SwitchToTagalog();
+        }
 
-    // attach handlers once (store Actions so we can unsubscribe later)
-    onBtn1 = () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button1)); };
-    onBtn2 = () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button2)); };
-    onBtn3 = () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button3)); };
-    onBtn4 = () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button4)); };
-    onTagalog = SwitchToTagalog;
-    onEnglish = SwitchToEnglish;
+        // attach handlers once
+        if (button1 != null) button1.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button1)); };
+        if (button2 != null) button2.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button2)); };
+        if (button3 != null) button3.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button3)); };
+        if (button4 != null) button4.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button4)); };
+        if (tagalogButton != null) tagalogButton.clicked += SwitchToTagalog;
+        englishButton = root.Q<Button>("English");
+        if (englishButton != null) englishButton.clicked += SwitchToEnglish;
 
-    if (button1 != null) button1.clicked += onBtn1;
-    if (button2 != null) button2.clicked += onBtn2;
-    if (button3 != null) button3.clicked += onBtn3;
-    if (button4 != null) button4.clicked += onBtn4;
-    if (tagalogButton != null) tagalogButton.clicked += onTagalog;
-    englishButton = root.Q<Button>("English");
-    if (englishButton != null) englishButton.clicked += onEnglish;
-
-    // set initial visibility: English button hidden, Tagalog visible
-    UpdateLanguageButtonsVisibility();
+        // set initial visibility: English button hidden, Tagalog visible
+        UpdateLanguageButtonsVisibility();
 
         handlersAttached = true;
     }
