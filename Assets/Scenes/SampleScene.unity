@@ -4982,7 +4982,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1889224073}
   - {fileID: 100802020}
   - {fileID: 963194228}
   - {fileID: 705507995}
@@ -5072,7 +5071,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 2.1, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1747121635}
   m_Father: {fileID: 41328469}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &100802022
@@ -5121,16 +5121,6 @@ MonoBehaviour:
   crouchScale: 0.5
   crouchDuration: 1
   m_char: {fileID: 100802022}
-  isInvincible: 0
-  invincibilityTimer: 0
-  invincibilityDuration: 5
-  invincibleAlpha: 0.5
-  flickerStart: 2
-  flickerMinFreq: 4
-  flickerMaxFreq: 12
-  isSlowed: 0
-  slowTimer: 0
-  slowDuration: 5
 --- !u!1 &261849724
 GameObject:
   m_ObjectHideFlags: 0
@@ -5162,6 +5152,95 @@ Transform:
   m_Children:
   - {fileID: 786533760}
   - {fileID: 3085408369932728256}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &273431778
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 273431782}
+  - component: {fileID: 273431779}
+  - component: {fileID: 273431781}
+  - component: {fileID: 273431780}
+  m_Layer: 5
+  m_Name: Quiz
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &273431779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273431778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: c44417d933386954aada15423d8d805d, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: c157dfff8c601ae4092314fb99964fe3,
+    type: 3}
+  m_SortingOrder: 0
+--- !u!95 &273431780
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273431778}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e4199089dbef55c4b9c3283ceea66b3a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &273431781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273431778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f47582160ef7ce44a9fb55c344c833f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uIDocument: {fileID: 273431779}
+  Quiz: {fileID: 273431778}
+  questionsCsv: {fileID: 4900000, guid: a43545f365b7ec341a20e7e6a884543b, type: 3}
+  questionsTlCsv: {fileID: 4900000, guid: 34766f45831721145ae94c0d0d1715ab, type: 3}
+  UIFade: {fileID: 1747121634}
+--- !u!4 &273431782
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273431778}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &299659538 stripped
@@ -11131,15 +11210,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1747121634}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 5}
   m_LocalScale: {x: 1.4953271, y: 1.4953271, z: 1.4953271}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1889224073}
+  m_Father: {fileID: 100802020}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000015259, y: 0.000013351}
+  m_AnchoredPosition: {x: 0.000015259, y: -2.0999866}
   m_SizeDelta: {x: 1286.9, y: 1394.295}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1747121636
@@ -11218,8 +11297,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f47582160ef7ce44a9fb55c344c833f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uIDocument: {fileID: 1937094450}
-  Quiz: {fileID: 1937094449}
+  uIDocument: {fileID: 273431779}
+  Quiz: {fileID: 273431778}
   questionsCsv: {fileID: 4900000, guid: a43545f365b7ec341a20e7e6a884543b, type: 3}
   questionsTlCsv: {fileID: 4900000, guid: 34766f45831721145ae94c0d0d1715ab, type: 3}
   UIFade: {fileID: 1747121634}
@@ -11745,7 +11824,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 543450652971131005}
-  - component: {fileID: 3469287836887511000}
   - component: {fileID: 1711813856383441682}
   - component: {fileID: 1846323502}
   - component: {fileID: 1846323501}
@@ -12378,7 +12456,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Quiz
       value: 
-      objectReference: {fileID: 1937094449}
+      objectReference: {fileID: 0}
     - target: {fileID: 1512838612287440577, guid: 56a846f1b14147543b779d9471920443,
         type: 3}
       propertyPath: UIFade
@@ -12388,7 +12466,7 @@ PrefabInstance:
         type: 3}
       propertyPath: uIDocument
       value: 
-      objectReference: {fileID: 1937094450}
+      objectReference: {fileID: 0}
     - target: {fileID: 2582103839365361727, guid: 56a846f1b14147543b779d9471920443,
         type: 3}
       propertyPath: player
@@ -12715,6 +12793,9 @@ SceneRoots:
   m_Roots:
   - {fileID: 41328469}
   - {fileID: 261849725}
+  - {fileID: 273431782}
   - {fileID: 616746226}
   - {fileID: 3577299142029190954}
   - {fileID: 1996062860}
+  - {fileID: 6383934550811617567}
+  - {fileID: 8750344844400313275}

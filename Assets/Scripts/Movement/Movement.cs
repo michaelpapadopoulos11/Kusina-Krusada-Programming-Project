@@ -171,7 +171,7 @@ public class Movement : MonoBehaviour
         }
         else
         {
-            verticalVelocity += gravity * deltaTime;
+            verticalVelocity += gravity * Time.deltaTime;
         }
 
         // Crouching (only when grounded)
@@ -219,7 +219,8 @@ public class Movement : MonoBehaviour
 
             move.y = verticalVelocity * deltaTime;
 
-        m_char.Move(move);
+            m_char.Move(move);
+        }
 
         // Invincibility powerup handling
         if (isInvincible) {
