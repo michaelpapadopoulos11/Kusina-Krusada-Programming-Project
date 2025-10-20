@@ -10,17 +10,12 @@ public float slowDuration = 5f;
     }
 
     void OnTriggerEnter (Collider other) {
-    Movement player = other.GetComponent<Movement>();
+        Movement player = other.GetComponent<Movement>();
         if (player != null) {
             player.isSlowed = true;
-            player.forwardSpeed = player.forwardSpeed / 2;
             player.slowTimer = slowDuration;
             Debug.Log("Player picked up slowdown glove");
             Destroy(gameObject);
-        } else {
-            Debug.Log("Player is no longer slowed");
-            player.isSlowed = false;
-            player.forwardSpeed = player.forwardSpeed * 2;
         }
     }
 }

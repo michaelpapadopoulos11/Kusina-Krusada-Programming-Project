@@ -66,10 +66,7 @@ public class Movement : MonoBehaviour
         originalHeight = m_char.height;
         originalCenter = m_char.center;
         isInvincible = false;
-<<<<<<< HEAD
-        isSlowed = false;
         baseForwardSpeed = forwardSpeed;
-=======
 
         // Cache renderers and original colors for visual feedback
         _renderers = GetComponentsInChildren<Renderer>(true);
@@ -86,7 +83,6 @@ public class Movement : MonoBehaviour
                     _originalColors[i][j] = Color.white;
             }
         }
->>>>>>> invincibility-powerup
     }
 
     void Update() {
@@ -228,19 +224,6 @@ public class Movement : MonoBehaviour
             }
         }
 
-<<<<<<< HEAD
-    // Slowdown powerup handling
-    if (isSlowed) {
-        slowTimer -= Time.deltaTime;
-        if (slowTimer <= 0f) {
-            isSlowed = false;
-            slowTimer = 0f;
-            // Restore forward speed to base value
-            forwardSpeed = baseForwardSpeed;
-            Debug.Log("Slowdown powerup expired — speed restored");
-        }
-    }
-=======
         // If invincibility state changed, apply immediate visual (sets base alpha)
         if (isInvincible != _prevInvincible)
         {
@@ -252,6 +235,17 @@ public class Movement : MonoBehaviour
         if (isInvincible)
         {
             UpdateInvincibilityFlicker();
+        }
+
+        // Handle slow effect
+        if (isSlowed) {
+            forwardSpeed = baseForwardSpeed * 0.5f;
+            slowTimer -= Time.deltaTime;
+            if (slowTimer <= 0f) {
+                isSlowed = false;
+                forwardSpeed = baseForwardSpeed;
+                Debug.Log("Slow effect worn off");
+            }
         }
     }
 
@@ -315,6 +309,5 @@ public class Movement : MonoBehaviour
                 mats[j].color = baseCol;
             }
         }
->>>>>>> invincibility-powerup
     }
 }
