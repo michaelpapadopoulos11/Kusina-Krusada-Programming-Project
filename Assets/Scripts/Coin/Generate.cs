@@ -37,31 +37,18 @@ public class Generate : MonoBehaviour
 
     void Update()
     {
-        timer += Time.deltaTime;
+        // Use cached deltaTime for better performance
+        timer += PerformanceHelper.CachedDeltaTime;
 
         // Spawn coins at interval if not already at max
         if (timer >= spawnInterval)
         {
             timer = 0f;
-            // Count existing spawned clones (global) using CloneMarker to avoid multiple spawners creating duplicates
-            int existing = 0;
-            if (coinPrefab != null)
-            {
-                var markers = FindObjectsOfType<CloneMarker>();
-                for (int m = 0; m < markers.Length; m++)
-                {
-                    var go = markers[m].gameObject;
-                    if (go == null) continue;
-                    if (go.name.StartsWith(coinPrefab.name)) existing++;
-                }
-            }
-
-            if (existing < maxCoins)
+            if (coins.Count < maxCoins)
                 SpawnCoin();
         }
 
-        // Cleanup null coins (destroyed via collision or self-destroy)
-        // Remove destroyed (null) entries and explicit out-of-range coins tracked by this spawner
+        // Optimized cleanup: iterate backwards and remove null entries efficiently
         for (int i = coins.Count - 1; i >= 0; i--)
         {
             var c = coins[i];

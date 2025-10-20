@@ -5,16 +5,19 @@ using UnityEngine;
 public class UICamera : MonoBehaviour
 {
     [SerializeField] private float rotateSpeed = 2;
+    
+    // Performance optimization: cache rotation calculation
+    private float currentRotationY = 0f;
 
-    // Start is called before the first frame update
     void Start()
     {
-        
+        currentRotationY = transform.eulerAngles.y;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        transform.Rotate(0, rotateSpeed * Time.deltaTime, 0);
+        // Use cached deltaTime and avoid creating new Vector3 every frame
+        currentRotationY += rotateSpeed * PerformanceHelper.CachedDeltaTime;
+        transform.rotation = Quaternion.Euler(0, currentRotationY, 0);
     }
 }

@@ -47,6 +47,9 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
+        // Cache deltaTime for performance
+        float deltaTime = PerformanceHelper.CachedDeltaTime;
+        
         // Reset swipes
         SwipeLeft = false;
         SwipeRight = false;
@@ -132,7 +135,7 @@ public class Movement : MonoBehaviour
         }
         else
         {
-            verticalVelocity += gravity * Time.deltaTime;
+            verticalVelocity += gravity * deltaTime;
         }
 
         // Crouching (only when grounded)
@@ -151,7 +154,7 @@ public class Movement : MonoBehaviour
 
         if (isCrouching)
         {
-            crouchTimer -= Time.deltaTime;
+            crouchTimer -= deltaTime;
             if (crouchTimer <= 0f)
             {
                 // Reset model
@@ -172,13 +175,13 @@ public class Movement : MonoBehaviour
         }
         else if (!UIScore.gameIsPaused)
         {
-             // Movement
-            Vector3 move = Vector3.forward * forwardSpeed * Time.deltaTime;
+             // Movement - optimized to use cached deltaTime
+            Vector3 move = Vector3.forward * forwardSpeed * deltaTime;
 
-            float targetX = Mathf.Lerp(transform.position.x, NewXPos, laneSwitchSpeed * Time.deltaTime);
+            float targetX = Mathf.Lerp(transform.position.x, NewXPos, laneSwitchSpeed * deltaTime);
             move += (targetX - transform.position.x) * Vector3.right;
 
-            move.y = verticalVelocity * Time.deltaTime;
+            move.y = verticalVelocity * deltaTime;
 
             m_char.Move(move);
         }

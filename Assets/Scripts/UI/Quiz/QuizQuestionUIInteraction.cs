@@ -116,30 +116,45 @@ public class QuizQuestionUIInteraction : MonoBehaviour
 
     private void CacheUIElements()
     {
-        questionLabel = root.Q<Label>("question_text");
-        button1 = root.Q<Button>("Button1");
-        button2 = root.Q<Button>("Button2");
-        button3 = root.Q<Button>("Button3");
-        button4 = root.Q<Button>("Button4");
-        tagalogButton = root.Q<Button>("Tagalog");
+        // Cache UI elements only once for better performance
+        if (questionLabel == null) questionLabel = root.Q<Label>("question_text");
+        if (button1 == null) button1 = root.Q<Button>("Button1");
+        if (button2 == null) button2 = root.Q<Button>("Button2");
+        if (button3 == null) button3 = root.Q<Button>("Button3");
+        if (button4 == null) button4 = root.Q<Button>("Button4");
+        if (tagalogButton == null) tagalogButton = root.Q<Button>("Tagalog");
+        if (englishButton == null) englishButton = root.Q<Button>("English");
+        
         if (UISettings.isEnglish is false)
         {
             SwitchToTagalog();
         }
 
-        // attach handlers once
-        if (button1 != null) button1.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button1)); };
-        if (button2 != null) button2.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button2)); };
-        if (button3 != null) button3.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button3)); };
-        if (button4 != null) button4.clicked += () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button4)); };
-        if (tagalogButton != null) tagalogButton.clicked += SwitchToTagalog;
-        englishButton = root.Q<Button>("English");
-        if (englishButton != null) englishButton.clicked += SwitchToEnglish;
+        // Attach handlers only once - use proper event unsubscription pattern
+        AttachEventHandlers();
 
         // set initial visibility: English button hidden, Tagalog visible
         UpdateLanguageButtonsVisibility();
 
         handlersAttached = true;
+    }
+    
+    private void AttachEventHandlers()
+    {
+        // Store delegates for proper cleanup
+        onBtn1 = () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button1)); };
+        onBtn2 = () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button2)); };
+        onBtn3 = () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button3)); };
+        onBtn4 = () => { if (!answerAccepted) StartCoroutine(OnAnswerSelected(button4)); };
+        onTagalog = SwitchToTagalog;
+        onEnglish = SwitchToEnglish;
+
+        if (button1 != null) button1.clicked += onBtn1;
+        if (button2 != null) button2.clicked += onBtn2;
+        if (button3 != null) button3.clicked += onBtn3;
+        if (button4 != null) button4.clicked += onBtn4;
+        if (tagalogButton != null) tagalogButton.clicked += onTagalog;
+        if (englishButton != null) englishButton.clicked += onEnglish;
     }
 
     private void OnDisable()
@@ -271,10 +286,22 @@ public class QuizQuestionUIInteraction : MonoBehaviour
         if (button4 != null) button4.SetEnabled(true);
 
         if (questionLabel != null) questionLabel.text = item.q;
-    if (button1 != null) { button1.text = item.a1; buttonIsCorrect[button1] = string.Equals(item.a1.Trim(), item.correct.Trim(), StringComparison.Ordinal); }
-    if (button2 != null) { button2.text = item.a2; buttonIsCorrect[button2] = string.Equals(item.a2.Trim(), item.correct.Trim(), StringComparison.Ordinal); }
-    if (button3 != null) { button3.text = item.a3; buttonIsCorrect[button3] = string.Equals(item.a3.Trim(), item.correct.Trim(), StringComparison.Ordinal); }
-    if (button4 != null) { button4.text = item.a4; buttonIsCorrect[button4] = string.Equals(item.a4.Trim(), item.correct.Trim(), StringComparison.Ordinal); }
+        
+        // Use optimized button property setting
+        SetButtonProperties(button1, item.a1, string.Equals(item.a1.Trim(), item.correct.Trim(), StringComparison.Ordinal));
+        SetButtonProperties(button2, item.a2, string.Equals(item.a2.Trim(), item.correct.Trim(), StringComparison.Ordinal));
+        SetButtonProperties(button3, item.a3, string.Equals(item.a3.Trim(), item.correct.Trim(), StringComparison.Ordinal));
+        SetButtonProperties(button4, item.a4, string.Equals(item.a4.Trim(), item.correct.Trim(), StringComparison.Ordinal));
+    }
+
+    // Optimize button updates by batching operations
+    private void SetButtonProperties(Button button, string text, bool isCorrect, bool enabled = true)
+    {
+        if (button == null) return;
+        
+        button.text = text;
+        button.SetEnabled(enabled);
+        buttonIsCorrect[button] = isCorrect;
     }
 
     private void LoadRandomQuestionFromCsv()
@@ -314,18 +341,27 @@ public class QuizQuestionUIInteraction : MonoBehaviour
     if (button4 != null) button4.SetEnabled(true);
 
     if (questionLabel != null) questionLabel.text = item.q;
-    if (button1 != null) { button1.text = item.a1; buttonIsCorrect[button1] = string.Equals(item.a1.Trim(), item.correct.Trim(), StringComparison.Ordinal); }
-    if (button2 != null) { button2.text = item.a2; buttonIsCorrect[button2] = string.Equals(item.a2.Trim(), item.correct.Trim(), StringComparison.Ordinal); }
-    if (button3 != null) { button3.text = item.a3; buttonIsCorrect[button3] = string.Equals(item.a3.Trim(), item.correct.Trim(), StringComparison.Ordinal); }
-    if (button4 != null) { button4.text = item.a4; buttonIsCorrect[button4] = string.Equals(item.a4.Trim(), item.correct.Trim(), StringComparison.Ordinal); }
+    
+    // Use optimized button property setting
+    SetButtonProperties(button1, item.a1, string.Equals(item.a1.Trim(), item.correct.Trim(), StringComparison.Ordinal));
+    SetButtonProperties(button2, item.a2, string.Equals(item.a2.Trim(), item.correct.Trim(), StringComparison.Ordinal));
+    SetButtonProperties(button3, item.a3, string.Equals(item.a3.Trim(), item.correct.Trim(), StringComparison.Ordinal));
+    SetButtonProperties(button4, item.a4, string.Equals(item.a4.Trim(), item.correct.Trim(), StringComparison.Ordinal));
     }
+
+    // Cached StringBuilder for CSV parsing to reduce allocations
+    private readonly System.Text.StringBuilder csvStringBuilder = new System.Text.StringBuilder();
+    
+    // Cached Length values to avoid repeated allocations
+    private static readonly Length FontSize75Percent = new Length(75, LengthUnit.Percent);
+    private static readonly Length FontSize200Percent = new Length(200, LengthUnit.Percent);
 
     private string[] SplitCsvLine(string line)
     {
         // Parse CSV line handling quoted fields (fields may contain commas inside quotes)
         var fields = new List<string>();
         bool inQuotes = false;
-        var cur = new System.Text.StringBuilder();
+        csvStringBuilder.Clear(); // Reuse StringBuilder to reduce allocations
         for (int i = 0; i < line.Length; i++)
         {
             char c = line[i];
@@ -334,7 +370,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
                 // peek next for escaped quote
                 if (inQuotes && i + 1 < line.Length && line[i + 1] == '"')
                 {
-                    cur.Append('"');
+                    csvStringBuilder.Append('"');
                     i++; // skip escaped quote
                 }
                 else
@@ -344,15 +380,15 @@ public class QuizQuestionUIInteraction : MonoBehaviour
             }
             else if (c == ',' && !inQuotes)
             {
-                fields.Add(cur.ToString());
-                cur.Clear();
+                fields.Add(csvStringBuilder.ToString());
+                csvStringBuilder.Clear();
             }
             else
             {
-                cur.Append(c);
+                csvStringBuilder.Append(c);
             }
         }
-        fields.Add(cur.ToString());
+        fields.Add(csvStringBuilder.ToString());
         return fields.ToArray();
     }
 
@@ -378,7 +414,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
 
             // Update only the clicked button
             clicked.text = "CORRECT!";
-            clicked.style.fontSize = new Length(200, LengthUnit.Percent);
+            clicked.style.fontSize = FontSize200Percent;
 
             // disable other buttons to avoid further clicks
             if (button1 != null && button1 != clicked) button1.SetEnabled(false);
@@ -404,7 +440,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
             Debug.Log($"Wrong answer! Points for this question reduced to {currentQuestionPoints}.");
             // mark only the clicked button as incorrect
             clicked.text = "INCORRECT!";
-            clicked.style.fontSize = new Length(200, LengthUnit.Percent);
+            clicked.style.fontSize = FontSize200Percent;
             // keep game paused and UI shown
         }
     }
@@ -414,30 +450,22 @@ public class QuizQuestionUIInteraction : MonoBehaviour
     {
         // clear previous correctness mapping
         buttonIsCorrect.Clear();
-        if (button1 != null)
-        {
-            button1.text = string.Empty;
-            button1.style.fontSize = new Length(75, LengthUnit.Percent);
-            button1.SetEnabled(true);
-        }
-        if (button2 != null)
-        {
-            button2.text = string.Empty;
-            button2.style.fontSize = new Length(75, LengthUnit.Percent);
-            button2.SetEnabled(true);
-        }
-        if (button3 != null)
-        {
-            button3.text = string.Empty;
-            button3.style.fontSize = new Length(75, LengthUnit.Percent);
-            button3.SetEnabled(true);
-        }
-        if (button4 != null)
-        {
-            button4.text = string.Empty;
-            button4.style.fontSize = new Length(75, LengthUnit.Percent);
-            button4.SetEnabled(true);
-        }
+        
+        // Optimized button reset using helper method
+        ResetSingleButton(button1);
+        ResetSingleButton(button2);
+        ResetSingleButton(button3);
+        ResetSingleButton(button4);
+    }
+    
+    // Helper method to reset individual button properties
+    private void ResetSingleButton(Button button)
+    {
+        if (button == null) return;
+        
+        button.text = string.Empty;
+        button.style.fontSize = FontSize75Percent;
+        button.SetEnabled(true);
     }
 
     private void ShowQuizUI()
@@ -474,9 +502,5 @@ public class QuizQuestionUIInteraction : MonoBehaviour
 
     // }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    // Update method removed for performance - no per-frame updates needed
 }

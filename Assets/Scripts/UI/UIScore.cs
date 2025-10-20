@@ -15,6 +15,9 @@ public class UIScore : MonoBehaviour
     [SerializeField] private float drainRate = 14.5f;
 
     public static bool gameIsPaused = false;
+    
+    // Performance optimization: cache last displayed score to avoid unnecessary updates
+    private int lastDisplayedScore = -1;
 
     // Start is called before the first frame update
     void Start()
@@ -25,13 +28,18 @@ public class UIScore : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        drainBar();
+        // Only update UI when game is not paused for better performance
+        if (!gameIsPaused)
+        {
+            drainBar();
+        }
         setScoreText();
     }
 
     private void drainBar()
     {
-        cur -= drainRate * Time.deltaTime; //decreases by the drainRate/per second
+        // Use cached deltaTime for better performance
+        cur -= drainRate * PerformanceHelper.CachedDeltaTime; //decreases by the drainRate/per second
         cur = Mathf.Clamp(cur, 0, max);
 
         updateBar();
@@ -48,6 +56,12 @@ public class UIScore : MonoBehaviour
     {
         // Use ScoreManager.Score (static). If ScoreManager isn't set up, fallback to the local score field.
         int display = ScoreManager.Score != 0 ? ScoreManager.Score : Mathf.RoundToInt(score);
-        txtScore.text = Convert.ToString(display);
+        
+        // Performance optimization: only update text when score actually changes
+        if (display != lastDisplayedScore)
+        {
+            txtScore.text = PerformanceHelper.FormatScore(display);
+            lastDisplayedScore = display;
+        }
     }
 }

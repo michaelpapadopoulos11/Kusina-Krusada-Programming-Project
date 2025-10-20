@@ -32,9 +32,5 @@ public class UIEvents : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); //Check build settings (File -> Build Settings) for indexes
     }
 
-
-    private void Update()
-    {
-        //detectSwipe();
-    }
+    // Update method removed for performance - no per-frame updates needed
 }

@@ -24,7 +24,8 @@ public class EnemySpawn : MonoBehaviour
 
     void Update()
     {
-        timer -= Time.deltaTime; // Decrease timer by the time passed since last frame
+        // Use cached deltaTime for better performance
+        timer -= PerformanceHelper.CachedDeltaTime; // Decrease timer by the time passed since last frame
 
         if (timer <= 0f)
         {
