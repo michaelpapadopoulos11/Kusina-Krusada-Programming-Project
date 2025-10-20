@@ -190,7 +190,7 @@ public class Movement : MonoBehaviour
 
         if (isCrouching)
         {
-            crouchTimer -= deltaTime;
+            crouchTimer -= Time.deltaTime;
             if (crouchTimer <= 0f)
             {
                 // Reset model
@@ -212,12 +212,12 @@ public class Movement : MonoBehaviour
         else if (!UIScore.gameIsPaused)
         {
              // Movement - optimized to use cached deltaTime
-            Vector3 move = Vector3.forward * forwardSpeed * deltaTime;
+            Vector3 move = Vector3.forward * forwardSpeed * Time.deltaTime;
 
-            float targetX = Mathf.Lerp(transform.position.x, NewXPos, laneSwitchSpeed * deltaTime);
+            float targetX = Mathf.Lerp(transform.position.x, NewXPos, laneSwitchSpeed * Time.deltaTime);
             move += (targetX - transform.position.x) * Vector3.right;
 
-            move.y = verticalVelocity * deltaTime;
+            move.y = verticalVelocity * Time.deltaTime;
 
             m_char.Move(move);
         }
