@@ -14,6 +14,7 @@ public float invincibilityDuration = 5f;
         if (player != null) {
             player.isInvincible = true;
             player.invincibilityTimer = invincibilityDuration;
+            // need to add a visal indication of when the player is invincible -- make the A value half ???            
             Debug.Log("Player picked up invincibility");
             Destroy(gameObject);
         } else {
