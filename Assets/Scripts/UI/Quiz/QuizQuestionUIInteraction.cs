@@ -30,6 +30,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
     private List<Question> parsedQuestionsTl = new List<Question>();
     private int lastQuestionIndex = -1;
     private bool activeIsTagalog = false;
+    private int currentQuestionPoints = 100; // Points available for current question
 
     [SerializeField] private GameObject UIFade;
 
@@ -265,6 +266,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
 
     // reset answer acceptance for the new question and ensure buttons enabled
         answerAccepted = false;
+        currentQuestionPoints = 100; // Reset points for new question
         if (button1 != null) button1.SetEnabled(true);
         if (button2 != null) button2.SetEnabled(true);
         if (button3 != null) button3.SetEnabled(true);
@@ -307,6 +309,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
 
     // reset answer acceptance for the new question and ensure buttons enabled
     answerAccepted = false;
+    currentQuestionPoints = 100; // Reset points for new question
     if (button1 != null) button1.SetEnabled(true);
     if (button2 != null) button2.SetEnabled(true);
     if (button3 != null) button3.SetEnabled(true);
@@ -366,6 +369,9 @@ public class QuizQuestionUIInteraction : MonoBehaviour
         {
             // correct
             Debug.Log("Correct answer selected.");
+            // Award the remaining points for this question
+            ScoreManager.AddPoints(currentQuestionPoints);
+            Debug.Log($"Awarded {currentQuestionPoints} points for correct answer.");
             // prevent further input
             answerAccepted = true;
 
@@ -395,6 +401,9 @@ public class QuizQuestionUIInteraction : MonoBehaviour
         else
         {
             Debug.Log("Incorrect");
+            // Reduce available points for this question by 20
+            currentQuestionPoints = Mathf.Max(0, currentQuestionPoints - 20);
+            Debug.Log($"Wrong answer! Points for this question reduced to {currentQuestionPoints}.");
             // mark only the clicked button as incorrect
             clicked.text = "INCORRECT!";
             clicked.style.fontSize = new Length(200, LengthUnit.Percent);
