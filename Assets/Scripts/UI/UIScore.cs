@@ -7,13 +7,17 @@ using System;
 public class UIScore : MonoBehaviour
 {
     [SerializeField] private Text txtScore;
-    [SerializeField] private int multiplier = 100;
     [SerializeField] private float score = 0;
     [SerializeField] private Image container;
     [SerializeField] private Image mask;
     [SerializeField] private float max = 100f;
     [SerializeField] private float cur = 0f;
     [SerializeField] private float drainRate = 14.5f;
+
+    public static bool gameIsPaused = false;
+    
+    // Performance optimization: cache last displayed score to avoid unnecessary updates
+    private int lastDisplayedScore = -1;
 
     // Start is called before the first frame update
     void Start()
@@ -24,14 +28,18 @@ public class UIScore : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        increaseScore();
-        drainBar();
+        // Only update UI when game is not paused for better performance
+        if (!gameIsPaused)
+        {
+            drainBar();
+        }
         setScoreText();
     }
 
     private void drainBar()
     {
-        cur -= drainRate * Time.deltaTime; //decreases by the drainRate/per second
+        // Use cached deltaTime for better performance
+        cur -= drainRate * PerformanceHelper.CachedDeltaTime; //decreases by the drainRate/per second
         cur = Mathf.Clamp(cur, 0, max);
 
         updateBar();
@@ -43,12 +51,17 @@ public class UIScore : MonoBehaviour
         mask.fillAmount = fillAmount; //changes the fill mask on the inner soap bar
     }
 
-    private void increaseScore()
-    {
-        score += multiplier * Time.deltaTime * (cur/100);
-    }
+    // Time-based scoring removed. Score is now driven by pickups (ScoreManager).
     private void setScoreText()
     {
-        txtScore.text = Convert.ToString(Math.Round(score, 0));
+        // Use ScoreManager.Score (static). If ScoreManager isn't set up, fallback to the local score field.
+        int display = ScoreManager.Score != 0 ? ScoreManager.Score : Mathf.RoundToInt(score);
+        
+        // Performance optimization: only update text when score actually changes
+        if (display != lastDisplayedScore)
+        {
+            txtScore.text = PerformanceHelper.FormatScore(display);
+            lastDisplayedScore = display;
+        }
     }
 }

@@ -7,25 +7,31 @@ public class Coin : MonoBehaviour
     private Transform player;
     private Generate spawner;
     private float timer;
+    
+    // Performance optimization: cache squared distance for faster calculations
+    private float destroyOffsetSqr;
 
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
         spawner = FindObjectOfType<Generate>();
         timer = 0f; // Initialize timer
+        destroyOffsetSqr = destroyOffset * destroyOffset; // Cache squared distance
     }
 
     void Update()
     {
         if (player == null) return;
 
-        // Increment timer
-        timer += Time.deltaTime;
+        // Use cached deltaTime for better performance
+        timer += PerformanceHelper.CachedDeltaTime;
 
-        // Destroy if far behind player
-        if (transform.position.z < player.position.z - destroyOffset)
+        // Optimized distance check using squared distance (no expensive square root)
+        float deltaZ = transform.position.z - player.position.z;
+        if (deltaZ < -destroyOffset) // Simple Z-axis check is sufficient for runner game
         {
             NotifyAndDestroy();
+            return;
         }
 
         // Destroy after lifetime expires

@@ -18,8 +18,6 @@ public class Movement : MonoBehaviour
 
     public float XValue = 2;
     public float forwardSpeed = 5f;
-    // Store the base speed so we can restore after slow effects
-    private float baseForwardSpeed;
     public float jumpForce = 8f;
     public float gravity = -20f;
     public float laneSwitchSpeed = 5f;
@@ -38,54 +36,20 @@ public class Movement : MonoBehaviour
     private float originalHeight;
     private Vector3 originalCenter;
 
-    // MIKE POWER UP
-    public bool isInvincible = false;
-    public float invincibilityTimer = 0f;
-    public float invincibilityDuration = 5f;
-    public float invincibleAlpha = 0.5f;
-
-    // Flicker settings: start flickering this many seconds before the end
-    [Tooltip("Seconds before invincibility end when flicker starts (e.g. 2)")]
-    public float flickerStart = 2f;
-    // Flicker frequency range (Hz)
-    public float flickerMinFreq = 4f;
-    public float flickerMaxFreq = 12f;
-
-    private Renderer[] _renderers;
-    private Color[][] _originalColors;
-    private bool _prevInvincible = false;
-
-    public bool isSlowed = false;
-    public float slowTimer = 0f;
-    public float slowDuration = 5f;
-
-    void Start() {
+    void Start()
+    {
         m_char = GetComponent<CharacterController>();
         originalScale = transform.localScale;
 
         originalHeight = m_char.height;
         originalCenter = m_char.center;
-        isInvincible = false;
-        baseForwardSpeed = forwardSpeed;
-
-        // Cache renderers and original colors for visual feedback
-        _renderers = GetComponentsInChildren<Renderer>(true);
-        _originalColors = new Color[_renderers.Length][];
-        for (int i = 0; i < _renderers.Length; i++)
-        {
-            var mats = _renderers[i].materials;
-            _originalColors[i] = new Color[mats.Length];
-            for (int j = 0; j < mats.Length; j++)
-            {
-                if (mats[j].HasProperty("_Color"))
-                    _originalColors[i][j] = mats[j].color;
-                else
-                    _originalColors[i][j] = Color.white;
-            }
-        }
     }
 
-    void Update() {
+    void Update()
+    {
+        // Cache deltaTime for performance
+        float deltaTime = PerformanceHelper.CachedDeltaTime;
+        
         // Reset swipes
         SwipeLeft = false;
         SwipeRight = false;
@@ -171,7 +135,7 @@ public class Movement : MonoBehaviour
         }
         else
         {
-            verticalVelocity += gravity * Time.deltaTime;
+            verticalVelocity += gravity * deltaTime;
         }
 
         // Crouching (only when grounded)
@@ -190,7 +154,7 @@ public class Movement : MonoBehaviour
 
         if (isCrouching)
         {
-            crouchTimer -= Time.deltaTime;
+            crouchTimer -= deltaTime;
             if (crouchTimer <= 0f)
             {
                 // Reset model
@@ -204,110 +168,22 @@ public class Movement : MonoBehaviour
             }
         }
 
-        // Movement
-        Vector3 move = Vector3.forward * forwardSpeed * Time.deltaTime;
-
-        float targetX = Mathf.Lerp(transform.position.x, NewXPos, laneSwitchSpeed * Time.deltaTime);
-        move += (targetX - transform.position.x) * Vector3.right;
-
-        move.y = verticalVelocity * Time.deltaTime;
-
-        m_char.Move(move);
-
-        // Invincibility powerup handling
-        if (isInvincible) {
-            invincibilityTimer -= Time.deltaTime;
-            if (invincibilityTimer <= 0f) {
-                isInvincible = false;
-                invincibilityTimer = 0f;
-                Debug.Log("Invincibility powerup expired");
-            }
-        }
-
-        // If invincibility state changed, apply immediate visual (sets base alpha)
-        if (isInvincible != _prevInvincible)
+        if (UIScore.gameIsPaused)
         {
-            ApplyInvincibilityVisual(isInvincible);
-            _prevInvincible = isInvincible;
+            verticalVelocity = -1f;
+            m_char.Move(Vector3.zero);
         }
-
-        // Update per-frame visuals (handles flicker when near expiry)
-        if (isInvincible)
+        else if (!UIScore.gameIsPaused)
         {
-            UpdateInvincibilityFlicker();
-        }
+             // Movement - optimized to use cached deltaTime
+            Vector3 move = Vector3.forward * forwardSpeed * deltaTime;
 
-        // Handle slow effect
-        if (isSlowed) {
-            forwardSpeed = baseForwardSpeed * 0.5f;
-            slowTimer -= Time.deltaTime;
-            if (slowTimer <= 0f) {
-                isSlowed = false;
-                forwardSpeed = baseForwardSpeed;
-                Debug.Log("Slow effect worn off");
-            }
-        }
-    }
+            float targetX = Mathf.Lerp(transform.position.x, NewXPos, laneSwitchSpeed * deltaTime);
+            move += (targetX - transform.position.x) * Vector3.right;
 
-    private void ApplyInvincibilityVisual(bool on)
-    {
-        if (_renderers == null || _originalColors == null) return;
+            move.y = verticalVelocity * deltaTime;
 
-        for (int i = 0; i < _renderers.Length; i++)
-        {
-            var renderer = _renderers[i];
-            var mats = renderer.materials; // creates instances if needed
-            for (int j = 0; j < mats.Length; j++)
-            {
-                if (!mats[j].HasProperty("_Color")) continue;
-
-                Color col = _originalColors[i][j];
-                if (on)
-                {
-                    col.a = Mathf.Clamp01(invincibleAlpha);
-                }
-                // when off, restore original alpha
-                mats[j].color = col;
-            }
-        }
-    }
-
-    private void UpdateInvincibilityFlicker()
-    {
-        if (_renderers == null || _originalColors == null) return;
-
-        float timeLeft = invincibilityTimer;
-        if (timeLeft <= 0f) return;
-
-        // If not yet in flicker window, ensure base invincible alpha is applied
-        if (timeLeft > flickerStart)
-        {
-            // base alpha already applied by ApplyInvincibilityVisual when state changed
-            return;
-        }
-
-        // Map timeLeft in [flickerStart..0] to frequency range [flickerMinFreq..flickerMaxFreq]
-        float t = Mathf.Clamp01(1f - (timeLeft / flickerStart));
-        float freq = Mathf.Lerp(flickerMinFreq, flickerMaxFreq, t);
-
-        // Create a 0..1 pingpong value at 'freq' Hz
-        float signal = Mathf.PingPong(Time.time * freq, 2f);
-
-        // When signal > 0.5 show the invincibleAlpha, otherwise show fully visible (or original alpha)
-        float targetAlpha = signal > 0.5f ? Mathf.Clamp01(invincibleAlpha) : 1f;
-
-        for (int i = 0; i < _renderers.Length; i++)
-        {
-            var renderer = _renderers[i];
-            var mats = renderer.materials;
-            for (int j = 0; j < mats.Length; j++)
-            {
-                if (!mats[j].HasProperty("_Color")) continue;
-
-                Color baseCol = _originalColors[i][j];
-                baseCol.a = targetAlpha;
-                mats[j].color = baseCol;
-            }
+            m_char.Move(move);
         }
     }
 }
