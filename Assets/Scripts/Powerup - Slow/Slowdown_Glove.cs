@@ -2,8 +2,14 @@ using UnityEngine;
 
 public class Slowdown_Glove : MonoBehaviour {
 
+AudioManager audioManager;
+
 public bool slowActive = false;
 public float slowDuration = 5f;
+
+    private void Awake() {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
 
     void Start() {
         slowActive = false;
@@ -13,6 +19,9 @@ public float slowDuration = 5f;
         Movement player = other.GetComponent<Movement>();
         if (player != null) {
             player.isSlowed = true;
+            // if (audioManager != null) {
+                audioManager.playSFX(audioManager.powerup);
+            // }
             player.slowTimer = slowDuration;
             Debug.Log("Player picked up slowdown glove");
             Destroy(gameObject);
