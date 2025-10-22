@@ -177,6 +177,7 @@ public class Movement : MonoBehaviour
             verticalVelocity = -1f;
             if (SwipeUp)
             {
+                audioManager.playSFX(audioManager.jump);
                 verticalVelocity = jumpForce;
             }
         }
