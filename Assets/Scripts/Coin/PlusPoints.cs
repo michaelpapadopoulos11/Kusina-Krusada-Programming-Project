@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlusPoints : MonoBehaviour
 {
 
-    // AudioManager audioManager;
+    AudioManager audioManager;
 
     [Tooltip("Points to add when collected")]
     public int points = 50;
@@ -12,9 +12,9 @@ public class PlusPoints : MonoBehaviour
     // Optional: tag of the object that collects points (usually Player)
     public string collectorTag = "Player";
 
-    // private void Awake() {
-    // audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
-    // }
+    private void Awake() {
+    audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -26,7 +26,7 @@ public class PlusPoints : MonoBehaviour
             if (!other.CompareTag(collectorTag)) return;
         }
 
-        // audioManager.playSFX(audioManager.fruit_collected); // Play sound after tag check
+        audioManager.playSFX(audioManager.fruit_collected); 
         ScoreManager.AddPoints(points);
 
         // Destroy the pickup on collection so clones are removed immediately, but only if this is a clone
@@ -45,7 +45,7 @@ public class PlusPoints : MonoBehaviour
             if (!collision.gameObject.CompareTag(collectorTag)) return;
         }
 
-        // audioManager.playSFX(audioManager.fruit_collected); // Play sound after tag check
+        audioManager.playSFX(audioManager.fruit_collected); // Play sound after tag check
         ScoreManager.AddPoints(points);
 
         // Destroy the pickup on collection so clones are removed immediately, but only if this is a clone
