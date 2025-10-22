@@ -7,6 +7,9 @@ public enum SIDE { Left, Mid, Right }
 
 public class Movement : MonoBehaviour
 {
+
+    AudioManager audioManager;
+
     private SIDE m_Side = SIDE.Mid;
     private Vector2 startTouch;
     float NewXPos = 0f;
@@ -58,6 +61,10 @@ public class Movement : MonoBehaviour
     public bool isSlowed = false;
     public float slowTimer = 0f;
     public float slowDuration = 5f;
+
+    private void Awake() {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
 
     void Start() {
         m_char = GetComponent<CharacterController>();
@@ -137,11 +144,13 @@ public class Movement : MonoBehaviour
         {
             if (m_Side == SIDE.Mid)
             {
+                audioManager.playSFX(audioManager.switch_lanes);
                 NewXPos = -XValue;
                 m_Side = SIDE.Left;
             }
             else if (m_Side == SIDE.Right)
             {
+                audioManager.playSFX(audioManager.switch_lanes);
                 NewXPos = 0;
                 m_Side = SIDE.Mid;
             }
@@ -150,11 +159,13 @@ public class Movement : MonoBehaviour
         {
             if (m_Side == SIDE.Mid)
             {
+                audioManager.playSFX(audioManager.switch_lanes);
                 NewXPos = XValue;
                 m_Side = SIDE.Right;
             }
             else if (m_Side == SIDE.Left)
             {
+                audioManager.playSFX(audioManager.switch_lanes);
                 NewXPos = 0;
                 m_Side = SIDE.Mid;
             }
