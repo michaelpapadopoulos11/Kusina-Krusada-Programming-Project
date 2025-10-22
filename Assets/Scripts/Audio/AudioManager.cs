@@ -16,6 +16,10 @@ public class AudioManager : MonoBehaviour {
     public AudioClip jump; // when player jumps
     public AudioClip slide; // when player ducks
 
+    public AudioClip quiz_correct; // when player answers quiz correctly
+    public AudioClip quiz_error; // when player answers quiz incorrectly
+
+    public AudioClip button_press; // when player presses a button -- swapping ENG to TAG / maybe menu button too ??
 
     private void Start() {
         musicSource.clip = background;
