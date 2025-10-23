@@ -235,7 +235,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
             else
                 LoadRandomQuestionFromCsv();
         }
-        audioManager.playSFX(audioManager.button_press);
+        audioManager.playSFX(audioManager.button_press, 1.0f);
         UpdateLanguageButtonsVisibility();
     }
 
@@ -249,7 +249,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
             else
                 LoadRandomQuestionFromCsv();
         }
-        audioManager.playSFX(audioManager.button_press); 
+        audioManager.playSFX(audioManager.button_press, 1.0f); 
         UpdateLanguageButtonsVisibility();
     }
 
@@ -422,7 +422,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
 
             // Update only the clicked button
             clicked.text = "CORRECT!";
-            audioManager.playSFX(audioManager.quiz_correct);
+            audioManager.playSFX(audioManager.quiz_correct, 1.0f);
             clicked.style.fontSize = FontSize200Percent;
 
             // disable other buttons to avoid further clicks
@@ -449,7 +449,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
             Debug.Log($"Wrong answer! Points for this question reduced to {currentQuestionPoints}.");
             // mark only the clicked button as incorrect
             clicked.text = "INCORRECT!";
-            audioManager.playSFX(audioManager.quiz_error);
+            audioManager.playSFX(audioManager.quiz_error, 1.0f);
             clicked.style.fontSize = FontSize200Percent;
             // keep game paused and UI shown
         }

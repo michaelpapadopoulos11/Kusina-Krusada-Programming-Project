@@ -144,13 +144,13 @@ public class Movement : MonoBehaviour
         {
             if (m_Side == SIDE.Mid)
             {
-                audioManager.playSFX(audioManager.switch_lanes);
+                audioManager.playSFX(audioManager.switch_lanes, 0.5f);
                 NewXPos = -XValue;
                 m_Side = SIDE.Left;
             }
             else if (m_Side == SIDE.Right)
             {
-                audioManager.playSFX(audioManager.switch_lanes);
+                audioManager.playSFX(audioManager.switch_lanes, 0.5f);
                 NewXPos = 0;
                 m_Side = SIDE.Mid;
             }
@@ -159,13 +159,13 @@ public class Movement : MonoBehaviour
         {
             if (m_Side == SIDE.Mid)
             {
-                audioManager.playSFX(audioManager.switch_lanes);
+                audioManager.playSFX(audioManager.switch_lanes, 0.5f);
                 NewXPos = XValue;
                 m_Side = SIDE.Right;
             }
             else if (m_Side == SIDE.Left)
             {
-                audioManager.playSFX(audioManager.switch_lanes);
+                audioManager.playSFX(audioManager.switch_lanes, 0.5f);
                 NewXPos = 0;
                 m_Side = SIDE.Mid;
             }
@@ -177,7 +177,7 @@ public class Movement : MonoBehaviour
             verticalVelocity = -1f;
             if (SwipeUp)
             {
-                audioManager.playSFX(audioManager.jump);
+                audioManager.playSFX(audioManager.jump, 1.0f);
                 verticalVelocity = jumpForce;
             }
         }

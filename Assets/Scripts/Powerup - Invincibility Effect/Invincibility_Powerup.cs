@@ -19,7 +19,7 @@ public float invincibilityDuration = 5f;
         Movement player = other.GetComponent<Movement>();
         if (player != null ) {
             player.isInvincible = true;
-            audioManager.playSFX(audioManager.powerup);
+            audioManager.playSFX(audioManager.powerup, 1.0f);
             player.invincibilityTimer = invincibilityDuration;
             Debug.Log("Player picked up invincibility");
             Destroy(gameObject);

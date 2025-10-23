@@ -26,7 +26,11 @@ public class AudioManager : MonoBehaviour {
         musicSource.Play();
         }
 
-    public void playSFX(AudioClip clip) {
-        SFXSource.PlayOneShot(clip);
+    public void playSFX(AudioClip clip, float volume = 1.0f) {
+        if (clip == null) {
+            Debug.LogWarning("AudioClip is null in playSFX");
+            return;
+        }
+        SFXSource.PlayOneShot(clip, Mathf.Clamp01(volume));
     }
 }
