@@ -177,7 +177,7 @@ public class Movement : MonoBehaviour
             verticalVelocity = -1f;
             if (SwipeUp)
             {
-                audioManager.playSFX(audioManager.jump, 1.0f);
+                audioManager.playSFX(audioManager.jump, 0.4f);
                 verticalVelocity = jumpForce;
             }
         }
@@ -189,6 +189,8 @@ public class Movement : MonoBehaviour
         // Crouching (only when grounded)
         if (m_char.isGrounded && SwipeDown && !isCrouching)
         {
+            audioManager.playSFX(audioManager.slide, 0.4f);
+
             // Shrink model
             transform.localScale = new Vector3(originalScale.x, originalScale.y * crouchScale, originalScale.z);
 
