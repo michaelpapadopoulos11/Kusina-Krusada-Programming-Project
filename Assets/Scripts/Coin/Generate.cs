@@ -157,6 +157,13 @@ public class Generate : MonoBehaviour
             return;
         }
 
+        // Check if there's already an object within 20f radius in the same lane
+        if (IsObjectTooClose(spawnPos, 20f))
+        {
+            // Don't spawn if there's an object too close
+            return;
+        }
+
         // Use the prefab's original rotation
     GameObject coin = Instantiate(coinPrefab, spawnPos, coinPrefab.transform.rotation);
     // Move the clone into the active scene so it behaves the same as VIRUS clones
@@ -190,6 +197,83 @@ public class Generate : MonoBehaviour
         }
 
         coins.Add(coin);
+    }
+
+    /// <summary>
+    /// Checks if there's already an object within the specified radius of the spawn position.
+    /// Focuses on the same lane (X position) and checks Z-axis distance.
+    /// </summary>
+    /// <param name="spawnPos">The intended spawn position</param>
+    /// <param name="checkRadius">The radius to check for existing objects</param>
+    /// <returns>True if an object is too close, false otherwise</returns>
+    private bool IsObjectTooClose(Vector3 spawnPos, float checkRadius)
+    {
+        // Define lane tolerance - objects within this X range are considered in the same lane
+        float laneWidth = 1.0f;
+
+        // Check all tracked coins first
+        foreach (var coin in coins)
+        {
+            if (coin == null) continue;
+
+            Vector3 coinPos = coin.transform.position;
+
+            // Check if in the same lane (similar X position)
+            if (Mathf.Abs(coinPos.x - spawnPos.x) <= laneWidth)
+            {
+                // Check Z-axis distance
+                if (Mathf.Abs(coinPos.z - spawnPos.z) <= checkRadius)
+                {
+                    return true; // Object too close
+                }
+            }
+        }
+
+        // Also check for any other spawned objects in the scene that might not be tracked
+        if (coinPrefab != null)
+        {
+            // Find all objects with similar components or clone names
+            var allTransforms = FindObjectsOfType<Transform>();
+            for (int i = 0; i < allTransforms.Length; i++)
+            {
+                var go = allTransforms[i].gameObject;
+                if (go == null || !go.activeInHierarchy) continue;
+
+                // Skip the player
+                if (player != null && go.transform == player) continue;
+
+                // Skip UI elements
+                if (go.GetComponent<UnityEngine.RectTransform>() != null) continue;
+
+                // Check if this is a spawned object we care about
+                bool isRelevantObject = false;
+                
+                // Check if it's a coin clone
+                if (go.name != null && go.name.EndsWith("(Clone)") && go.name.StartsWith(coinPrefab.name))
+                    isRelevantObject = true;
+                
+                // Check if it has relevant components
+                if (go.GetComponent<PlusPoints>() != null || go.GetComponent<Coin>() != null || go.GetComponent<CloneMarker>() != null)
+                    isRelevantObject = true;
+
+                if (isRelevantObject)
+                {
+                    Vector3 objPos = go.transform.position;
+
+                    // Check if in the same lane
+                    if (Mathf.Abs(objPos.x - spawnPos.x) <= laneWidth)
+                    {
+                        // Check Z-axis distance
+                        if (Mathf.Abs(objPos.z - spawnPos.z) <= checkRadius)
+                        {
+                            return true; // Object too close
+                        }
+                    }
+                }
+            }
+        }
+
+        return false; // No objects too close
     }
 
 }
