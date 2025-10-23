@@ -11805,7 +11805,7 @@ MonoBehaviour:
   run: {fileID: 8300000, guid: 9c4b643cbd85145ef9b43ed2e1584ca5, type: 3}
   switch_lanes: {fileID: 8300000, guid: 6358da5646b7c4c848a3319eaa3ea768, type: 3}
   jump: {fileID: 8300000, guid: 1b23c2322d0394977a88fbd03016913e, type: 3}
-  slide: {fileID: 0}
+  slide: {fileID: 8300000, guid: 3a31a1b0200734df8843008f711b19e9, type: 3}
   quiz_correct: {fileID: 8300000, guid: 0add77c8162054d8f982c73c789afa1e, type: 3}
   quiz_error: {fileID: 8300000, guid: fbe1e9efdd163405c92d2c7f597a9a71, type: 3}
   button_press: {fileID: 8300000, guid: 7d6ffeed6aaeb4189aed3dc72b514736, type: 3}
@@ -12020,7 +12020,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.28
+  m_Volume: 0.13
   m_Pitch: 1
   Loop: 1
   Mute: 0

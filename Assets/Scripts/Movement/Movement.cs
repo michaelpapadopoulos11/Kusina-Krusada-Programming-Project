@@ -144,13 +144,13 @@ public class Movement : MonoBehaviour
         {
             if (m_Side == SIDE.Mid)
             {
-                audioManager.playSFX(audioManager.switch_lanes, 0.5f);
+                audioManager.playSFX(audioManager.switch_lanes, 0.3f);
                 NewXPos = -XValue;
                 m_Side = SIDE.Left;
             }
             else if (m_Side == SIDE.Right)
             {
-                audioManager.playSFX(audioManager.switch_lanes, 0.5f);
+                audioManager.playSFX(audioManager.switch_lanes, 0.3f);
                 NewXPos = 0;
                 m_Side = SIDE.Mid;
             }
@@ -159,13 +159,13 @@ public class Movement : MonoBehaviour
         {
             if (m_Side == SIDE.Mid)
             {
-                audioManager.playSFX(audioManager.switch_lanes, 0.5f);
+                audioManager.playSFX(audioManager.switch_lanes, 0.3f);
                 NewXPos = XValue;
                 m_Side = SIDE.Right;
             }
             else if (m_Side == SIDE.Left)
             {
-                audioManager.playSFX(audioManager.switch_lanes, 0.5f);
+                audioManager.playSFX(audioManager.switch_lanes, 0.3f);
                 NewXPos = 0;
                 m_Side = SIDE.Mid;
             }
@@ -177,7 +177,7 @@ public class Movement : MonoBehaviour
             verticalVelocity = -1f;
             if (SwipeUp)
             {
-                audioManager.playSFX(audioManager.jump, 1.0f);
+                audioManager.playSFX(audioManager.jump, 0.3f);
                 verticalVelocity = jumpForce;
             }
         }
@@ -197,6 +197,7 @@ public class Movement : MonoBehaviour
             m_char.center = new Vector3(originalCenter.x, originalCenter.y * crouchScale, originalCenter.z);
 
             isCrouching = true;
+            audioManager.playSFX(audioManager.slide, 0.3f);
             crouchTimer = crouchDuration;
         }
 
