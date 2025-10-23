@@ -440,6 +440,9 @@ public class QuizQuestionUIInteraction : MonoBehaviour
             UIScore.gameIsPaused = false;
             UIFade.SetActive(false);
             answerAccepted = false;
+            
+            // Destroy the quiz object after correct answer
+            Destroy(gameObject);
         }
         else
         {
