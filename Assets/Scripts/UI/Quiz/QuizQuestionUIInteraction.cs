@@ -6,6 +6,9 @@ using System;
 
 public class QuizQuestionUIInteraction : MonoBehaviour
 {
+
+    AudioManager audioManager;
+
     [SerializeField] UIDocument uIDocument;
     private VisualElement root;
     public GameObject Quiz;
@@ -51,6 +54,10 @@ public class QuizQuestionUIInteraction : MonoBehaviour
         public string a3;
         public string a4;
         public string correct;
+    }
+
+    private void Awake() {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
 
     // Start is called before the first frame update
@@ -238,6 +245,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
             else
                 LoadRandomQuestionFromCsv();
         }
+        audioManager.playSFX(audioManager.button_press, 0.5f);
         UpdateLanguageButtonsVisibility();
     }
 
@@ -251,6 +259,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
             else
                 LoadRandomQuestionFromCsv();
         }
+        audioManager.playSFX(audioManager.button_press, 0.5f); 
         UpdateLanguageButtonsVisibility();
     }
 
@@ -423,6 +432,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
 
             // Update only the clicked button
             clicked.text = "CORRECT!";
+            audioManager.playSFX(audioManager.quiz_correct, 0.7f);
             clicked.style.fontSize = FontSize200Percent;
 
             // disable other buttons to avoid further clicks
@@ -452,6 +462,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
             Debug.Log($"Wrong answer! Points for this question reduced to {currentQuestionPoints}.");
             // mark only the clicked button as incorrect
             clicked.text = "INCORRECT!";
+            audioManager.playSFX(audioManager.quiz_error, 0.6f);
             clicked.style.fontSize = FontSize200Percent;
             // keep game paused and UI shown
         }
