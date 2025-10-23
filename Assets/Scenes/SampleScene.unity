@@ -23,7 +23,7 @@ RenderSettings:
   m_AmbientSkyColor: {r: 0.8414472, g: 0.9339623, b: 0.84377897, a: 1}
   m_AmbientEquatorColor: {r: 0.7122642, g: 1, b: 0.88311994, a: 1}
   m_AmbientGroundColor: {r: 0.28279638, g: 0.38679248, b: 0.33321708, a: 1}
-  m_AmbientIntensity: 1.25
+  m_AmbientIntensity: 1.0
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.7971698, g: 0.9295728, b: 1, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: d48a7646f5d0547e889733d84b50cb9f, type: 2}
@@ -5293,6 +5293,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enforceNonTrigger: 1
+--- !u!114 &299659550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 299659538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fca17a5a2694f6f4db0059995cbf14b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coinPrefab: {fileID: 299659538}
+  player: {fileID: 100802020}
+  coinY: 2
+  spawnInterval: 4
+  maxCoins: 5
+  yPositions:
+  - 1
+  - 1
+  destroyDistanceBehind: 20
 --- !u!1 &491782407
 GameObject:
   m_ObjectHideFlags: 0
@@ -5307,6 +5328,7 @@ GameObject:
   - component: {fileID: 491782410}
   - component: {fileID: 491782409}
   - component: {fileID: 491782408}
+  - component: {fileID: 491782414}
   m_Layer: 0
   m_Name: VIRUS
   m_TagString: Untagged
@@ -5438,6 +5460,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 179.901, y: -273.57, z: 1.5859985}
+--- !u!114 &491782414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 491782407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6ddc1bd9c4c24b55b2d4348264824d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 100
+  hoverAmplitude: 0
+  hoverFrequency: 0
 --- !u!1001 &616746226
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5464,7 +5501,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 608d50fefb2a646eb917f7f57b5d12c1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -32.9
+      value: -46.21
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 608d50fefb2a646eb917f7f57b5d12c1,
         type: 3}
@@ -5533,6 +5570,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 299659546}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 608d50fefb2a646eb917f7f57b5d12c1,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 299659550}
   m_SourcePrefab: {fileID: 100100000, guid: 608d50fefb2a646eb917f7f57b5d12c1, type: 3}
 --- !u!43 &704054615
 Mesh:
@@ -6063,6 +6104,33 @@ MonoBehaviour:
   startY: 0
   startZ: -10
   matchRotation: 0
+--- !u!1 &841547710 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8336235771513492385, guid: 54a6e04e2c3fd4eb88122e8f43bc0276,
+    type: 3}
+  m_PrefabInstance: {fileID: 1996062860}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &841547716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 841547710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fca17a5a2694f6f4db0059995cbf14b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coinPrefab: {fileID: 841547710}
+  player: {fileID: 100802020}
+  coinY: 2
+  spawnInterval: 20
+  maxCoins: 5
+  yPositions:
+  - 2
+  - 4
+  destroyDistanceBehind: 20
 --- !u!1 &877573504
 GameObject:
   m_ObjectHideFlags: 0
@@ -11564,7 +11632,7 @@ MonoBehaviour:
   coinPrefab: {fileID: 1410849445}
   player: {fileID: 100802020}
   coinY: 2
-  spawnInterval: 5
+  spawnInterval: 12
   maxCoins: 5
   yPositions:
   - 2
@@ -11911,12 +11979,12 @@ PrefabInstance:
     - target: {fileID: 4222678499210647894, guid: 54a6e04e2c3fd4eb88122e8f43bc0276,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -30.75
+      value: -49.34
       objectReference: {fileID: 0}
     - target: {fileID: 4222678499210647894, guid: 54a6e04e2c3fd4eb88122e8f43bc0276,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 13.07
+      value: 23.71
       objectReference: {fileID: 0}
     - target: {fileID: 4222678499210647894, guid: 54a6e04e2c3fd4eb88122e8f43bc0276,
         type: 3}
@@ -11971,7 +12039,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8336235771513492385, guid: 54a6e04e2c3fd4eb88122e8f43bc0276,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 841547716}
   m_SourcePrefab: {fileID: 100100000, guid: 54a6e04e2c3fd4eb88122e8f43bc0276, type: 3}
 --- !u!4 &65796488539318851
 Transform:
@@ -13936,12 +14008,12 @@ PrefabInstance:
     - target: {fileID: 8512541710608546444, guid: 1343671f3ec29482aa4f2c748b135913,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 24.26
+      value: 4.41
       objectReference: {fileID: 0}
     - target: {fileID: 8512541710608546444, guid: 1343671f3ec29482aa4f2c748b135913,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -12.7
+      value: -12.527
       objectReference: {fileID: 0}
     - target: {fileID: 8512541710608546444, guid: 1343671f3ec29482aa4f2c748b135913,
         type: 3}
@@ -16357,6 +16429,7 @@ GameObject:
   - component: {fileID: 8750344844400313279}
   - component: {fileID: 8750344844400313278}
   - component: {fileID: 8750344844400313276}
+  - component: {fileID: 8750344844400313280}
   m_Layer: 0
   m_Name: Point
   m_TagString: Untagged
@@ -16762,7 +16835,7 @@ Transform:
   m_GameObject: {fileID: 8224884545851660545}
   serializedVersion: 2
   m_LocalRotation: {x: 0.00000008146034, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: -24.65, y: 2.68, z: -0}
+  m_LocalPosition: {x: -46.49, y: 2.68, z: -0}
   m_LocalScale: {x: 1.02743, y: 1.02743, z: 1.02743}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16824,6 +16897,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.79886174, y: 0.91116655, z: 0.79886174}
   m_Center: {x: 0, y: 0.078135684, z: 0}
+--- !u!114 &8750344844400313280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8224884545851660545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6ddc1bd9c4c24b55b2d4348264824d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 100
+  hoverAmplitude: 0.3
+  hoverFrequency: 0.5
 --- !u!114 &8830465438826756908
 MonoBehaviour:
   m_ObjectHideFlags: 0
