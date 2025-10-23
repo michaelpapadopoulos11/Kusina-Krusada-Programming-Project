@@ -11732,14 +11732,14 @@ MonoBehaviour:
   SFXSource: {fileID: 1376405559}
   background: {fileID: 8300000, guid: 264dabbb7f044416bb51b6a74a2355a9, type: 3}
   powerup: {fileID: 8300000, guid: 2b56dd7dc17134b909a44f9335fcf4ee, type: 3}
-  fruit_collected: {fileID: 8300000, guid: bde833667c5174aaabd09b37493a20dc, type: 3}
+  fruit_collected: {fileID: 8300000, guid: 2948c40a5d58c4b598e5d3d19c55a24a, type: 3}
   run: {fileID: 8300000, guid: 9c4b643cbd85145ef9b43ed2e1584ca5, type: 3}
   switch_lanes: {fileID: 8300000, guid: 6358da5646b7c4c848a3319eaa3ea768, type: 3}
   jump: {fileID: 8300000, guid: 1b23c2322d0394977a88fbd03016913e, type: 3}
   slide: {fileID: 0}
   quiz_correct: {fileID: 8300000, guid: 0add77c8162054d8f982c73c789afa1e, type: 3}
   quiz_error: {fileID: 8300000, guid: fbe1e9efdd163405c92d2c7f597a9a71, type: 3}
-  button_press: {fileID: 8300000, guid: ac5630410c26e47efafbeecee6070320, type: 3}
+  button_press: {fileID: 8300000, guid: 7d6ffeed6aaeb4189aed3dc72b514736, type: 3}
 --- !u!4 &1528915293
 Transform:
   m_ObjectHideFlags: 0
@@ -14272,6 +14272,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8089747823610501980, guid: 1343671f3ec29482aa4f2c748b135913,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 2.2255714
+      objectReference: {fileID: 0}
+    - target: {fileID: 8089747823610501980, guid: 1343671f3ec29482aa4f2c748b135913,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 2.173517
+      objectReference: {fileID: 0}
+    - target: {fileID: 8089747823610501980, guid: 1343671f3ec29482aa4f2c748b135913,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.1887553
+      objectReference: {fileID: 0}
+    - target: {fileID: 8089747823610501980, guid: 1343671f3ec29482aa4f2c748b135913,
+        type: 3}
+      propertyPath: m_Center.x
+      value: -0.07575345
+      objectReference: {fileID: 0}
+    - target: {fileID: 8089747823610501980, guid: 1343671f3ec29482aa4f2c748b135913,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.06229158
+      objectReference: {fileID: 0}
+    - target: {fileID: 8089747823610501980, guid: 1343671f3ec29482aa4f2c748b135913,
+        type: 3}
+      propertyPath: m_Center.z
+      value: -0.20388362
       objectReference: {fileID: 0}
     - target: {fileID: 8512541710608546444, guid: 1343671f3ec29482aa4f2c748b135913,
         type: 3}

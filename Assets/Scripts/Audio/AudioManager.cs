@@ -33,4 +33,8 @@ public class AudioManager : MonoBehaviour {
         }
         SFXSource.PlayOneShot(clip, Mathf.Clamp01(volume));
     }
+
+    public void setSFXPitch(float pitch) {
+        SFXSource.pitch = Mathf.Clamp(pitch, 0.1f, 3f);
+    }
 }

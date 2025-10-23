@@ -19,7 +19,7 @@ public float slowDuration = 5f;
         Movement player = other.GetComponent<Movement>();
         if (player != null) {
             player.isSlowed = true;
-            audioManager.playSFX(audioManager.powerup, 1.0f);
+            audioManager.playSFX(audioManager.powerup, 0.6f);
             player.slowTimer = slowDuration;
             Debug.Log("Player picked up slowdown glove");
             Destroy(gameObject);

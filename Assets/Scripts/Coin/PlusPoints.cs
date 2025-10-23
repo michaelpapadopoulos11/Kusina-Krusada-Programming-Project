@@ -26,6 +26,7 @@ public class PlusPoints : MonoBehaviour
             if (!other.CompareTag(collectorTag)) return;
         }
 
+        audioManager.setSFXPitch(UnityEngine.Random.Range(1f, 2f));
         audioManager.playSFX(audioManager.fruit_collected); 
         ScoreManager.AddPoints(points);
 
