@@ -23,7 +23,7 @@ RenderSettings:
   m_AmbientSkyColor: {r: 0.8414472, g: 0.9339623, b: 0.84377897, a: 1}
   m_AmbientEquatorColor: {r: 0.7122642, g: 1, b: 0.88311994, a: 1}
   m_AmbientGroundColor: {r: 0.28279638, g: 0.38679248, b: 0.33321708, a: 1}
-  m_AmbientIntensity: 1.0
+  m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.7971698, g: 0.9295728, b: 1, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: d48a7646f5d0547e889733d84b50cb9f, type: 2}
@@ -13107,6 +13107,7 @@ MonoBehaviour:
   score: 0
   container: {fileID: 1384206046749091143}
   mask: {fileID: 3632827276481589216}
+  soapbarIcon: {fileID: 0}
   max: 100
   cur: 100
   drainRate: 14.5

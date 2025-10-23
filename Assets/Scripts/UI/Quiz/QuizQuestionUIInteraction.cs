@@ -104,9 +104,18 @@ public class QuizQuestionUIInteraction : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
         if (other.CompareTag("Player"))
         {
+            // Check if player is invincible - if so, destroy this quiz trigger and don't show quiz
+            Movement player = other.GetComponent<Movement>();
+            if (player != null && player.isInvincible)
+            {
+                Debug.Log("Player is invincible - destroying quiz trigger without showing quiz");
+                Destroy(gameObject);
+                return;
+            }
+            
+            // Player is vulnerable, show the quiz as normal
             UIFade.SetActive(true);
             StartCoroutine(NewRoutine());
 

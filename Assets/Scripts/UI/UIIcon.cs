@@ -30,6 +30,9 @@ public class UIIcon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Only animate if the icon is visible (visibility controlled by UIScore.cs)
+        if (!gameObject.activeInHierarchy) return;
+        
         if(transform.localScale.x < baseScale) {
             bobSpeed = Mathf.Abs(bobSpeed);
         }
