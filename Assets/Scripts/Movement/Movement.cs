@@ -74,6 +74,7 @@ public class Movement : MonoBehaviour
         originalCenter = m_char.center;
         isInvincible = false;
         baseForwardSpeed = forwardSpeed;
+        isSlowed = false;
 
         // Cache renderers and original colors for visual feedback
         _renderers = GetComponentsInChildren<Renderer>(true);
