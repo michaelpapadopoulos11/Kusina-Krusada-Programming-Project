@@ -62,6 +62,8 @@ public class Movement : MonoBehaviour
     public float slowTimer = 0f;
     public float slowDuration = 5f;
 
+    public int pointsMultiplier = 1; // Multiplier for points collected
+
     private void Awake() {
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
