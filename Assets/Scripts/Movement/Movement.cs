@@ -22,7 +22,7 @@ public class Movement : MonoBehaviour
     public float XValue = 2;
     public float forwardSpeed = 5f;
     // Store the base speed so we can restore after slow effects
-    private float baseForwardSpeed;
+    [HideInInspector] public float baseForwardSpeed;
     public float jumpForce = 8f;
     public float gravity = -20f;
     public float laneSwitchSpeed = 5f;
@@ -62,6 +62,13 @@ public class Movement : MonoBehaviour
     public bool isSlowed = false;
     public float slowTimer = 0f;
     public float slowDuration = 5f;
+    private float slowedSpeed; // Store the slowed speed value
+
+    public int pointsMultiplier = 1; // Multiplier for points collected
+
+    public bool isDoublePoints = false; // Tracks if double points is active
+    public float doublePointsTimer = 0f; // Timer for double points effect
+    public float doublePointsDuration = 5f; // Duration of double points effect
 
     private void Awake() {
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
@@ -75,6 +82,8 @@ public class Movement : MonoBehaviour
         originalCenter = m_char.center;
         isInvincible = false;
         baseForwardSpeed = forwardSpeed;
+        isSlowed = false;
+        isDoublePoints = false;
 
         // Cache renderers and original colors for visual feedback
         _renderers = GetComponentsInChildren<Renderer>(true);
@@ -145,13 +154,13 @@ public class Movement : MonoBehaviour
         {
             if (m_Side == SIDE.Mid)
             {
-                audioManager.playSFX(audioManager.switch_lanes, 0.5f);
+                audioManager.playSFX(audioManager.switch_lanes, 0.3f);
                 NewXPos = -XValue;
                 m_Side = SIDE.Left;
             }
             else if (m_Side == SIDE.Right)
             {
-                audioManager.playSFX(audioManager.switch_lanes, 0.5f);
+                audioManager.playSFX(audioManager.switch_lanes, 0.3f);
                 NewXPos = 0;
                 m_Side = SIDE.Mid;
             }
@@ -160,13 +169,13 @@ public class Movement : MonoBehaviour
         {
             if (m_Side == SIDE.Mid)
             {
-                audioManager.playSFX(audioManager.switch_lanes, 0.5f);
+                audioManager.playSFX(audioManager.switch_lanes, 0.3f);
                 NewXPos = XValue;
                 m_Side = SIDE.Right;
             }
             else if (m_Side == SIDE.Left)
             {
-                audioManager.playSFX(audioManager.switch_lanes, 0.5f);
+                audioManager.playSFX(audioManager.switch_lanes, 0.3f);
                 NewXPos = 0;
                 m_Side = SIDE.Mid;
             }
@@ -178,7 +187,7 @@ public class Movement : MonoBehaviour
             verticalVelocity = -1f;
             if (SwipeUp)
             {
-                audioManager.playSFX(audioManager.jump, 1.0f);
+                audioManager.playSFX(audioManager.jump, 0.3f);
                 verticalVelocity = jumpForce;
             }
         }
@@ -190,12 +199,12 @@ public class Movement : MonoBehaviour
         // Crouching (only when grounded)
         if (m_char.isGrounded && SwipeDown && !IsCrouching)
         {
-
             // Shrink CharacterController
             m_char.height = originalHeight * crouchScale;
             m_char.center = new Vector3(originalCenter.x, originalCenter.y * crouchScale, originalCenter.z);
 
             IsCrouching = true;
+            audioManager.playSFX(audioManager.slide, 0.3f);
             crouchTimer = crouchDuration;
         }
 
@@ -258,12 +267,24 @@ public class Movement : MonoBehaviour
 
         // Handle slow effect
         if (isSlowed) {
-            forwardSpeed = baseForwardSpeed * 0.5f;
+            // Use the stored slowed speed (set when powerup is picked up)
+            forwardSpeed = slowedSpeed;
             slowTimer -= Time.deltaTime;
             if (slowTimer <= 0f) {
                 isSlowed = false;
-                forwardSpeed = baseForwardSpeed;
+                forwardSpeed = baseForwardSpeed; // Restore to current base speed
                 Debug.Log("Slow effect worn off");
+            }
+        }
+
+        // Handle double points powerup
+        if (isDoublePoints) {
+            pointsMultiplier = 2; // x2 fruit points value
+            doublePointsTimer -= Time.deltaTime;
+            if (doublePointsTimer <= 0f) {
+                isDoublePoints = false;
+                pointsMultiplier = 1; // normal points per fruit collected
+                Debug.Log("Double points powerup expired");
             }
         }
     }
@@ -328,5 +349,18 @@ public class Movement : MonoBehaviour
                 mats[j].color = baseCol;
             }
         }
+    }
+
+    /// <summary>
+    /// Apply slowdown effect using current speed as reference
+    /// Called by slowdown powerups
+    /// </summary>
+    public void ApplySlowdownEffect(float duration, float slowFactor = 0.5f)
+    {
+        isSlowed = true;
+        slowTimer = duration;
+        // Calculate slowed speed based on current base speed
+        slowedSpeed = baseForwardSpeed * slowFactor;
+        Debug.Log($"Slowdown applied: {baseForwardSpeed} -> {slowedSpeed}");
     }
 }

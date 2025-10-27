@@ -5118,6 +5118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   XValue: 2.5
   forwardSpeed: 15
+  baseForwardSpeed: 0
   jumpForce: 8
   gravity: -20
   laneSwitchSpeed: 5
@@ -5134,6 +5135,10 @@ MonoBehaviour:
   isSlowed: 0
   slowTimer: 0
   slowDuration: 5
+  pointsMultiplier: 1
+  isDoublePoints: 0
+  doublePointsTimer: 0
+  doublePointsDuration: 5
 --- !u!1001 &192945160
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5447,6 +5452,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1381264872}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bae077e3922290649a4a8f8a659a1587,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1381264876}
   m_SourcePrefab: {fileID: 100100000, guid: bae077e3922290649a4a8f8a659a1587, type: 3}
 --- !u!1 &261849724
 GameObject:
@@ -5626,7 +5635,9 @@ MonoBehaviour:
   player: {fileID: 1381264871}
   coinY: 2
   spawnInterval: 4
+  minSpawnInterval: 1
   maxCoins: 5
+  enableConsecutiveSpawning: 0
   yPositions:
   - 1
   - 1
@@ -5669,7 +5680,9 @@ MonoBehaviour:
   player: {fileID: 1381264871}
   coinY: 2
   spawnInterval: 8
+  minSpawnInterval: 1
   maxCoins: 2
+  enableConsecutiveSpawning: 0
   yPositions:
   - 2
   - 4
@@ -6443,7 +6456,9 @@ MonoBehaviour:
   player: {fileID: 1381264871}
   coinY: 2
   spawnInterval: 20
+  minSpawnInterval: 1
   maxCoins: 5
+  enableConsecutiveSpawning: 0
   yPositions:
   - 2
   - 4
@@ -11950,6 +11965,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   XValue: 2.5
   forwardSpeed: 15
+  baseForwardSpeed: 0
   jumpForce: 8
   gravity: -20
   laneSwitchSpeed: 5
@@ -11966,6 +11982,10 @@ MonoBehaviour:
   isSlowed: 0
   slowTimer: 0
   slowDuration: 5
+  pointsMultiplier: 1
+  isDoublePoints: 0
+  doublePointsTimer: 0
+  doublePointsDuration: 5
 --- !u!143 &1381264875
 CharacterController:
   m_ObjectHideFlags: 0
@@ -11992,6 +12012,22 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.5, z: 0}
+--- !u!114 &1381264876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1381264870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ae6b2d44ea821b468924e4ea33d445b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speedIncreaseInterval: 30
+  speedIncreaseAmount: 1
+  maxSpeed: 20
+  playerMovement: {fileID: 1381264874}
 --- !u!43 &1381281482
 Mesh:
   m_ObjectHideFlags: 0
@@ -12179,7 +12215,9 @@ MonoBehaviour:
   player: {fileID: 1381264871}
   coinY: 2
   spawnInterval: 12
+  minSpawnInterval: 1
   maxCoins: 5
+  enableConsecutiveSpawning: 0
   yPositions:
   - 2
   - 4
@@ -14694,6 +14732,17 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4886814084366037579, guid: 1343671f3ec29482aa4f2c748b135913,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0f3e8744c55e9754794bb18458e8b30f, type: 2}
+    - target: {fileID: 4946903083297106741, guid: 1343671f3ec29482aa4f2c748b135913,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -2899701599575829976, guid: fcc81bd6c1d600d4e90faa5b8cc85bdd,
+        type: 3}
     - target: {fileID: 5188046831762778679, guid: 1343671f3ec29482aa4f2c748b135913,
         type: 3}
       propertyPath: m_IsActive
@@ -17581,7 +17630,9 @@ MonoBehaviour:
   player: {fileID: 1381264871}
   coinY: 2
   spawnInterval: 2
+  minSpawnInterval: 1
   maxCoins: 5
+  enableConsecutiveSpawning: 0
   yPositions:
   - 2
   - 4
