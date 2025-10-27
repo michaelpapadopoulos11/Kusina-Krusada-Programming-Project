@@ -61,6 +61,7 @@ public class Movement : MonoBehaviour
     public bool isSlowed = false;
     public float slowTimer = 0f;
     public float slowDuration = 5f;
+    private float slowedSpeed; // Store the slowed speed value
 
     public int pointsMultiplier = 1; // Multiplier for points collected
 
