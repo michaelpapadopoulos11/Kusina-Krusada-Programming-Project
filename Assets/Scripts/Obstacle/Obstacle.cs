@@ -4,103 +4,49 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour {
 
-    // If true, Start() will ensure all colliders are non-trigger. You can set to false
-    // if you want to manage collider settings in the editor instead.
-    public bool enforceNonTrigger = true;
-
     // Cached colliders on this obstacle
     private Collider[] _colliders;
-    // Cached reference to player Movement (assumes single player)
-    private Movement _player;
-    // Current isTrigger state we've applied to colliders
-    private bool _currentIsTrigger = false;
 
     void Start() {
         // Cache colliders
         _colliders = GetComponentsInChildren<Collider>(true);
 
-        // Ensure colliders are non-trigger by default if enforcement is on
-        if (enforceNonTrigger)
+        // Set all colliders as triggers for reliable collision detection
+        foreach (var c in _colliders)
         {
-            foreach (var c in _colliders)
-            {
-                c.isTrigger = false;
-            }
-            _currentIsTrigger = false;
-            Debug.Log($"Obstacle Start: set {_colliders.Length} collider(s) to non-trigger");
+            c.isTrigger = true;
         }
-
-        // Cache player reference (finds the first Movement in scene)
-        _player = FindObjectOfType<Movement>();
+        Debug.Log($"Obstacle Start: set {_colliders.Length} collider(s) to trigger");
     }
 
-    void Update()
-    {
-        if (_player == null)
-        {
-            // Try to find player if it wasn't present at Start
-            _player = FindObjectOfType<Movement>();
-            if (_player == null) return;
-        }
+    // Removed the Update method that was dynamically changing collider types
+    // This was causing collision detection issues
 
-        bool desiredIsTrigger = _player.isInvincible;
-        if (desiredIsTrigger != _currentIsTrigger)
-        {
-            // Apply new trigger state to all colliders
-            foreach (var c in _colliders)
-            {
-                c.isTrigger = desiredIsTrigger;
-            }
-            _currentIsTrigger = desiredIsTrigger;
-            Debug.Log($"Obstacle: set colliders isTrigger = {desiredIsTrigger}");
-
-            // If we just switched to trigger mode and the player is overlapping, destroy immediately
-            if (desiredIsTrigger)
-            {
-                foreach (var c in _colliders)
-                {
-                    // Quick overlap check: if player's position is inside collider bounds, destroy
-                    if (c.bounds.Contains(_player.transform.position))
-                    {
-                        Destroy(gameObject);
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
-    // Handles trigger-based collisions (when colliders are triggers)
+    // Handles trigger-based collisions - simplified approach
     void OnTriggerEnter(Collider other)
     {
+        Debug.Log($"OnTriggerEnter called with: {other.name}, tag: {other.tag}");
         Movement player = other.GetComponent<Movement>();
         if (player != null)
         {
+            Debug.Log($"Player found! Invincible: {player.isInvincible}, GameOver: {player.isGameOver}");
+            
+            // Simply check invincibility state at collision time
             if (player.isInvincible)
             {
+                Debug.Log("Player is invincible - destroying obstacle");
                 Destroy(gameObject);
             }
-            else
+            else if (!player.isGameOver) // Only trigger if game isn't already over
             {
-                Debug.Log("Player hit obstacle while vulnerable (trigger)");
+                Debug.Log("Player is NOT invincible - calling TriggerGameOver");
+                player.TriggerGameOver();
+                Destroy(gameObject);
             }
         }
-    }
-
-    // Handles normal physics collisions (when colliders are not triggers)
-    void OnCollisionEnter(Collision collision)
-    {
-        Movement player = collision.gameObject.GetComponent<Movement>();
-        if (player != null)
+        else
         {
-            if (player.isInvincible)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                Debug.Log("Player hit obstacle while vulnerable (collision)");
-            }
+            Debug.Log("No Movement component found on colliding object");
         }
     }
 }

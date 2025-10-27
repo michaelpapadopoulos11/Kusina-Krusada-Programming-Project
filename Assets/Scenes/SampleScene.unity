@@ -5624,7 +5624,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3516a50a5a78d4756b842b2b2dcce359, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enforceNonTrigger: 1
+  enforceNonTrigger: 0
 --- !u!114 &299659550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12190,6 +12190,7 @@ MonoBehaviour:
   isDoublePoints: 0
   doublePointsTimer: 0
   doublePointsDuration: 5
+  isGameOver: 0
 --- !u!143 &1381264875
 CharacterController:
   m_ObjectHideFlags: 0

@@ -70,6 +70,9 @@ public class Movement : MonoBehaviour
     public float doublePointsTimer = 0f; // Timer for double points effect
     public float doublePointsDuration = 5f; // Duration of double points effect
 
+    // Simple game over state
+    public bool isGameOver = false;
+
     private void Awake() {
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
@@ -84,6 +87,7 @@ public class Movement : MonoBehaviour
         baseForwardSpeed = forwardSpeed;
         isSlowed = false;
         isDoublePoints = false;
+        isGameOver = false;
 
         // Cache renderers and original colors for visual feedback
         _renderers = GetComponentsInChildren<Renderer>(true);
@@ -362,5 +366,23 @@ public class Movement : MonoBehaviour
         // Calculate slowed speed based on current base speed
         slowedSpeed = baseForwardSpeed * slowFactor;
         Debug.Log($"Slowdown applied: {baseForwardSpeed} -> {slowedSpeed}");
+    }
+
+    /// <summary>
+    /// Trigger immediate game over when hitting obstacles
+    /// </summary>
+    public void TriggerGameOver()
+    {
+        Debug.Log($"TriggerGameOver called! isInvincible: {isInvincible}, isGameOver: {isGameOver}");
+        if (isInvincible || isGameOver) 
+        {
+            Debug.Log("TriggerGameOver blocked - player is invincible or game already over");
+            return; // Can't trigger game over if invincible or already game over
+        }
+        
+        Debug.Log("Setting isGameOver = true and pausing game");
+        isGameOver = true;
+        UIScore.gameIsPaused = true;
+        Debug.Log("Game Over - Player hit obstacle!");
     }
 }

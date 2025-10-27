@@ -17,6 +17,9 @@ public class UIGameover : MonoBehaviour
     [SerializeField] private bool isGameover = false;
     [SerializeField] private bool isPanelEntry = true;
     [SerializeField] private bool isPanelCorrection = true;
+    
+    // Reference to the player's Movement script
+    private Movement playerMovement;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,18 +27,39 @@ public class UIGameover : MonoBehaviour
         isPanelEntry = true;
         isPanelCorrection = true;
         panelGameover.pivot = new Vector2(0.5f, -2.0f); //moves the gameover panel out of frame
+        
+        // Find the player's Movement script
+        playerMovement = FindObjectOfType<Movement>();
+        if (playerMovement == null)
+        {
+            Debug.LogWarning("UIGameover: Could not find Movement script in scene!");
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        //TODO change this to the quiz life system <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        if (Convert.ToInt64(textScoreCount.text) == -1)
+        // Check if player has died (lives <= 0) or the game is over
+        if (playerMovement != null && playerMovement.isGameOver)
         {
+            if (!isGameover) // Only log once
+            {
+                Debug.Log("UIGameover: Detected player game over state - showing game over UI");
+            }
             isGameover = true;
             UIScore.gameIsPaused = true;
         }
+        // Fallback: also check the old score-based system for compatibility
+        else if (Convert.ToInt64(textScoreCount.text) == -1)
+        {
+            if (!isGameover) // Only log once
+            {
+                Debug.Log("UIGameover: Detected score-based game over - showing game over UI");
+            }
+            isGameover = true;
+            UIScore.gameIsPaused = true;
+        }
+        
         displayGameover();
         //panelGameover.pivot += new Vector2(0, panelEntrySpeed * Time.deltaTime);
     }
