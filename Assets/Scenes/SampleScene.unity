@@ -5132,8 +5132,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fca17a5a2694f6f4db0059995cbf14b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coinPrefab: {fileID: 0}
-  player: {fileID: 0}
+  coinPrefab: {fileID: 167106425}
+  player: {fileID: 1381264871}
   coinY: 2
   spawnInterval: 10
   minSpawnInterval: 8
