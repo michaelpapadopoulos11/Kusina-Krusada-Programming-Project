@@ -17,6 +17,7 @@ public float invincibilityDuration = 5f;
 
     void OnTriggerEnter (Collider other) {
         Movement player = other.GetComponent<Movement>();
+        
         if (player != null ) {
             player.isInvincible = true;
             audioManager.playSFX(audioManager.powerup, 0.6f);
