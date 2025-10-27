@@ -12,6 +12,11 @@ public static class ScoreManager
         Score += amount;
     }
 
+    public static void SubPoints(int amount)
+    {
+        Score -= amount;
+    }
+
     // Reset score to zero
     public static void ResetScore()
     {

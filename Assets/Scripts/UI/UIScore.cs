@@ -23,12 +23,14 @@ public class UIScore : MonoBehaviour
     void Awake()
     {
         // Set soapbar icon to hidden by default as early as possible
+        ScoreManager.ResetScore();
         InitializeSoapbarIcon();
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        txtScore.text = "0";
         // Initially hide the soapbar elements since player starts without invincibility
         if (container != null)
             container.gameObject.SetActive(false);
