@@ -163,6 +163,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
+    Android: com.DefaultCompany.FoodSafetyGameDevelopment
     Standalone: com.DefaultCompany.Food-Safety-Game-Development
   buildNumber:
     Standalone: 0
@@ -947,7 +948,7 @@ PlayerSettings:
   hmiLogStartupTiming: 0
   hmiCpuConfiguration: 
   apiCompatibilityLevel: 6
-  activeInputHandler: 2
+  activeInputHandler: 0
   windowsGamepadBackendHint: 0
   cloudProjectId: 421073fe-12a4-429a-8fd7-b5adacdc3f1a
   framebufferDepthMemorylessMode: 0
