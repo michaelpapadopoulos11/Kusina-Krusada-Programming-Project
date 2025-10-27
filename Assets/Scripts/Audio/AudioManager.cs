@@ -23,6 +23,7 @@ public class AudioManager : MonoBehaviour {
 
     private void Start() {
         musicSource.clip = background;
+        musicSource.volume = UIVolume.soundVolume;
         musicSource.Play();
         }
 
@@ -31,7 +32,7 @@ public class AudioManager : MonoBehaviour {
             Debug.LogWarning("AudioClip is null in playSFX");
             return;
         }
-        SFXSource.PlayOneShot(clip, Mathf.Clamp01(volume));
+        SFXSource.PlayOneShot(clip, Mathf.Clamp01(UIVolume.soundVolume));
     }
 
     public void setSFXPitch(float pitch) {

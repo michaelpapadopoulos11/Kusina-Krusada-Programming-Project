@@ -132,6 +132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 15364046}
   - component: {fileID: 15364047}
+  - component: {fileID: 15364048}
   m_Layer: 0
   m_Name: SliderVolume
   m_TagString: Untagged
@@ -204,14 +205,39 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1303231093}
   m_FillRect: {fileID: 365802086}
   m_HandleRect: {fileID: 1303231092}
-  m_Direction: 1
+  m_Direction: 0
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 15364048}
+        m_TargetAssemblyTypeName: UIVolume, Assembly-CSharp
+        m_MethodName: changeVolume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &15364048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 15364045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ae9553772da56141a14bde41cbb8698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  VolumeSlider: {fileID: 15364047}
 --- !u!1 &141199916
 GameObject:
   m_ObjectHideFlags: 0
@@ -685,7 +711,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.2901961, g: 0.69803923, b: 0.83921576, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1677,11 +1703,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1027519540}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 575ba14519ad8e548ac6c8f0cdad4e97, type: 3}
+  m_Script: {fileID: 11500000, guid: 69d9e555b6f0111479b598889abc261d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SettingsCanvas: {fileID: 358671612}
-  LanguageDropdown: {fileID: 0}
 --- !u!1 &1144338117
 GameObject:
   m_ObjectHideFlags: 0
@@ -2079,7 +2104,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1277316904}
-        m_TargetAssemblyTypeName: UISettings, Assembly-CSharp
+        m_TargetAssemblyTypeName: UILanguage, Assembly-CSharp
         m_MethodName: changeLanguage
         m_Mode: 1
         m_Arguments:
@@ -2138,10 +2163,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1277316899}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 575ba14519ad8e548ac6c8f0cdad4e97, type: 3}
+  m_Script: {fileID: 11500000, guid: ee4bdbead8d830849bcda2b6ce6859d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SettingsCanvas: {fileID: 358671612}
   LanguageDropdown: {fileID: 1277316901}
 --- !u!1 &1303231091
 GameObject:
@@ -2424,7 +2448,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.3537736, g: 0.8354408, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3632,7 +3656,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: 5, y: 0}
+  m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1966169884
@@ -3673,7 +3697,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

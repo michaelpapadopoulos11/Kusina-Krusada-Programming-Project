@@ -141,7 +141,7 @@ public class QuizQuestionUIInteraction : MonoBehaviour
         if (tagalogButton == null) tagalogButton = root.Q<Button>("Tagalog");
         if (englishButton == null) englishButton = root.Q<Button>("English");
         
-        if (UISettings.isEnglish is false)
+        if (UILanguage.isEnglish is false)
         {
             SwitchToTagalog();
         }

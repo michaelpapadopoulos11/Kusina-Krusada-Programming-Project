@@ -23,6 +23,8 @@ public class UIScore : MonoBehaviour
     void Awake()
     {
         // Set soapbar icon to hidden by default as early as possible
+        ScoreManager.ResetScore();
+        gameIsPaused = false;
         InitializeSoapbarIcon();
     }
 
