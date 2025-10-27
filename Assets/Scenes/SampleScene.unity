@@ -5153,7 +5153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speedIncreaseInterval: 15
   speedIncreaseAmount: 3
-  maxSpeed: 75
+  maxSpeed: 65
   playerMovement: {fileID: 100802023}
 --- !u!1 &261849724
 GameObject:
@@ -5334,7 +5334,7 @@ MonoBehaviour:
   coinY: 2
   spawnInterval: 2
   minSpawnInterval: 0.2
-  maxCoins: 10
+  maxCoins: 7
   enableConsecutiveSpawning: 0
   yPositions:
   - 1
@@ -18135,8 +18135,8 @@ MonoBehaviour:
   coinPrefab: {fileID: 9186451452737789571}
   player: {fileID: 100802020}
   coinY: 2
-  spawnInterval: 12
-  minSpawnInterval: 10
+  spawnInterval: 10
+  minSpawnInterval: 8
   maxCoins: 10
   enableConsecutiveSpawning: 0
   yPositions:
