@@ -5134,6 +5134,9 @@ MonoBehaviour:
   slowTimer: 0
   slowDuration: 5
   pointsMultiplier: 1
+  isDoublePoints: 0
+  doublePointsTimer: 0
+  doublePointsDuration: 5
 --- !u!1 &261849724
 GameObject:
   m_ObjectHideFlags: 0
@@ -12548,27 +12551,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!65 &350813678957038288
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9186451452737789571}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2.2255714, y: 2.173517, z: 0.1887553}
-  m_Center: {x: -0.07575345, y: 0.06229158, z: -0.20388362}
 --- !u!33 &405323739325109838
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -12714,8 +12696,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78d03d9e5cff6450e94360418ac2d45b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doublePointsActive: 0
-  doublePointsDuration: 5
 --- !u!4 &875656796365840702
 Transform:
   m_ObjectHideFlags: 0
@@ -13243,7 +13223,7 @@ Transform:
   m_GameObject: {fileID: 4962194003138282226}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 51.04, y: -12.47, z: 268.7}
+  m_LocalPosition: {x: 8.08, y: -12.47, z: 54.53}
   m_LocalScale: {x: 1.0088, y: 1.0088, z: 1.0088}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -17723,7 +17703,7 @@ Transform:
   m_GameObject: {fileID: 8224884545851660545}
   serializedVersion: 2
   m_LocalRotation: {x: 0.00000008146034, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: -18.99, y: 2.68, z: 6.42}
+  m_LocalPosition: {x: -31.36, y: 2.68, z: 6.42}
   m_LocalScale: {x: 1.02743, y: 1.02743, z: 1.02743}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -18069,7 +18049,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4651289302685453540}
-  - component: {fileID: 350813678957038288}
+  - component: {fileID: 9186451452737789573}
   - component: {fileID: 4509043364376465014}
   - component: {fileID: 816460943280316342}
   - component: {fileID: 7098566353989054789}
@@ -18094,14 +18074,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coinPrefab: {fileID: 4962194003138282226}
-  player: {fileID: 0}
+  player: {fileID: 100802020}
   coinY: 2
-  spawnInterval: 5
+  spawnInterval: 12
   maxCoins: 5
   yPositions:
   - 2
   - 4
   destroyDistanceBehind: 20
+--- !u!135 &9186451452737789573
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9186451452737789571}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.11
+  m_Center: {x: 0, y: 0, z: -0.33}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
