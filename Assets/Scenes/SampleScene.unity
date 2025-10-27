@@ -5135,6 +5135,26 @@ MonoBehaviour:
   isSlowed: 0
   slowTimer: 0
   slowDuration: 5
+  pointsMultiplier: 1
+  isDoublePoints: 0
+  doublePointsTimer: 0
+  doublePointsDuration: 5
+--- !u!114 &100802024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100802016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ae6b2d44ea821b468924e4ea33d445b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speedIncreaseInterval: 15
+  speedIncreaseAmount: 3
+  maxSpeed: 75
+  playerMovement: {fileID: 100802023}
 --- !u!1 &261849724
 GameObject:
   m_ObjectHideFlags: 0
@@ -5313,9 +5333,9 @@ MonoBehaviour:
   player: {fileID: 100802020}
   coinY: 2
   spawnInterval: 2
-  minSpawnInterval: 0.5
-  maxCoins: 5
-  enableConsecutiveSpawning: 1
+  minSpawnInterval: 0.2
+  maxCoins: 10
+  enableConsecutiveSpawning: 0
   yPositions:
   - 1
   - 1
@@ -5358,8 +5378,8 @@ MonoBehaviour:
   player: {fileID: 100802020}
   coinY: 2
   spawnInterval: 3
-  minSpawnInterval: 0.01
-  maxCoins: 7
+  minSpawnInterval: 0.2
+  maxCoins: 10
   enableConsecutiveSpawning: 1
   yPositions:
   - 2
@@ -5509,7 +5529,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 608d50fefb2a646eb917f7f57b5d12c1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.84
+      value: -42.81
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 608d50fefb2a646eb917f7f57b5d12c1,
         type: 3}
@@ -17762,8 +17782,8 @@ MonoBehaviour:
   player: {fileID: 100802020}
   coinY: 2
   spawnInterval: 2
-  minSpawnInterval: 7
-  maxCoins: 7
+  minSpawnInterval: 0.5
+  maxCoins: 10
   enableConsecutiveSpawning: 1
   yPositions:
   - 2
@@ -18090,9 +18110,9 @@ GameObject:
   - component: {fileID: 4651289302685453540}
   - component: {fileID: 9186451452737789573}
   - component: {fileID: 4509043364376465014}
+  - component: {fileID: 9186451452737789572}
   - component: {fileID: 816460943280316342}
   - component: {fileID: 7098566353989054789}
-  - component: {fileID: 9186451452737789572}
   m_Layer: 0
   m_Name: Hairnet Powerup
   m_TagString: Player
@@ -18112,11 +18132,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fca17a5a2694f6f4db0059995cbf14b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coinPrefab: {fileID: 4962194003138282226}
+  coinPrefab: {fileID: 9186451452737789571}
   player: {fileID: 100802020}
   coinY: 2
   spawnInterval: 12
-  maxCoins: 5
+  minSpawnInterval: 10
+  maxCoins: 10
+  enableConsecutiveSpawning: 0
   yPositions:
   - 2
   - 4

@@ -61,21 +61,13 @@ public class Generate : MonoBehaviour
         // Use cached deltaTime for better performance
         timer += PerformanceHelper.CachedDeltaTime;
 
-        // Check if we're at max speed for guaranteed spawning
-        bool isAtMaxSpeed = IsPlayerAtMaxSpeed();
-        
         // Spawn coins at current interval
         if (timer >= currentSpawnInterval)
         {
             timer = 0f;
             
-            // At max speed, guarantee spawn regardless of maxCoins limit
-            if (isAtMaxSpeed)
-            {
-                SpawnCoin();
-            }
-            // Normal spawning with maxCoins limit
-            else if (coins.Count < maxCoins)
+            // Respect maxCoins limit for all speeds
+            if (coins.Count < maxCoins)
             {
                 SpawnCoin();
             }
@@ -368,16 +360,17 @@ public class Generate : MonoBehaviour
         var gameProgression = GameProgression.Instance;
         if (gameProgression != null && gameProgression.playerMovement != null)
         {
-            // Get current, original, and max speeds from GameProgression
+            // Get current, original speeds from GameProgression
             float currentSpeed = gameProgression.GetCurrentBaseSpeed();
             float originalSpeed = gameProgression.GetOriginalSpeed();
-            float maxSpeed = gameProgression.maxSpeed;
+            // Use a higher effective max speed for spawn interval calculation (30f instead of GameProgression's 20f)
+            float effectiveMaxSpeed = 30f;
             
-            // Calculate progress from 0 to 1 based on speed increase
+            // Calculate progress from 0 to 1 based on speed increase to effective max
             float speedProgress = 0f;
-            if (maxSpeed > originalSpeed)
+            if (effectiveMaxSpeed > originalSpeed)
             {
-                speedProgress = Mathf.Clamp01((currentSpeed - originalSpeed) / (maxSpeed - originalSpeed));
+                speedProgress = Mathf.Clamp01((currentSpeed - originalSpeed) / (effectiveMaxSpeed - originalSpeed));
             }
 
             // Interpolate between original spawn interval and minimum spawn interval
@@ -391,12 +384,12 @@ public class Generate : MonoBehaviour
                 var movement = player.GetComponent<Movement>();
                 if (movement != null)
                 {
-                    // Assume starting speed is 5f and max speed is 20f if GameProgression isn't available
+                    // Use higher effective max speed for spawn interval calculation
                     float assumedOriginalSpeed = 5f;
-                    float assumedMaxSpeed = 20f;
+                    float effectiveMaxSpeed = 30f;
                     float currentSpeed = movement.baseForwardSpeed;
                     
-                    float speedProgress = Mathf.Clamp01((currentSpeed - assumedOriginalSpeed) / (assumedMaxSpeed - assumedOriginalSpeed));
+                    float speedProgress = Mathf.Clamp01((currentSpeed - assumedOriginalSpeed) / (effectiveMaxSpeed - assumedOriginalSpeed));
                     currentSpawnInterval = Mathf.Lerp(originalSpawnInterval, minSpawnInterval, speedProgress);
                 }
                 else
@@ -419,6 +412,30 @@ public class Generate : MonoBehaviour
     public float GetCurrentSpawnInterval()
     {
         return currentSpawnInterval;
+    }
+
+    /// <summary>
+    /// Get the current player speed for spawn logic
+    /// </summary>
+    private float GetCurrentPlayerSpeed()
+    {
+        var gameProgression = GameProgression.Instance;
+        if (gameProgression != null && gameProgression.playerMovement != null)
+        {
+            return gameProgression.GetCurrentBaseSpeed();
+        }
+        
+        // Fallback: check player movement directly
+        if (player != null)
+        {
+            var movement = player.GetComponent<Movement>();
+            if (movement != null)
+            {
+                return movement.baseForwardSpeed;
+            }
+        }
+        
+        return 5f; // Default fallback speed
     }
 
     /// <summary>
