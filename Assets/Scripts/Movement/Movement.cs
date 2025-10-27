@@ -64,6 +64,10 @@ public class Movement : MonoBehaviour
 
     public int pointsMultiplier = 1; // Multiplier for points collected
 
+    public bool isDoublePoints = false; // Tracks if double points is active
+    public float doublePointsTimer = 0f; // Timer for double points effect
+    public float doublePointsDuration = 5f; // Duration of double points effect
+
     private void Awake() {
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
@@ -77,6 +81,7 @@ public class Movement : MonoBehaviour
         isInvincible = false;
         baseForwardSpeed = forwardSpeed;
         isSlowed = false;
+        isDoublePoints = false;
 
         // Cache renderers and original colors for visual feedback
         _renderers = GetComponentsInChildren<Renderer>(true);
@@ -269,6 +274,17 @@ public class Movement : MonoBehaviour
                 isSlowed = false;
                 forwardSpeed = baseForwardSpeed;
                 Debug.Log("Slow effect worn off");
+            }
+        }
+
+        // Handle double points powerup
+        if (isDoublePoints) {
+            pointsMultiplier = 2; // x2 fruit points value
+            doublePointsTimer -= Time.deltaTime;
+            if (doublePointsTimer <= 0f) {
+                isDoublePoints = false;
+                pointsMultiplier = 1; // normal points per fruit collected
+                Debug.Log("Double points powerup expired");
             }
         }
     }
