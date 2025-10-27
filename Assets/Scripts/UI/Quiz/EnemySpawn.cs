@@ -48,14 +48,6 @@ public class EnemySpawn : MonoBehaviour
         {
             // Create a copy of the original enemy model and place it exactly spawnOffsetZ in front of the player
             Vector3 spawnPosition = new Vector3(playerTransform.position.x, playerTransform.position.y, playerTransform.position.z + spawnOffsetZ);
-            
-            // Check if there's already an object within 20f radius in the same lane
-            if (IsObjectTooClose(spawnPosition, 20f))
-            {
-                // Don't spawn if there's an object too close
-                return;
-            }
-            
             Instantiate(originalEnemyModel, spawnPosition, originalEnemyModel.transform.rotation);
             return;
         }
@@ -73,79 +65,6 @@ public class EnemySpawn : MonoBehaviour
         }
 
         Vector3 finalSpawnPosition = new Vector3(spawnX, spawnY, spawnZ);
-        
-        // Check if there's already an object within 20f radius in the same lane
-        if (IsObjectTooClose(finalSpawnPosition, 20f))
-        {
-            // Don't spawn if there's an object too close
-            return;
-        }
-        
         Instantiate(enemyPrefab, finalSpawnPosition, Quaternion.identity);
-    }
-
-    /// <summary>
-    /// Checks if there's already an object within the specified radius of the spawn position.
-    /// Focuses on the same lane (X position) and checks Z-axis distance.
-    /// </summary>
-    /// <param name="spawnPos">The intended spawn position</param>
-    /// <param name="checkRadius">The radius to check for existing objects</param>
-    /// <returns>True if an object is too close, false otherwise</returns>
-    private bool IsObjectTooClose(Vector3 spawnPos, float checkRadius)
-    {
-        // Define lane tolerance - objects within this X range are considered in the same lane
-        float laneWidth = 1.0f;
-
-        // Find all active GameObjects in the scene
-        var allTransforms = FindObjectsOfType<Transform>();
-        for (int i = 0; i < allTransforms.Length; i++)
-        {
-            var go = allTransforms[i].gameObject;
-            if (go == null || !go.activeInHierarchy) continue;
-
-            // Skip the player
-            if (playerTransform != null && go.transform == playerTransform) continue;
-
-            // Skip UI elements
-            if (go.GetComponent<UnityEngine.RectTransform>() != null) continue;
-
-            // Skip this spawner
-            if (go.transform == this.transform) continue;
-
-            // Check if this is a relevant object (enemies, coins, power-ups, etc.)
-            bool isRelevantObject = false;
-            
-            // Check for enemy-related components or names
-            if (enemyPrefab != null && go.name != null && go.name.Contains(enemyPrefab.name))
-                isRelevantObject = true;
-            
-            // Check for other game objects that should be considered for spacing
-            if (go.GetComponent<PlusPoints>() != null || 
-                go.GetComponent<Coin>() != null || 
-                go.GetComponent<CloneMarker>() != null ||
-                go.name != null && go.name.EndsWith("(Clone)"))
-                isRelevantObject = true;
-
-            // Check for power-ups
-            if (go.GetComponent<Invincibility_Powerup>() != null)
-                isRelevantObject = true;
-
-            if (isRelevantObject)
-            {
-                Vector3 objPos = go.transform.position;
-
-                // Check if in the same lane
-                if (Mathf.Abs(objPos.x - spawnPos.x) <= laneWidth)
-                {
-                    // Check Z-axis distance
-                    if (Mathf.Abs(objPos.z - spawnPos.z) <= checkRadius)
-                    {
-                        return true; // Object too close
-                    }
-                }
-            }
-        }
-
-        return false; // No objects too close
     }
 }
