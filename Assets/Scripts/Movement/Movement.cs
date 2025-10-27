@@ -16,8 +16,8 @@ public class Movement : MonoBehaviour
 
     private bool SwipeLeft;
     private bool SwipeRight;
-    private bool SwipeUp;
-    private bool SwipeDown;
+    public bool SwipeUp { get; private set; }
+    public bool SwipeDown { get; private set; }
 
     public float XValue = 2;
     public float forwardSpeed = 5f;
@@ -34,7 +34,8 @@ public class Movement : MonoBehaviour
 
     private float verticalVelocity;
     private Vector3 originalScale;
-    private bool isCrouching = false;
+    public bool IsCrouching { get; private set; } = false;
+    public bool IsGrounded => m_char.isGrounded;
     private float crouchTimer = 0f;
 
     // Store original CharacterController settings
@@ -187,20 +188,18 @@ public class Movement : MonoBehaviour
         }
 
         // Crouching (only when grounded)
-        if (m_char.isGrounded && SwipeDown && !isCrouching)
+        if (m_char.isGrounded && SwipeDown && !IsCrouching)
         {
-            // Shrink model
-            transform.localScale = new Vector3(originalScale.x, originalScale.y * crouchScale, originalScale.z);
 
             // Shrink CharacterController
             m_char.height = originalHeight * crouchScale;
             m_char.center = new Vector3(originalCenter.x, originalCenter.y * crouchScale, originalCenter.z);
 
-            isCrouching = true;
+            IsCrouching = true;
             crouchTimer = crouchDuration;
         }
 
-        if (isCrouching)
+        if (IsCrouching)
         {
             crouchTimer -= Time.deltaTime;
             if (crouchTimer <= 0f)
@@ -212,7 +211,7 @@ public class Movement : MonoBehaviour
                 m_char.height = originalHeight;
                 m_char.center = originalCenter;
 
-                isCrouching = false;
+                IsCrouching = false;
             }
         }
 
