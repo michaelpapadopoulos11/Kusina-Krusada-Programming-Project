@@ -22,7 +22,7 @@ public class Movement : MonoBehaviour
     public float XValue = 2;
     public float forwardSpeed = 5f;
     // Store the base speed so we can restore after slow effects
-    private float baseForwardSpeed;
+    [HideInInspector] public float baseForwardSpeed;
     public float jumpForce = 8f;
     public float gravity = -20f;
     public float laneSwitchSpeed = 5f;
@@ -61,6 +61,7 @@ public class Movement : MonoBehaviour
     public bool isSlowed = false;
     public float slowTimer = 0f;
     public float slowDuration = 5f;
+    private float slowedSpeed = 0f; // Store the slowed speed value
 
     private void Awake() {
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
@@ -259,13 +260,20 @@ public class Movement : MonoBehaviour
 
         // Handle slow effect
         if (isSlowed) {
-            forwardSpeed = baseForwardSpeed * 0.5f;
+            // Use the stored slowed speed (set when powerup is picked up)
+            forwardSpeed = slowedSpeed;
             slowTimer -= Time.deltaTime;
             if (slowTimer <= 0f) {
                 isSlowed = false;
-                forwardSpeed = baseForwardSpeed;
+                forwardSpeed = baseForwardSpeed; // Restore to current base speed
                 Debug.Log("Slow effect worn off");
             }
+        }
+        else
+        {
+            // If not slowed, ensure forwardSpeed matches baseForwardSpeed
+            // This handles speed increases that happen while not slowed
+            forwardSpeed = baseForwardSpeed;
         }
     }
 
@@ -329,5 +337,18 @@ public class Movement : MonoBehaviour
                 mats[j].color = baseCol;
             }
         }
+    }
+
+    /// <summary>
+    /// Apply slowdown effect using current speed as reference
+    /// Called by slowdown powerups
+    /// </summary>
+    public void ApplySlowdownEffect(float duration, float slowFactor = 0.5f)
+    {
+        isSlowed = true;
+        slowTimer = duration;
+        // Calculate slowed speed based on current base speed
+        slowedSpeed = baseForwardSpeed * slowFactor;
+        Debug.Log($"Slowdown applied: {baseForwardSpeed} -> {slowedSpeed}");
     }
 }

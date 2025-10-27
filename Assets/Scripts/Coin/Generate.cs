@@ -7,16 +7,30 @@ public class Generate : MonoBehaviour
     public GameObject coinPrefab;
     public Transform player;
     public float coinY = 2f;
-    [Tooltip("Seconds between automatic spawns")]
+    [Tooltip("Seconds between automatic spawns (starting value)")]
     public float spawnInterval = 5f;
+    [Tooltip("Minimum spawn interval - reached when player reaches max speed")]
+    public float minSpawnInterval = 1f;
     [Tooltip("Maximum clones allowed in scene from this spawner")]
     public int maxCoins = 5;
+    
+    [Header("Consecutive Spawning")]
+    [Tooltip("Allow spawning 3 consecutive items in the same lane 10f apart when at max speed")]
+    public bool enableConsecutiveSpawning = false;
 
     private readonly float[] xPositions = { -2.5f, 0.12f, 2.3f };
     // possible Y positions for spawned coins
     public float[] yPositions = new float[] { 2f, 4f };
     private List<GameObject> coins = new List<GameObject>();
     private float timer = 0f;
+    private float originalSpawnInterval; // Store the original spawn interval
+    private float currentSpawnInterval; // Current calculated spawn interval
+    
+    // Consecutive spawning variables
+    private bool isConsecutiveSpawning = false;
+    private int consecutiveCount = 0;
+    private int selectedLane = 0;
+    private float consecutiveSpacing = 10f;
     // How far behind the player a clone must be before it's destroyed
     public float destroyDistanceBehind = 20f;
     // (Removed unused OnDestroyed spawn cooldown fields — spawning now only occurs on the timer)
@@ -25,6 +39,10 @@ public class Generate : MonoBehaviour
     {
         if (player == null)
             player = GameObject.FindGameObjectWithTag("Player")?.transform;
+
+        // Store the original spawn interval for calculations
+        originalSpawnInterval = spawnInterval;
+        currentSpawnInterval = spawnInterval;
 
         // Warn if the assigned coinPrefab is a scene instance rather than a project prefab asset.
         #if UNITY_EDITOR
@@ -37,15 +55,30 @@ public class Generate : MonoBehaviour
 
     void Update()
     {
+        // Update spawn interval based on player speed
+        UpdateSpawnInterval();
+
         // Use cached deltaTime for better performance
         timer += PerformanceHelper.CachedDeltaTime;
 
-        // Spawn coins at interval if not already at max
-        if (timer >= spawnInterval)
+        // Check if we're at max speed for guaranteed spawning
+        bool isAtMaxSpeed = IsPlayerAtMaxSpeed();
+        
+        // Spawn coins at current interval
+        if (timer >= currentSpawnInterval)
         {
             timer = 0f;
-            if (coins.Count < maxCoins)
+            
+            // At max speed, guarantee spawn regardless of maxCoins limit
+            if (isAtMaxSpeed)
+            {
                 SpawnCoin();
+            }
+            // Normal spawning with maxCoins limit
+            else if (coins.Count < maxCoins)
+            {
+                SpawnCoin();
+            }
         }
 
         // Optimized cleanup: iterate backwards and remove null entries efficiently
@@ -140,7 +173,50 @@ public class Generate : MonoBehaviour
 
     void SpawnCoin()
     {
-        int lane = Random.Range(0, xPositions.Length);
+        if (coinPrefab == null)
+        {
+            Debug.LogWarning("Generate.SpawnCoin: coinPrefab not assigned — cannot spawn.");
+            return;
+        }
+
+        bool isAtMaxSpeed = IsPlayerAtMaxSpeed();
+        
+        // Handle consecutive spawning logic with 25% chance
+        if (enableConsecutiveSpawning && isAtMaxSpeed && !isConsecutiveSpawning)
+        {
+            // 25% chance to start consecutive spawning sequence
+            if (Random.Range(0f, 1f) <= 0.25f)
+            {
+                isConsecutiveSpawning = true;
+                consecutiveCount = 0;
+                selectedLane = Random.Range(0, xPositions.Length);
+                Debug.Log("Starting consecutive spawning sequence (25% chance triggered)");
+            }
+        }
+        
+        // Determine spawn parameters
+        int lane;
+        float baseSpawnDistance = 150f;
+        
+        if (isConsecutiveSpawning && consecutiveCount < 3)
+        {
+            // Use selected lane for consecutive spawning
+            lane = selectedLane;
+            // Spawn items 10f apart in the same lane
+            baseSpawnDistance = 150f + (consecutiveCount * consecutiveSpacing);
+        }
+        else
+        {
+            // Normal random lane selection
+            lane = Random.Range(0, xPositions.Length);
+            // Reset consecutive spawning if we've completed the sequence
+            if (isConsecutiveSpawning)
+            {
+                isConsecutiveSpawning = false;
+                consecutiveCount = 0;
+            }
+        }
+
         float y = coinY;
         if (yPositions != null && yPositions.Length > 0)
             y = yPositions[Random.Range(0, yPositions.Length)];
@@ -148,46 +224,65 @@ public class Generate : MonoBehaviour
         Vector3 spawnPos = new Vector3(
             xPositions[lane],
             y,
-            player.position.z + 150f
+            player.position.z + baseSpawnDistance
         );
 
-        if (coinPrefab == null)
+        // For consecutive spawning, skip collision detection to guarantee spawning
+        if (!isConsecutiveSpawning || consecutiveCount >= 3)
         {
-            Debug.LogWarning("Generate.SpawnCoin: coinPrefab not assigned — cannot spawn.");
-            return;
+            // Check if there's already an object within 20f radius in the same lane
+            if (IsObjectTooClose(spawnPos, 20f))
+            {
+                // Don't spawn if there's an object too close (only for normal spawning)
+                return;
+            }
         }
 
-        // Check if there's already an object within 20f radius in the same lane
-        if (IsObjectTooClose(spawnPos, 20f))
+        // Create the coin
+        GameObject coin = CreateCoinInstance(spawnPos);
+        if (coin != null)
         {
-            // Don't spawn if there's an object too close
-            return;
+            coins.Add(coin);
+            
+            // Update consecutive spawning counter
+            if (isConsecutiveSpawning)
+            {
+                consecutiveCount++;
+                Debug.Log($"Consecutive spawn {consecutiveCount}/3 in lane {lane}");
+            }
         }
+    }
 
+    /// <summary>
+    /// Creates a coin instance with all necessary components and setup
+    /// </summary>
+    private GameObject CreateCoinInstance(Vector3 spawnPos)
+    {
         // Use the prefab's original rotation
-    GameObject coin = Instantiate(coinPrefab, spawnPos, coinPrefab.transform.rotation);
-    // Move the clone into the active scene so it behaves the same as VIRUS clones
-    SceneManager.MoveGameObjectToScene(coin, SceneManager.GetActiveScene());
-    coin.transform.SetParent(null);
+        GameObject coin = Instantiate(coinPrefab, spawnPos, coinPrefab.transform.rotation);
+        
+        // Move the clone into the active scene so it behaves the same as VIRUS clones
+        SceneManager.MoveGameObjectToScene(coin, SceneManager.GetActiveScene());
+        coin.transform.SetParent(null);
 
-    // Normalize name: Unity can sometimes append multiple (Clone)(Clone). Keep a single (Clone)
-    if (coin.name.Contains("(Clone)"))
-    {
-        var baseName = coin.name.Replace("(Clone)", "");
-        coin.name = baseName + "(Clone)";
-    }
+        // Normalize name: Unity can sometimes append multiple (Clone)(Clone). Keep a single (Clone)
+        if (coin.name.Contains("(Clone)"))
+        {
+            var baseName = coin.name.Replace("(Clone)", "");
+            coin.name = baseName + "(Clone)";
+        }
 
-    // Remove any Generate components on the clone or its children to avoid recursive spawning
-    var gens = coin.GetComponentsInChildren<Generate>(true);
-    foreach (var g in gens)
-    {
-        if (g != this)
-            Destroy(g);
-    }
+        // Remove any Generate components on the clone or its children to avoid recursive spawning
+        var gens = coin.GetComponentsInChildren<Generate>(true);
+        foreach (var g in gens)
+        {
+            if (g != this)
+                Destroy(g);
+        }
 
-    // Attach marker so this object is recognized as a spawned clone
-    if (coin.GetComponent<CloneMarker>() == null)
-        coin.AddComponent<CloneMarker>();
+        // Attach marker so this object is recognized as a spawned clone
+        if (coin.GetComponent<CloneMarker>() == null)
+            coin.AddComponent<CloneMarker>();
 
         if (coin.GetComponent<SpawnedEntity>() == null)
         {
@@ -196,7 +291,7 @@ public class Generate : MonoBehaviour
             se.destroyDistanceBehind = this.destroyDistanceBehind;
         }
 
-        coins.Add(coin);
+        return coin;
     }
 
     /// <summary>
@@ -274,6 +369,99 @@ public class Generate : MonoBehaviour
         }
 
         return false; // No objects too close
+    }
+
+    /// <summary>
+    /// Updates the current spawn interval based on the player's movement speed.
+    /// Spawn interval decreases as speed increases, reaching minSpawnInterval when max speed is reached.
+    /// </summary>
+    private void UpdateSpawnInterval()
+    {
+        // Try to get the GameProgression instance to access speed information
+        var gameProgression = GameProgression.Instance;
+        if (gameProgression != null && gameProgression.playerMovement != null)
+        {
+            // Get current, original, and max speeds from GameProgression
+            float currentSpeed = gameProgression.GetCurrentBaseSpeed();
+            float originalSpeed = gameProgression.GetOriginalSpeed();
+            float maxSpeed = gameProgression.maxSpeed;
+            
+            // Calculate progress from 0 to 1 based on speed increase
+            float speedProgress = 0f;
+            if (maxSpeed > originalSpeed)
+            {
+                speedProgress = Mathf.Clamp01((currentSpeed - originalSpeed) / (maxSpeed - originalSpeed));
+            }
+
+            // Interpolate between original spawn interval and minimum spawn interval
+            currentSpawnInterval = Mathf.Lerp(originalSpawnInterval, minSpawnInterval, speedProgress);
+            
+            // Debug log for testing (can be removed later)
+            // Debug.Log($"Speed: {currentSpeed:F1}/{maxSpeed} | Spawn Interval: {currentSpawnInterval:F2}s");
+        }
+        else
+        {
+            // Fallback: try to get player movement directly
+            if (player != null)
+            {
+                var movement = player.GetComponent<Movement>();
+                if (movement != null)
+                {
+                    // Assume starting speed is 5f and max speed is 20f if GameProgression isn't available
+                    float assumedOriginalSpeed = 5f;
+                    float assumedMaxSpeed = 20f;
+                    float currentSpeed = movement.baseForwardSpeed;
+                    
+                    float speedProgress = Mathf.Clamp01((currentSpeed - assumedOriginalSpeed) / (assumedMaxSpeed - assumedOriginalSpeed));
+                    currentSpawnInterval = Mathf.Lerp(originalSpawnInterval, minSpawnInterval, speedProgress);
+                }
+                else
+                {
+                    // No movement component found, use original interval
+                    currentSpawnInterval = originalSpawnInterval;
+                }
+            }
+            else
+            {
+                // No player found, use original interval
+                currentSpawnInterval = originalSpawnInterval;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Get the current spawn interval for UI display or other systems
+    /// </summary>
+    public float GetCurrentSpawnInterval()
+    {
+        return currentSpawnInterval;
+    }
+
+    /// <summary>
+    /// Check if the player has reached the guaranteed spawn speed threshold (40)
+    /// </summary>
+    private bool IsPlayerAtMaxSpeed()
+    {
+        const float guaranteedSpawnSpeed = 40f;
+        
+        var gameProgression = GameProgression.Instance;
+        if (gameProgression != null && gameProgression.playerMovement != null)
+        {
+            float currentSpeed = gameProgression.GetCurrentBaseSpeed();
+            return currentSpeed >= guaranteedSpawnSpeed;
+        }
+        
+        // Fallback: check player movement directly
+        if (player != null)
+        {
+            var movement = player.GetComponent<Movement>();
+            if (movement != null)
+            {
+                return movement.baseForwardSpeed >= guaranteedSpawnSpeed;
+            }
+        }
+        
+        return false;
     }
 
 }

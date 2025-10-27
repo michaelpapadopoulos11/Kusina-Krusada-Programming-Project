@@ -5005,6 +5005,7 @@ GameObject:
   - component: {fileID: 100802018}
   - component: {fileID: 100802022}
   - component: {fileID: 100802023}
+  - component: {fileID: 100802024}
   m_Layer: 3
   m_Name: Capsule
   m_TagString: Player
@@ -5117,6 +5118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   XValue: 2.5
   forwardSpeed: 15
+  baseForwardSpeed: 0
   jumpForce: 8
   gravity: -20
   laneSwitchSpeed: 5
@@ -5133,6 +5135,22 @@ MonoBehaviour:
   isSlowed: 0
   slowTimer: 0
   slowDuration: 5
+--- !u!114 &100802024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100802016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ae6b2d44ea821b468924e4ea33d445b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speedIncreaseInterval: 15
+  speedIncreaseAmount: 2
+  maxSpeed: 60
+  playerMovement: {fileID: 100802023}
 --- !u!1 &261849724
 GameObject:
   m_ObjectHideFlags: 0
@@ -5310,8 +5328,10 @@ MonoBehaviour:
   coinPrefab: {fileID: 299659538}
   player: {fileID: 100802020}
   coinY: 2
-  spawnInterval: 4
+  spawnInterval: 2
+  minSpawnInterval: 0.5
   maxCoins: 5
+  enableConsecutiveSpawning: 1
   yPositions:
   - 1
   - 1
@@ -5353,8 +5373,10 @@ MonoBehaviour:
   coinPrefab: {fileID: 491782407}
   player: {fileID: 100802020}
   coinY: 2
-  spawnInterval: 8
-  maxCoins: 2
+  spawnInterval: 3
+  minSpawnInterval: 0.01
+  maxCoins: 7
+  enableConsecutiveSpawning: 1
   yPositions:
   - 2
   - 4
@@ -6128,11 +6150,34 @@ MonoBehaviour:
   player: {fileID: 100802020}
   coinY: 2
   spawnInterval: 20
-  maxCoins: 5
+  minSpawnInterval: 18
+  maxCoins: 2
+  enableConsecutiveSpawning: 0
   yPositions:
   - 2
   - 4
   destroyDistanceBehind: 20
+--- !u!135 &841547721
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 841547710}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 148.43
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &877573504
 GameObject:
   m_ObjectHideFlags: 0
@@ -11762,8 +11807,10 @@ MonoBehaviour:
   coinPrefab: {fileID: 1410849445}
   player: {fileID: 100802020}
   coinY: 2
-  spawnInterval: 12
+  spawnInterval: 15
+  minSpawnInterval: 12
   maxCoins: 5
+  enableConsecutiveSpawning: 0
   yPositions:
   - 2
   - 4
@@ -12243,6 +12290,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -5.4
       objectReference: {fileID: 0}
+    - target: {fileID: 3530422061157229517, guid: 54a6e04e2c3fd4eb88122e8f43bc0276,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 18.57
+      objectReference: {fileID: 0}
     - target: {fileID: 4222678499210647894, guid: 54a6e04e2c3fd4eb88122e8f43bc0276,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12313,10 +12365,15 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3530422061157229517, guid: 54a6e04e2c3fd4eb88122e8f43bc0276, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8336235771513492385, guid: 54a6e04e2c3fd4eb88122e8f43bc0276,
+        type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 841547721}
     - targetCorrespondingSourceObject: {fileID: 8336235771513492385, guid: 54a6e04e2c3fd4eb88122e8f43bc0276,
         type: 3}
       insertIndex: -1
@@ -14286,17 +14343,17 @@ PrefabInstance:
     - target: {fileID: 8089747823610501980, guid: 1343671f3ec29482aa4f2c748b135913,
         type: 3}
       propertyPath: m_Size.x
-      value: 2.2255714
+      value: 2.41
       objectReference: {fileID: 0}
     - target: {fileID: 8089747823610501980, guid: 1343671f3ec29482aa4f2c748b135913,
         type: 3}
       propertyPath: m_Size.y
-      value: 2.173517
+      value: 2.3
       objectReference: {fileID: 0}
     - target: {fileID: 8089747823610501980, guid: 1343671f3ec29482aa4f2c748b135913,
         type: 3}
       propertyPath: m_Size.z
-      value: 0.1887553
+      value: 2.55
       objectReference: {fileID: 0}
     - target: {fileID: 8089747823610501980, guid: 1343671f3ec29482aa4f2c748b135913,
         type: 3}
@@ -17165,7 +17222,9 @@ MonoBehaviour:
   player: {fileID: 100802020}
   coinY: 2
   spawnInterval: 2
-  maxCoins: 5
+  minSpawnInterval: 7
+  maxCoins: 7
+  enableConsecutiveSpawning: 1
   yPositions:
   - 2
   - 4
