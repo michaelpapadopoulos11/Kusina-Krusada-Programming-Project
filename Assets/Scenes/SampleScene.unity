@@ -6029,8 +6029,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbafa55a4e772f642b4aba794f3bb79f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetCanvas: {fileID: 5083472873520509761}
-  heartSprite: {fileID: 21300000, guid: 1ad4c6a66d278fc45a259101ccc282ae, type: 3}
+  targetCanvas: {fileID: 0}
+  heartSprite: {fileID: 0}
   heartSize: {x: 50, y: 50}
   startPosition: {x: -100, y: 100}
   heartSpacing: 60
@@ -6798,8 +6798,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbafa55a4e772f642b4aba794f3bb79f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetCanvas: {fileID: 5083472873520509761}
-  heartSprite: {fileID: 21300000, guid: 1ad4c6a66d278fc45a259101ccc282ae, type: 3}
+  targetCanvas: {fileID: 0}
+  heartSprite: {fileID: 0}
   heartSize: {x: 50, y: 50}
   startPosition: {x: -100, y: 100}
   heartSpacing: 60
@@ -12956,7 +12956,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.12
+  m_Volume: 1
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -13633,8 +13633,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbafa55a4e772f642b4aba794f3bb79f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetCanvas: {fileID: 5083472873520509761}
-  heartSprite: {fileID: 21300000, guid: 1ad4c6a66d278fc45a259101ccc282ae, type: 3}
+  targetCanvas: {fileID: 0}
+  heartSprite: {fileID: 0}
   heartSize: {x: 50, y: 50}
   startPosition: {x: -100, y: 100}
   heartSpacing: 60
