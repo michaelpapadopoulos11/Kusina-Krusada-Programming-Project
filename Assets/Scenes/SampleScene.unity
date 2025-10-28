@@ -5624,7 +5624,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3516a50a5a78d4756b842b2b2dcce359, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enforceNonTrigger: 0
 --- !u!114 &299659550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12494,7 +12493,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 1604880633}
   SFXSource: {fileID: 1376405559}
-  background: {fileID: 8300000, guid: 264dabbb7f044416bb51b6a74a2355a9, type: 3}
+  background: {fileID: 8300000, guid: aab5dc555ff784a4c8a7438cc0e658fc, type: 3}
   powerup: {fileID: 8300000, guid: 2b56dd7dc17134b909a44f9335fcf4ee, type: 3}
   fruit_collected: {fileID: 8300000, guid: 2948c40a5d58c4b598e5d3d19c55a24a, type: 3}
   run: {fileID: 8300000, guid: 9c4b643cbd85145ef9b43ed2e1584ca5, type: 3}
@@ -12715,7 +12714,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.28
+  m_Volume: 0.12
   m_Pitch: 1
   Loop: 1
   Mute: 0
