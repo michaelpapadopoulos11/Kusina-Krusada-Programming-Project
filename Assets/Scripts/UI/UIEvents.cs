@@ -11,6 +11,8 @@ public class UIEvents : MonoBehaviour
     public void OnPlayClick ()
     {
         Debug.Log("Play Clicked");
+        // Reset the life system when starting a new game
+        LifeManager.ResetLives();
         switchScene();
     }
 

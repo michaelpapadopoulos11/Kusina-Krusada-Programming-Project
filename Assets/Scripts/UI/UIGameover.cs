@@ -9,7 +9,6 @@ public class UIGameover : MonoBehaviour
 {
     [SerializeField] private Text textGameoverScore;
     [SerializeField] private Text textScoreCount;
-    [SerializeField] private int lifeCount = 3;
     [SerializeField] private RectTransform panelGameover; //panel for the entire gameover
     [SerializeField] private float panelOvershoot = 0.1f;
     [SerializeField] private float panelEntrySpeed = 10f;
@@ -45,6 +44,16 @@ public class UIGameover : MonoBehaviour
             if (!isGameover) // Only log once
             {
                 Debug.Log("UIGameover: Detected player game over state - showing game over UI");
+            }
+            isGameover = true;
+            UIScore.gameIsPaused = true;
+        }
+        // Check if all lives are lost through the LifeManager
+        else if (LifeManager.IsGameOver())
+        {
+            if (!isGameover) // Only log once
+            {
+                Debug.Log("UIGameover: Detected life system game over - showing game over UI");
             }
             isGameover = true;
             UIScore.gameIsPaused = true;

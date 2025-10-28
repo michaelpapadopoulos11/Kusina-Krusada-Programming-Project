@@ -31,12 +31,16 @@ public class UIGameoverButtons : MonoBehaviour
     public void OnRetryClick()
     {
         Debug.Log("r");
+        // Reset the life system before reloading the scene
+        LifeManager.ResetLives();
         reloadScene();
     }
     
     public void OnMenuClick()
     {
         Debug.Log("menu");
+        // Reset the life system before going to menu
+        LifeManager.ResetLives();
         switchToMenu();
     }
 }

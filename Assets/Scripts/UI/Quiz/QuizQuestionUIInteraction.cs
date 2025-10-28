@@ -457,6 +457,10 @@ public class QuizQuestionUIInteraction : MonoBehaviour
         else
         {
             Debug.Log("Incorrect");
+            
+            // Trigger life system for wrong answer
+            LifeManager.OnWrongAnswer();
+            
             // Reduce available points for this question by 20
             currentQuestionPoints = Mathf.Max(0, currentQuestionPoints - 20);
             Debug.Log($"Wrong answer! Points for this question reduced to {currentQuestionPoints}.");

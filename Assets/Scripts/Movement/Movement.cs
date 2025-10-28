@@ -88,6 +88,9 @@ public class Movement : MonoBehaviour
         isSlowed = false;
         isDoublePoints = false;
         isGameOver = false;
+        
+        // Reset the life system when the game starts
+        LifeManager.ResetLives();
 
         // Cache renderers and original colors for visual feedback
         _renderers = GetComponentsInChildren<Renderer>(true);
