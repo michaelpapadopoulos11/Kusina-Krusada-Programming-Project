@@ -44,7 +44,7 @@ public class Movement : MonoBehaviour
 
     // MIKE POWER UP
     public bool isInvincible = false;
-    public float invincibilityTimer = 0f;
+    public static float invincibilityTimer = 0f;
     public float invincibilityDuration = 5f;
     public float invincibleAlpha = 0.5f;
 
@@ -60,14 +60,14 @@ public class Movement : MonoBehaviour
     private bool _prevInvincible = false;
 
     public bool isSlowed = false;
-    public float slowTimer = 0f;
+    public static float slowTimer = 0f; //global var so buff icons can display
     public float slowDuration = 5f;
     private float slowedSpeed; // Store the slowed speed value
 
     public int pointsMultiplier = 1; // Multiplier for points collected
 
     public bool isDoublePoints = false; // Tracks if double points is active
-    public float doublePointsTimer = 0f; // Timer for double points effect
+    public static float doublePointsTimer = 0f; // Timer for double points effect
     public float doublePointsDuration = 5f; // Duration of double points effect
 
     // Simple game over state
@@ -254,6 +254,7 @@ public class Movement : MonoBehaviour
             invincibilityTimer -= Time.deltaTime;
             if (invincibilityTimer <= 0f) {
                 isInvincible = false;
+                Invincibility_Powerup.invincibilityActive = false;
                 invincibilityTimer = 0f;
                 Debug.Log("Invincibility powerup expired");
             }
@@ -279,6 +280,7 @@ public class Movement : MonoBehaviour
             slowTimer -= Time.deltaTime;
             if (slowTimer <= 0f) {
                 isSlowed = false;
+                Slowdown_Glove.slowActive = false;
                 forwardSpeed = baseForwardSpeed; // Restore to current base speed
                 Debug.Log("Slow effect worn off");
             }
@@ -290,6 +292,7 @@ public class Movement : MonoBehaviour
             doublePointsTimer -= Time.deltaTime;
             if (doublePointsTimer <= 0f) {
                 isDoublePoints = false;
+                Double_Points.doublePointsActive = false; //used for setting UI icons
                 pointsMultiplier = 1; // normal points per fruit collected
                 Debug.Log("Double points powerup expired");
             }

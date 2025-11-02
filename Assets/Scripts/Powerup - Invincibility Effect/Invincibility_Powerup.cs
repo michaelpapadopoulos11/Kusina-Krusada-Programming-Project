@@ -4,7 +4,7 @@ public class Invincibility_Powerup : MonoBehaviour {
 
 AudioManager audioManager;
 
-public bool invincibilityActive = false;
+public static bool invincibilityActive = false;
 public float invincibilityDuration = 5f;
 
     private void Awake() {
@@ -21,7 +21,8 @@ public float invincibilityDuration = 5f;
         if (player != null ) {
             player.isInvincible = true;
             audioManager.playSFX(audioManager.powerup, 0.6f);
-            player.invincibilityTimer = invincibilityDuration;
+            invincibilityActive = true;
+            Movement.invincibilityTimer = invincibilityDuration;
             Debug.Log("Player picked up invincibility");
             Destroy(gameObject);
         }
