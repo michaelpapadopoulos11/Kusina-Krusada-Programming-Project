@@ -1,7 +1,10 @@
 # Programming-Project
-Food Safety Game Development V25.10.2025
+Food Safety Game Development V03.11.2025
 
-## Hi guys, please read this to help out on consistent development in Unity!
+## RUNNING INSTRUCTIONS FOOTNOTE
+The following files rely on the Unity game engine. This should be launched using editor 2022.3.62f2. The environment should be loaded on the Main Menu screen by default. To change to the mobile emulator please ensure that the Android and/or iOS support files are downloaded (Please refer to "Setting Up Unity"). Once the environment is loaded you can play via the simulator. For a mobile build please download the apk locally via cable. (Official build will be released on the Google Play and App Store)
+
+## To the team, please read this to help out on consistent development in Unity!
 
 GitHub Practises:
 When pushing new items into main please edit the version title to the date of your push eg Date is the 24th of September 2025, so label the version number as V24.09.2025. VXX.XX.XXXX
@@ -22,5 +25,5 @@ Please ensure you have downloaded the following;
 - Android and iOS support (File > Build Settings > Android and/or iOS downloaded)
 - Editor device is set to any Android or iOS device for testing (Edit > Project Settings > Editor > Unity Remote - Device > Any Android Device / Any iOS device)
 
-
+Ensure that the main menu is up by default!
 
