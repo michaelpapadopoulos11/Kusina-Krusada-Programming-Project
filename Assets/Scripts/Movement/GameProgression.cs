@@ -94,25 +94,25 @@ public class GameProgression : MonoBehaviour
         }
     }
 
-    /// <summary>
+
     /// Get the current base speed (what the speed would be without any effects)
-    /// </summary>
+
     public float GetCurrentBaseSpeed()
     {
         return playerMovement != null ? playerMovement.baseForwardSpeed : originalSpeed;
     }
 
-    /// <summary>
+
     /// Get the original speed (starting speed before any increases)
-    /// </summary>
+
     public float GetOriginalSpeed()
     {
         return originalSpeed;
     }
 
-    /// <summary>
+
     /// Reset the speed progression (useful for restarting the game)
-    /// </summary>
+
     public void ResetProgression()
     {
         if (playerMovement != null)
@@ -124,9 +124,9 @@ public class GameProgression : MonoBehaviour
         Debug.Log("Speed progression reset to original values.");
     }
 
-    /// <summary>
+
     /// Get the time until the next speed increase
-    /// </summary>
+ 
     public float GetTimeUntilNextIncrease()
     {
         return speedIncreaseInterval - timer;
