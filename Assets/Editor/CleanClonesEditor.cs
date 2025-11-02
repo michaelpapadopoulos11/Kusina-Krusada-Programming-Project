@@ -41,7 +41,7 @@ public static class CleanClonesEditor
 
 		// whitelist: only remove clones of "VIRUS" or "Point"
 		// expect names like "VIRUS(Clone)" or "Point(Clone)"
-		if (name.EndsWith("(Clone)") && (name.StartsWith("VIRUS") || name.StartsWith("Point")))
+		if (name.EndsWith("(Clone)") && (name.StartsWith("VIRUS") || name.StartsWith("Point") || name.StartsWith("carrot")))
 			matches.Add(t.gameObject);
 
 		for (int i = 0; i < t.childCount; i++)
