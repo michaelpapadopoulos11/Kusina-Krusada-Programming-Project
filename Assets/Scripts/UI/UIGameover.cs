@@ -82,17 +82,26 @@ public class UIGameover : MonoBehaviour
 
         if (isPanelEntry)
         {
-            panelGameover.pivot += new Vector2(0, panelEntrySpeed * Time.deltaTime);
-            if (panelGameover.pivot.y >= 0.5 + panelOvershoot) { isPanelEntry = false; }
+            float newY = panelGameover.pivot.y + (panelEntrySpeed * Time.deltaTime);
+            panelGameover.pivot = new Vector2(panelGameover.pivot.x, Mathf.Min(newY, 0.5f + panelOvershoot));
+
+            if (panelGameover.pivot.y >= 0.5 + panelOvershoot) 
+            {
+                isPanelEntry = false; 
+            }
         }
 
         if (isPanelCorrection && !isPanelEntry)
         {
-            panelGameover.pivot -= new Vector2(0, panelCorrectionSpeed * Time.deltaTime);
-            if (panelGameover.pivot.y <= 0.5) { isPanelCorrection = false; }
+            float newY = panelGameover.pivot.y - (panelCorrectionSpeed * Time.deltaTime);
+            panelGameover.pivot = new Vector2(panelGameover.pivot.x, Mathf.Max(newY, 0.5f));
+            if (panelGameover.pivot.y <= 0.5)
+            {
+                isPanelCorrection = false; 
+            }
         }
 
-        if (!isPanelCorrection && !isPanelCorrection)
+        if (!isPanelCorrection && !isPanelEntry)
         {
             if (Convert.ToInt32(textScoreCount.text) >= 10)
             {

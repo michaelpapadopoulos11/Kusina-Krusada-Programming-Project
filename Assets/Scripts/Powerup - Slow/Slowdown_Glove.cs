@@ -5,7 +5,7 @@ public class Slowdown_Glove : MonoBehaviour
 
     AudioManager audioManager;
 
-    public bool slowActive = false;
+    public static bool slowActive = false;
     public float slowDuration = 5f;
 
     private void Awake()
@@ -25,6 +25,7 @@ public class Slowdown_Glove : MonoBehaviour
         {
             // Apply slowdown using current speed as reference
             player.ApplySlowdownEffect(slowDuration, 0.5f);
+            slowActive = true;
             audioManager.playSFX(audioManager.powerup, 0.6f);
             Debug.Log("Player picked up slowdown glove");
             Destroy(gameObject);
