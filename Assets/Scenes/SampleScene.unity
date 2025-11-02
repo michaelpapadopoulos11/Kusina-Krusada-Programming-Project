@@ -5610,7 +5610,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 204.00003, y: 200.02419, z: 204.00009}
+  m_Size: {x: 196.8, y: 193.8, z: 199}
   m_Center: {x: 0.011707306, y: 99.999886, z: 0.11692047}
 --- !u!114 &299659546
 MonoBehaviour:
