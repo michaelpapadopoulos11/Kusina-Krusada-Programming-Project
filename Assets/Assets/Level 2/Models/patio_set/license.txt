@@ -1,0 +1,11 @@
+Model Information:
+* title:	Patio Set
+* source:	https://sketchfab.com/3d-models/patio-set-37c3f6ee451f495ba183427a38a804b4
+* author:	zhixson (https://sketchfab.com/zhixson)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Patio Set" (https://sketchfab.com/3d-models/patio-set-37c3f6ee451f495ba183427a38a804b4) by zhixson (https://sketchfab.com/zhixson) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
