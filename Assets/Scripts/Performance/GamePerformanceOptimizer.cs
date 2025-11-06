@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using System.Collections;
+using ShadowQuality = UnityEngine.ShadowQuality;
+using ShadowResolution = UnityEngine.ShadowResolution;
 
 /// <summary>
 /// Static performance optimizer for mobile games based on device specifications
@@ -11,7 +13,6 @@ using System.Collections;
 public class GamePerformanceOptimizer : MonoBehaviour
 {
     [Header("Device Detection")]
-    [SerializeField] private bool detectDeviceSpecs = true;
     [SerializeField] private bool logDeviceInfo = true;
     
     [Header("Memory Management")]
@@ -22,7 +23,6 @@ public class GamePerformanceOptimizer : MonoBehaviour
     [Header("Rendering Optimizations")] 
     [SerializeField] private bool optimizeRendering = true;
     [SerializeField] private bool enableOcclusion = true;
-    [SerializeField] private bool reduceLODBias = true;
     
     // Device categorization
     public enum DeviceCategory
@@ -121,38 +121,48 @@ public class GamePerformanceOptimizer : MonoBehaviour
     
     private void ApplyHighEndSettings()
     {
-        // High-end devices can handle better quality
+        // High-end devices optimized for consistent 60 FPS
         Application.targetFrameRate = 60;
-        QualitySettings.SetQualityLevel(2, true); // Medium quality
+        QualitySettings.SetQualityLevel(2, true); // Medium quality - cap for 60 FPS consistency
         
-        // Enable better shadows
-        QualitySettings.shadows = UnityEngine.ShadowQuality.HardOnly;
-        QualitySettings.shadowResolution = UnityEngine.ShadowResolution.Medium;
-        QualitySettings.shadowDistance = 50f;
+        // Conservative shadows for stable performance
+        QualitySettings.shadows = ShadowQuality.HardOnly;
+        QualitySettings.shadowResolution = ShadowResolution.Low; // Reduced for stability
+        QualitySettings.shadowDistance = 40f; // Reduced for better performance
+        QualitySettings.shadowCascades = 1; // Single cascade for mobile
         
-        // Better LOD settings
-        QualitySettings.lodBias = 1.0f;
+        // Optimized LOD settings for 60 FPS
+        QualitySettings.lodBias = 0.8f; // Slightly reduced for performance
         QualitySettings.maximumLODLevel = 0;
         
-        Debug.Log("Applied high-end device settings");
+        // Additional 60 FPS optimizations
+        QualitySettings.globalTextureMipmapLimit = 0; // Full texture quality on high-end
+        QualitySettings.particleRaycastBudget = 64;
+        
+        Debug.Log("Applied high-end device settings optimized for 60 FPS");
     }
     
     private void ApplyMidRangeSettings()
     {
-        // Mid-range devices get balanced settings
-        Application.targetFrameRate = 45;
+        // Mid-range devices targeting 60 FPS with quality trade-offs
+        Application.targetFrameRate = 60; // Aim for 60 FPS on mid-range too
         QualitySettings.SetQualityLevel(1, true); // Low quality
         
-        // Moderate shadows
-        QualitySettings.shadows = UnityEngine.ShadowQuality.HardOnly;
-        QualitySettings.shadowResolution = UnityEngine.ShadowResolution.Low;
-        QualitySettings.shadowDistance = 30f;
+        // Minimal shadows for performance
+        QualitySettings.shadows = ShadowQuality.HardOnly;
+        QualitySettings.shadowResolution = ShadowResolution.Low;
+        QualitySettings.shadowDistance = 25f; // Reduced for better frame rate
+        QualitySettings.shadowCascades = 1;
         
-        // Balanced LOD settings
-        QualitySettings.lodBias = 0.8f;
+        // Performance-focused LOD settings
+        QualitySettings.lodBias = 0.6f; // More aggressive LOD switching
         QualitySettings.maximumLODLevel = 1;
         
-        Debug.Log("Applied mid-range device settings");
+        // Texture optimizations for consistent 60 FPS
+        QualitySettings.globalTextureMipmapLimit = 1; // Half resolution textures
+        QualitySettings.particleRaycastBudget = 32;
+        
+        Debug.Log("Applied mid-range device settings targeting 60 FPS");
     }
     
     private void ApplyLowEndSettings()
@@ -162,8 +172,8 @@ public class GamePerformanceOptimizer : MonoBehaviour
         QualitySettings.SetQualityLevel(0, true); // Very Low quality
         
         // Disable shadows completely
-        QualitySettings.shadows = UnityEngine.ShadowQuality.Disable;
-        QualitySettings.shadowResolution = UnityEngine.ShadowResolution.Low;
+        QualitySettings.shadows = ShadowQuality.Disable;
+        QualitySettings.shadowResolution = ShadowResolution.Low;
         QualitySettings.shadowDistance = 15f;
         
         // Aggressive LOD settings
