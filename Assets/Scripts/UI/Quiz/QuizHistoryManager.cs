@@ -24,6 +24,23 @@ public class QuizHistoryManager : MonoBehaviour
     private bool isTagalog = false;
     private bool isQuizHistoryVisible = false;
     private List<GameObject> hiddenUIElements = new List<GameObject>();
+    
+    // Cache font asset to avoid repeated loading
+    private UnityEngine.Font cachedFontAsset;
+    
+    private void LoadAndCacheFontAsset()
+    {
+        if (cachedFontAsset == null)
+        {
+            cachedFontAsset = Resources.Load<UnityEngine.Font>("FredokaOne-Regular");
+            if (cachedFontAsset == null)
+            {
+                // Try alternative path
+                cachedFontAsset = UnityEngine.Resources.FindObjectsOfTypeAll<UnityEngine.Font>()
+                    .FirstOrDefault(f => f.name.Contains("FredokaOne"));
+            }
+        }
+    }
 
     [Serializable]
     private class Question
@@ -55,6 +72,9 @@ public class QuizHistoryManager : MonoBehaviour
         root.style.display = DisplayStyle.None;
         isQuizHistoryVisible = false;
 
+        // Subscribe to language change events
+        UILanguage.OnLanguageChanged += OnLanguageChangedHandler;
+
         // Get references to UI elements
         questionsScrollView = root.Q<ScrollView>("QuestionsScrollView");
         questionsContainer = root.Q<VisualElement>("QuestionsContainer");
@@ -80,6 +100,9 @@ public class QuizHistoryManager : MonoBehaviour
             closeButton.clicked += HideQuizHistory;
         }
 
+        // Cache font asset to improve performance
+        LoadAndCacheFontAsset();
+        
         // Parse CSV data
         ParseCSVData();
         
@@ -106,6 +129,7 @@ public class QuizHistoryManager : MonoBehaviour
     void Update()
     {
         // Allow closing with Escape key when Quiz History is visible
+        // Only check for input when the UI is visible to reduce Update overhead
         if (isQuizHistoryVisible && Input.GetKeyDown(closeKey))
         {
             HideQuizHistory();
@@ -115,6 +139,21 @@ public class QuizHistoryManager : MonoBehaviour
     public void ShowQuizHistory()
     {
         if (isQuizHistoryVisible) return;
+
+        // Check current language setting and update if needed
+        try
+        {
+            bool shouldUseTagalog = !UILanguage.isEnglish;
+            if (isTagalog != shouldUseTagalog)
+            {
+                SwitchLanguage(shouldUseTagalog);
+            }
+        }
+        catch
+        {
+            // UILanguage might not be available, keep current setting
+            Debug.Log("UILanguage not available when showing Quiz History");
+        }
 
         // Hide other UI elements
         HideOtherUIElements();
@@ -156,6 +195,10 @@ public class QuizHistoryManager : MonoBehaviour
         Debug.Log("Quiz History UI hidden");
     }
 
+    // Cache canvases to avoid expensive FindObjectsOfType calls
+    private Canvas[] cachedCanvases;
+    private bool canvasesCached = false;
+
     private void HideOtherUIElements()
     {
         hiddenUIElements.Clear();
@@ -176,11 +219,17 @@ public class QuizHistoryManager : MonoBehaviour
         // Auto-detect and hide main menu UI elements
         AutoDetectAndHideUIElements();
 
-        // Also hide any Canvas elements that are not the Quiz History
-        var allCanvases = FindObjectsOfType<Canvas>();
-        foreach (var canvas in allCanvases)
+        // Cache canvases on first use to avoid repeated FindObjectsOfType calls
+        if (!canvasesCached)
         {
-            if (canvas.gameObject != this.gameObject && 
+            cachedCanvases = FindObjectsOfType<Canvas>();
+            canvasesCached = true;
+        }
+
+        // Also hide any Canvas elements that are not the Quiz History
+        foreach (var canvas in cachedCanvases)
+        {
+            if (canvas != null && canvas.gameObject != this.gameObject && 
                 canvas.gameObject != uiDocument.gameObject && 
                 canvas.gameObject.activeInHierarchy &&
                 !canvas.gameObject.name.Contains("QuizHistory") &&
@@ -192,39 +241,67 @@ public class QuizHistoryManager : MonoBehaviour
         }
     }
 
+    // Cache main menu UI elements to avoid repeated searching
+    private UIMainMenuButtons cachedMainMenuButtons;
+    private GameObject[] cachedCommonUIElements;
+    private bool commonUIElementsCached = false;
+
     private void AutoDetectAndHideUIElements()
     {
-        // Find and hide common main menu elements
-        string[] commonUINames = { 
-            "MainMenu", "MainMenuUI", "MainMenuCanvas", "MenuCanvas", 
-            "UIMainMenu", "Menu", "MainPanel", "MenuPanel", "HUD", "UI"
-        };
-
-        foreach (string uiName in commonUINames)
+        // Cache common UI elements on first use to improve performance
+        if (!commonUIElementsCached)
         {
-            var foundObject = GameObject.Find(uiName);
-            if (foundObject != null && foundObject.activeInHierarchy && 
-                foundObject != this.gameObject && foundObject != uiDocument.gameObject)
+            CacheCommonUIElements();
+            commonUIElementsCached = true;
+        }
+
+        // Hide cached common UI elements
+        foreach (var uiElement in cachedCommonUIElements)
+        {
+            if (uiElement != null && uiElement.activeInHierarchy && 
+                uiElement != this.gameObject && uiElement != uiDocument.gameObject)
             {
-                foundObject.SetActive(false);
-                hiddenUIElements.Add(foundObject);
-                Debug.Log($"Auto-detected and hid UI element: {foundObject.name}");
+                uiElement.SetActive(false);
+                hiddenUIElements.Add(uiElement);
             }
         }
 
-        // Also look for UIMainMenuButtons component and hide its parent
-        var mainMenuButtons = FindObjectOfType<UIMainMenuButtons>();
-        if (mainMenuButtons != null && mainMenuButtons.gameObject.activeInHierarchy)
+        // Use cached main menu buttons reference
+        if (cachedMainMenuButtons == null)
         {
-            var parentCanvas = mainMenuButtons.GetComponentInParent<Canvas>();
+            cachedMainMenuButtons = FindObjectOfType<UIMainMenuButtons>();
+        }
+
+        if (cachedMainMenuButtons != null && cachedMainMenuButtons.gameObject.activeInHierarchy)
+        {
+            var parentCanvas = cachedMainMenuButtons.GetComponentInParent<Canvas>();
             if (parentCanvas != null && parentCanvas.gameObject.activeInHierarchy && 
                 !hiddenUIElements.Contains(parentCanvas.gameObject))
             {
                 parentCanvas.gameObject.SetActive(false);
                 hiddenUIElements.Add(parentCanvas.gameObject);
-                Debug.Log($"Auto-detected and hid main menu canvas: {parentCanvas.gameObject.name}");
             }
         }
+    }
+
+    private void CacheCommonUIElements()
+    {
+        string[] commonUINames = { 
+            "MainMenu", "MainMenuUI", "MainMenuCanvas", "MenuCanvas", 
+            "UIMainMenu", "Menu", "MainPanel", "MenuPanel", "HUD", "UI"
+        };
+
+        var foundElements = new System.Collections.Generic.List<GameObject>();
+        foreach (string uiName in commonUINames)
+        {
+            var foundObject = GameObject.Find(uiName);
+            if (foundObject != null)
+            {
+                foundElements.Add(foundObject);
+            }
+        }
+
+        cachedCommonUIElements = foundElements.ToArray();
     }
 
     private void ShowOtherUIElements()
@@ -451,17 +528,10 @@ public class QuizHistoryManager : MonoBehaviour
         // Create and add question label with explicit styling
         var questionLabel = new Label();
         questionLabel.name = "Question";
-        // Apply explicit styling to match the template (using font definition)
-        var fontAsset = Resources.Load<UnityEngine.Font>("FredokaOne-Regular");
-        if (fontAsset == null)
+        // Apply explicit styling using cached font asset for better performance
+        if (cachedFontAsset != null)
         {
-            // Try alternative path
-            fontAsset = UnityEngine.Resources.FindObjectsOfTypeAll<UnityEngine.Font>()
-                .FirstOrDefault(f => f.name.Contains("FredokaOne"));
-        }
-        if (fontAsset != null)
-        {
-            questionLabel.style.unityFontDefinition = FontDefinition.FromFont(fontAsset);
+            questionLabel.style.unityFontDefinition = FontDefinition.FromFont(cachedFontAsset);
         }
         questionLabel.style.unityFontStyleAndWeight = FontStyle.Normal;
         questionLabel.style.fontSize = 110; // 80px font size for questions
@@ -488,10 +558,10 @@ public class QuizHistoryManager : MonoBehaviour
         {
             var optionLabel = new Label();
             optionLabel.name = $"Option{i}";
-            // Apply explicit styling for options (using font definition)
-            if (fontAsset != null)
+            // Apply explicit styling for options using cached font asset
+            if (cachedFontAsset != null)
             {
-                optionLabel.style.unityFontDefinition = FontDefinition.FromFont(fontAsset);
+                optionLabel.style.unityFontDefinition = FontDefinition.FromFont(cachedFontAsset);
             }
             optionLabel.style.unityFontStyleAndWeight = FontStyle.Normal;
             optionLabel.style.fontSize = 70; // Updated font size for options
@@ -543,8 +613,32 @@ public class QuizHistoryManager : MonoBehaviour
         Debug.Log("Quiz History opened via OnClick event");
     }
 
+    /// <summary>
+    /// Handle language change events from UILanguage
+    /// </summary>
+    /// <param name="isEnglish">True if English is selected, false if Tagalog</param>
+    private void OnLanguageChangedHandler(bool isEnglish)
+    {
+        // Safety check - only update if we're fully initialized
+        if (parsedQuestions == null && parsedQuestionsTl == null)
+        {
+            Debug.LogWarning("Quiz History Manager not fully initialized, language change will be applied on next display");
+            return;
+        }
+
+        bool shouldUseTagalog = !isEnglish;
+        if (isTagalog != shouldUseTagalog)
+        {
+            SwitchLanguage(shouldUseTagalog);
+            Debug.Log($"Questions History language updated to: {(isEnglish ? "English" : "Tagalog")}");
+        }
+    }
+
     void OnDestroy()
     {
+        // Unsubscribe from language change events
+        UILanguage.OnLanguageChanged -= OnLanguageChangedHandler;
+        
         // Clean up event handlers
         if (closeButton != null)
         {

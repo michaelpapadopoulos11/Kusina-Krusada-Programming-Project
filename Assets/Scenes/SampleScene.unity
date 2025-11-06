@@ -5610,7 +5610,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 196.8, y: 193.8, z: 199}
+  m_Size: {x: 196.8, y: 193.7, z: 225.3}
   m_Center: {x: 0.011707306, y: 99.999886, z: 0.11692047}
 --- !u!114 &299659546
 MonoBehaviour:
@@ -5639,8 +5639,8 @@ MonoBehaviour:
   coinPrefab: {fileID: 299659538}
   player: {fileID: 1381264871}
   coinY: 2
-  spawnInterval: 4
-  minSpawnInterval: 1
+  spawnInterval: 3
+  minSpawnInterval: 0.5
   maxCoins: 5
   enableConsecutiveSpawning: 0
   yPositions:
@@ -17232,10 +17232,10 @@ GameObject:
   - component: {fileID: 4759081127745662581}
   - component: {fileID: 8477037319667622352}
   - component: {fileID: 5926890828656301338}
+  - component: {fileID: 8477037319667622356}
   - component: {fileID: 8477037319667622355}
   - component: {fileID: 8477037319667622354}
   - component: {fileID: 8477037319667622353}
-  - component: {fileID: 8477037319667622356}
   m_Layer: 0
   m_Name: carrot
   m_TagString: Untagged
@@ -19041,7 +19041,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.7894044, y: 2.7741246, z: 9.621734}
+  m_Size: {x: 3.79, y: 4.85, z: 9.621734}
   m_Center: {x: 0.0000000989751, y: 0.015322376, z: -1.6420304}
 --- !u!23 &8533584752796443389
 MeshRenderer:

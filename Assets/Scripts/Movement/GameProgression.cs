@@ -10,7 +10,7 @@ public class GameProgression : MonoBehaviour
     public float speedIncreaseAmount = 1f;
     
     [Tooltip("Maximum speed the game can reach")]
-    public float maxSpeed = 20f;
+    public float maxSpeed = 30f;
     
     [Tooltip("Reference to the player's Movement component")]
     public Movement playerMovement;
