@@ -1466,6 +1466,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SettingsCanvas: {fileID: 358671612}
+  quizHistoryManager: {fileID: 1512220062}
 --- !u!114 &981614680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2709,6 +2710,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1512220060}
   - component: {fileID: 1512220061}
+  - component: {fileID: 1512220062}
   m_Layer: 5
   m_Name: Quiz_History
   m_TagString: Untagged
@@ -2748,6 +2750,23 @@ MonoBehaviour:
   sourceAsset: {fileID: 9197481963319205126, guid: 57d60f78cebb303439dd427b96b7c730,
     type: 3}
   m_SortingOrder: 0
+--- !u!114 &1512220062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512220059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df66b45ab849ebd46b0de272aa963511, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiDocument: {fileID: 1512220061}
+  questionsCsv: {fileID: 4900000, guid: a43545f365b7ec341a20e7e6a884543b, type: 3}
+  questionsTlCsv: {fileID: 4900000, guid: 34766f45831721145ae94c0d0d1715ab, type: 3}
+  otherUIElements: []
+  closeKey: 27
 --- !u!1 &1590370656
 GameObject:
   m_ObjectHideFlags: 0
@@ -3193,6 +3212,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SettingsCanvas: {fileID: 358671612}
+  quizHistoryManager: {fileID: 0}
 --- !u!1 &1762668282
 GameObject:
   m_ObjectHideFlags: 0
@@ -3246,6 +3266,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SettingsCanvas: {fileID: 358671612}
+  quizHistoryManager: {fileID: 0}
 --- !u!114 &1762668285
 MonoBehaviour:
   m_ObjectHideFlags: 0

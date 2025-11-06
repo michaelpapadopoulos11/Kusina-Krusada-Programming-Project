@@ -19,7 +19,7 @@ public class MainMenuSetup : MonoBehaviour
     [SerializeField] private UIDocument[] otherUIDocuments;
     
     private QuizHistoryManager quizHistoryManager;
-    private MainMenuUIController menuController;
+    private UIMainMenuButtons menuController;
 
     void Start()
     {
@@ -28,11 +28,11 @@ public class MainMenuSetup : MonoBehaviour
 
     private void SetupComponents()
     {
-        // Add MainMenuUIController if it doesn't exist
-        menuController = GetComponent<MainMenuUIController>();
+        // Add UIMainMenuButtons if it doesn't exist
+        menuController = GetComponent<UIMainMenuButtons>();
         if (menuController == null)
         {
-            menuController = gameObject.AddComponent<MainMenuUIController>();
+            menuController = gameObject.AddComponent<UIMainMenuButtons>();
         }
 
         // Add QuizHistoryManager if it doesn't exist
@@ -43,7 +43,6 @@ public class MainMenuSetup : MonoBehaviour
         }
 
         // Use reflection to set private fields (since they're SerializeField)
-        SetPrivateField(menuController, "mainMenuUIDocument", mainMenuUIDocument);
         SetPrivateField(menuController, "quizHistoryManager", quizHistoryManager);
         
         SetPrivateField(quizHistoryManager, "uiDocument", quizHistoryUIDocument);
