@@ -174,6 +174,13 @@ public class QuizHistoryManager : MonoBehaviour
     {
         if (isQuizHistoryVisible) return;
 
+        // Prevent opening if settings menu is open
+        if (UIMainMenuButtons.IsSettingsOpen)
+        {
+            Debug.Log("Cannot open Questions History while Settings menu is open");
+            return;
+        }
+
         // Check current language setting and update if needed
         try
         {
@@ -646,6 +653,13 @@ public class QuizHistoryManager : MonoBehaviour
     // Public method that can be called directly from Unity OnClick events
     public void OnQuestionHistoryButtonClick()
     {
+        // Double-check settings state before opening
+        if (UIMainMenuButtons.IsSettingsOpen)
+        {
+            Debug.Log("Questions History button clicked but Settings menu is open - access blocked");
+            return;
+        }
+        
         ShowQuizHistory();
         Debug.Log("Quiz History opened via OnClick event");
     }
