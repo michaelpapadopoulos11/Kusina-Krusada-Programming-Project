@@ -61,6 +61,13 @@ public class QuizHistoryManager : MonoBehaviour
         questionTemplate = root.Q<VisualElement>("QuestionTemplate");
         closeButton = root.Q<Button>("CloseButton");
 
+        // Hide the scrollbar
+        if (questionsScrollView != null)
+        {
+            questionsScrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
+            questionsScrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
+        }
+
         if (questionsContainer == null || questionTemplate == null)
         {
             Debug.LogError("Required UI elements not found. Make sure QuestionsContainer and QuestionTemplate exist in the UXML.");
@@ -456,8 +463,8 @@ public class QuizHistoryManager : MonoBehaviour
         {
             questionLabel.style.unityFontDefinition = FontDefinition.FromFont(fontAsset);
         }
-        questionLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-        questionLabel.style.fontSize = 80; // 80px font size for questions
+        questionLabel.style.unityFontStyleAndWeight = FontStyle.Normal;
+        questionLabel.style.fontSize = 110; // 80px font size for questions
         questionLabel.style.color = Color.white;
         questionLabel.style.unityTextAlign = TextAnchor.UpperCenter;
         questionLabel.style.whiteSpace = WhiteSpace.Normal;
@@ -486,8 +493,8 @@ public class QuizHistoryManager : MonoBehaviour
             {
                 optionLabel.style.unityFontDefinition = FontDefinition.FromFont(fontAsset);
             }
-            optionLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-            optionLabel.style.fontSize = 50; // Updated font size for options
+            optionLabel.style.unityFontStyleAndWeight = FontStyle.Normal;
+            optionLabel.style.fontSize = 70; // Updated font size for options
             optionLabel.style.color = Color.white;
             optionLabel.style.unityTextAlign = TextAnchor.UpperLeft;
             optionLabel.style.whiteSpace = WhiteSpace.Normal;
