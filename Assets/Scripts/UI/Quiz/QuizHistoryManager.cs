@@ -81,6 +81,9 @@ public class QuizHistoryManager : MonoBehaviour
         questionTemplate = root.Q<VisualElement>("QuestionTemplate");
         closeButton = root.Q<Button>("CloseButton");
 
+        // Debug logging for mobile builds
+        Debug.Log($"Quiz History UI Elements Found - ScrollView: {questionsScrollView != null}, Container: {questionsContainer != null}, Template: {questionTemplate != null}, CloseButton: {closeButton != null}");
+
         // Hide the scrollbar
         if (questionsScrollView != null)
         {
@@ -94,10 +97,19 @@ public class QuizHistoryManager : MonoBehaviour
             return;
         }
 
-        // Attach close button event
+        // If close button is not found, create a fallback one
+        if (closeButton == null)
+        {
+            CreateFallbackCloseButton();
+        }
+
+        // Attach close button event and ensure it's visible on mobile
         if (closeButton != null)
         {
             closeButton.clicked += HideQuizHistory;
+            
+            // Ensure button is visible and has proper mobile styling
+            EnsureCloseButtonVisibility();
         }
 
         // Cache font asset to improve performance
@@ -128,11 +140,33 @@ public class QuizHistoryManager : MonoBehaviour
 
     void Update()
     {
-        // Allow closing with Escape key when Quiz History is visible
+        // Allow closing with multiple input methods when Quiz History is visible
         // Only check for input when the UI is visible to reduce Update overhead
-        if (isQuizHistoryVisible && Input.GetKeyDown(closeKey))
+        if (isQuizHistoryVisible)
         {
-            HideQuizHistory();
+            // PC: Escape key
+            if (Input.GetKeyDown(closeKey))
+            {
+                HideQuizHistory();
+            }
+            
+            // Mobile: Android back button
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                HideQuizHistory();
+            }
+            
+            // Additional check: if close button becomes null, try to re-find it
+            if (closeButton == null && root != null)
+            {
+                closeButton = root.Q<Button>("CloseButton");
+                if (closeButton != null)
+                {
+                    closeButton.clicked += HideQuizHistory;
+                    EnsureCloseButtonVisibility();
+                    Debug.Log("Close button re-found and re-attached");
+                }
+            }
         }
     }
 
@@ -163,6 +197,9 @@ public class QuizHistoryManager : MonoBehaviour
         {
             root.style.display = DisplayStyle.Flex;
             isQuizHistoryVisible = true;
+            
+            // Re-ensure close button visibility when showing UI (mobile fix)
+            EnsureCloseButtonVisibility();
         }
 
         // Pause game and show cursor
@@ -611,6 +648,98 @@ public class QuizHistoryManager : MonoBehaviour
     {
         ShowQuizHistory();
         Debug.Log("Quiz History opened via OnClick event");
+    }
+
+    /// <summary>
+    /// Debug method to test close button visibility - can be called from Unity Inspector
+    /// </summary>
+    [ContextMenu("Test Close Button Visibility")]
+    public void TestCloseButtonVisibility()
+    {
+        if (closeButton != null)
+        {
+            Debug.Log($"Close Button Found: {closeButton.name}");
+            Debug.Log($"Button Text: '{closeButton.text}'");
+            Debug.Log($"Button Display: {closeButton.style.display.value}");
+            Debug.Log($"Button Visibility: {closeButton.style.visibility.value}");
+            Debug.Log($"Button Size: {closeButton.style.width.value} x {closeButton.style.height.value}");
+            Debug.Log($"Button Position: Top={closeButton.style.top.value}, Right={closeButton.style.right.value}");
+        }
+        else
+        {
+            Debug.LogError("Close button is NULL!");
+        }
+    }
+
+    /// <summary>
+    /// Ensure the close button is visible and properly styled for mobile devices
+    /// </summary>
+    private void EnsureCloseButtonVisibility()
+    {
+        if (closeButton == null) return;
+
+        // Force button visibility
+        closeButton.style.display = DisplayStyle.Flex;
+        closeButton.style.visibility = Visibility.Visible;
+        
+        // Set fallback text in case the ✕ character doesn't render on mobile
+        if (string.IsNullOrEmpty(closeButton.text) || closeButton.text == "✕")
+        {
+            closeButton.text = "X"; // Fallback to simple X character
+        }
+        
+        // Ensure minimum touch target size for mobile (44px minimum recommended)
+        if (closeButton.style.width.value.value < 44f)
+        {
+            closeButton.style.width = 104;
+            closeButton.style.height = 100;
+        }
+        
+        // Ensure button has proper z-index and positioning
+        closeButton.style.position = Position.Relative;
+        closeButton.BringToFront();
+        
+        // Make sure background color is visible
+        closeButton.style.backgroundColor = new Color(1f, 0f, 0f, 0.7f); // Red with transparency
+        closeButton.style.color = Color.white;
+        
+        Debug.Log("Close button visibility ensured for mobile build");
+    }
+
+    /// <summary>
+    /// Create a fallback close button if the original one is not found
+    /// </summary>
+    private void CreateFallbackCloseButton()
+    {
+        if (root == null) return;
+
+        Debug.Log("Creating fallback close button for mobile compatibility");
+
+        // Create a new close button
+        closeButton = new Button();
+        closeButton.name = "FallbackCloseButton";
+        closeButton.text = "X";
+        
+        // Style the fallback button
+        closeButton.style.position = Position.Absolute;
+        closeButton.style.top = 20;
+        closeButton.style.right = 20;
+        closeButton.style.width = 80;
+        closeButton.style.height = 80;
+        closeButton.style.fontSize = 40;
+        closeButton.style.color = Color.white;
+        closeButton.style.backgroundColor = new Color(1f, 0f, 0f, 0.8f);
+        closeButton.style.borderTopLeftRadius = 25;
+        closeButton.style.borderTopRightRadius = 25;
+        closeButton.style.borderBottomLeftRadius = 25;
+        closeButton.style.borderBottomRightRadius = 25;
+        closeButton.style.unityTextAlign = TextAnchor.MiddleCenter;
+        closeButton.style.unityFontStyleAndWeight = FontStyle.Bold;
+        
+        // Add to root element
+        root.Add(closeButton);
+        
+        Debug.Log("Fallback close button created and added to UI");
     }
 
     /// <summary>
