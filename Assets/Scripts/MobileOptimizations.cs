@@ -9,12 +9,9 @@ public class MobileOptimizations : MonoBehaviour
     
     [Header("Rendering Optimizations")]
     [SerializeField] private bool enableRenderingOptimizations = true;
-    [SerializeField] private bool useDynamicBatching = false; // Usually slower on mobile
-    [SerializeField] private bool useStaticBatching = true;
     
     [Header("Physics Optimizations")]
     [SerializeField] private bool optimizePhysics = true;
-    [SerializeField] private int physicsSubsteps = 1;
     [SerializeField] private float fixedTimestep = 0.02f;
     
     private float gcTimer;
@@ -44,8 +41,8 @@ public class MobileOptimizations : MonoBehaviour
         // Rendering optimizations
         if (enableRenderingOptimizations)
         {
-            // Configure batching
-            PlayerSettings.mobileMTRendering = true; // Enable multithreaded rendering
+            // Configure batching settings
+            // Note: PlayerSettings can only be modified in Editor scripts
             
             // Optimize shadow settings
             QualitySettings.shadowDistance = SystemInfo.systemMemorySize > 4000 ? 50f : 25f;
@@ -74,7 +71,7 @@ public class MobileOptimizations : MonoBehaviour
         }
         
         // Audio optimizations
-        AudioSettings.GetConfiguration(out var audioConfig);
+        var audioConfig = AudioSettings.GetConfiguration();
         audioConfig.sampleRate = SystemInfo.systemMemorySize > 3000 ? 44100 : 22050;
         AudioSettings.Reset(audioConfig);
         

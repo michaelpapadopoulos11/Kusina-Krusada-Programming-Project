@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -136,10 +135,17 @@ public static class RunnerPrefabCombiner
 
     static bool IsUnderLOD(Transform t)
     {
-        if (!SKIP_LOD_GROUPS) return false;
+#pragma warning disable CS0162 // Unreachable code detected
+        // Skip LOD check if SKIP_LOD_GROUPS is false
+        if (!SKIP_LOD_GROUPS) 
+            return false;
+#pragma warning restore CS0162
+        
+        // Check if transform is under any LODGroup
         while (t != null)
         {
-            if (t.TryGetComponent<LODGroup>(out _)) return true;
+            if (t.TryGetComponent<LODGroup>(out _)) 
+                return true;
             t = t.parent;
         }
         return false;
@@ -169,7 +175,7 @@ public static class RunnerPrefabCombiner
         {
             if (!mr.TryGetComponent<MeshFilter>(out var mf)) continue;
             if (!mf.sharedMesh) continue;
-            if (SKIP_SKINNED && mr is SkinnedMeshRenderer) continue;
+            if (SKIP_SKINNED && mr.TryGetComponent<SkinnedMeshRenderer>(out _)) continue;
             if (IsUnderLOD(mr.transform)) continue;
 
             var mesh = mf.sharedMesh;

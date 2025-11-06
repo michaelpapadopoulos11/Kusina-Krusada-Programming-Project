@@ -112,7 +112,6 @@ public class RuntimeTextureOptimizer : MonoBehaviour
 {
     [Header("Runtime Texture Settings")]
     [SerializeField] private bool optimizeTexturesAtRuntime = true;
-    [SerializeField] private int maxTextureSize = 1024;
     [SerializeField] private bool useStreamingMipmaps = true;
     
     private void Start()

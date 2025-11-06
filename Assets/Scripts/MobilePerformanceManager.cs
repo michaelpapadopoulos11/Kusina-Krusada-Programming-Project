@@ -19,7 +19,6 @@ public class MobilePerformanceManager : MonoBehaviour
     private int frameCount;
     private float currentFPS;
     private int currentQualityLevel;
-    private bool isPerformanceOptimized = false;
     
     private void Start()
     {
