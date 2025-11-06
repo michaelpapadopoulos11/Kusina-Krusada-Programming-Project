@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class UIMainMenuButtons : MonoBehaviour
 {
     [SerializeField] private GameObject SettingsCanvas;
+    [SerializeField] private QuizHistoryManager quizHistoryManager; // Reference to Quiz History Manager
 
     void Start()
     {
@@ -25,6 +26,15 @@ public class UIMainMenuButtons : MonoBehaviour
     {
         //Function of Question History
         Debug.Log("Question History Clicked");
+        
+        if (quizHistoryManager != null)
+        {
+            quizHistoryManager.ShowQuizHistory();
+        }
+        else
+        {
+            Debug.LogWarning("QuizHistoryManager reference is not assigned in UIMainMenuButtons!");
+        }
     }
 
     public void OnSettingsClick()
