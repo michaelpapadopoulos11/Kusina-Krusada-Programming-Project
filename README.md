@@ -1,29 +1,55 @@
-# Programming-Project
-Food Safety Game Development V03.11.2025
+# 📱 Kusina Krusada!
+### An Educational Endless‑Runner Game for the Food Microbiology Academy
 
-## RUNNING INSTRUCTIONS FOOTNOTE
-The following files rely on the Unity game engine. This should be launched using editor 2022.3.62f2. The environment should be loaded on the Main Menu screen by default. To change to the mobile emulator please ensure that the Android and/or iOS support files are downloaded (Please refer to "Setting Up Unity"). Once the environment is loaded you can play via the simulator. For a mobile build please download the apk locally via cable. (Official build will be released on the Google Play and App Store)
+Kusina Krusada is an educational mobile game developed by a team of five as part of a final university project in collaboration with the Food Microbiology Academy, an organisation based in both Australia and the Philippines. The game teaches young players about food safety, hygiene, and microbiology through fast‑paced, engaging gameplay.
 
-## To the team, please read this to help out on consistent development in Unity!
+Designed as an endless‑runner, Kusina Krusada is built for both **iOS and Android**, making it accessible to a wide audience.
 
-GitHub Practises:
-When pushing new items into main please edit the version title to the date of your push eg Date is the 24th of September 2025, so label the version number as V24.09.2025. VXX.XX.XXXX
+<p align="center">
+  <img src="111111.JPG" alt="Gameplay Screenshot 1" width="300"/>
+</p>
 
-Relevant Console Commands for commits and push, and to fix GitHub for healthy practises:
-- git checkout <branch-name> (used to keep changes in the current branch you're working on when you transition between branches)
-- git checkout -b <branch-name> (to create a new branch with items based on the branch you are currently in)
-- git pull <branch-name> (to pull from the specific branch)
-- git merge <branch-name> (in the branch you're currently in, merge the named branch into the branch you're in)
+---
 
-If there ever is a time where main branch is not updating based on other branches anymore let the team know so that we'll find a way to fix it.
+## 🎮 Gameplay Overview
 
-Trello Practises:
-When working on a specific function, make sure that you are adding the work onto Trello too to keep the Sprint Tasks updated. Once you are ready to show it to the team drag the work to "Ready to Present" and let us know of it. Once the team has approved of it, and is also approved by our client, move the item to its relevant sprint collumn.
+Players take on the role of the Handler Hero, running through a map inspired by a Filipino street‑food market while dodging obstacles and collecting power‑ups. Every round feels fresh and unpredictable thanks to procedural generation.
 
-Setting Up Unity: 
-Please ensure you have downloaded the following;
-- Android and iOS support (File > Build Settings > Android and/or iOS downloaded)
-- Editor device is set to any Android or iOS device for testing (Edit > Project Settings > Editor > Unity Remote - Device > Any Android Device / Any iOS device)
+The objective is simple: **survive as long as possible and compete for the highest score**.
 
-Ensure that the main menu is up by default!
+Along the way, players must avoid harmful microbes and kitchen hazards. If the player collides with a microbe, the game pauses and presents a food health and safety quiz question. Answering correctly reinforces learning and allows the player to continue, turning mistakes into teachable moments.
 
+<p align="center">
+  <img src="2222222.JPG" alt="Gameplay Screenshot 2" width="300"/>
+</p>
+
+---
+
+## 🛠️ Tech Stack
+
+Unity · C# · C++ · GitHub · MS Word · Excel · Teams
+
+---
+
+## ✨ Features
+
+- **Procedurally Generated Map Design** — The map is infinite, meaning players can always push for higher scores.  
+- **Educational Quiz System** — Microbe collisions trigger one of nearly 100 food safety quiz questions to reinforce learning.  
+- **Infinite Difficulty Scaling** — The longer the player survives, the faster and more challenging the game becomes.  
+- **Cross‑Platform Support** — Built for both iOS and Android using Unity’s mobile build tools.  
+- **Kid‑Friendly Visuals** — Bright, approachable art style designed for young learners.  
+
+### 🦸 In‑Game Power‑Ups
+
+- **Apron & Gloves** — Slows down gameplay for easier navigation.  
+- **Soap Bar** — Grants temporary invincibility.  
+- **Hairnet** — Doubles collected points for a short duration.  
+
+---
+
+## 🔧 What Could Be Improved
+
+- **More Quiz Options** — Allowing users to enter their age could tailor questions to their experience level.  
+- **Additional Power‑Ups or Hazards** — More mechanics would add depth and variety to gameplay.  
+- **Difficulty Balancing** — Fine‑tuning obstacle frequency and speed scaling could create a smoother challenge curve.  
+- **Save/Progression System** — Persistent stats, achievements, or unlockables would give players long‑term goals.  
