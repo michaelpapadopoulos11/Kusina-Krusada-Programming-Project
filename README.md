@@ -1,5 +1,5 @@
 # 📱 Kusina Krusada!
-### An Educational Endless‑Runner Game for the Food Microbiology Academy
+### An Educational Mobile Game for the Food Microbiology Academy
 
 Kusina Krusada is an educational mobile game developed by a team of five as part of a final university project in collaboration with the Food Microbiology Academy, an organisation based in both Australia and the Philippines. The game teaches young players about food safety, hygiene, and microbiology through fast‑paced, engaging gameplay.
 
