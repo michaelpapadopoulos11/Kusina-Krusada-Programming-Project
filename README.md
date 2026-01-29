@@ -30,11 +30,11 @@ Along the way, players must avoid harmful microbes and kitchen hazards. If the p
 - **Game Engine:** Unity  
 - **Languages:** C#, C++  
 - **Version Control:** GitHub  
-- **Productivity Tools:** MS Word, Excel, Teams
+- **Productivity Tools:** Trello, MS Word/Excel, Teams, Discord
 
 ---
 
-## ✨ Features
+## 🔬 Features
 
 - **Procedurally Generated Map Design** — The map is infinite, meaning players can always push for higher scores.  
 - **Educational Quiz System** — Microbe collisions trigger one of nearly 100 food safety quiz questions to reinforce learning.  
@@ -42,7 +42,7 @@ Along the way, players must avoid harmful microbes and kitchen hazards. If the p
 - **Cross‑Platform Support** — Built for both iOS and Android using Unity’s mobile build tools.  
 - **Kid‑Friendly Visuals** — Bright, approachable art style designed for young learners.  
 
-### 🦸 In‑Game Power‑Ups
+### 🦠 In‑Game Power‑Ups
 
 - **Apron & Gloves** — Slows down gameplay for easier navigation.  
 - **Soap Bar** — Grants temporary invincibility.  
@@ -50,7 +50,32 @@ Along the way, players must avoid harmful microbes and kitchen hazards. If the p
 
 ---
 
-## 🔧 What Could Be Improved
+## 🎓 Learning Outcomes
+
+- **First Experience with Unity:**  
+  This was my very first time using Unity, and I learned a huge amount about game development fundamentals, mobile builds, and bringing together scripts, visuals, and mechanics into a fully functional game.  
+
+- **Game Development Skills:**  
+  Applied Unity to design and build a cross‑platform mobile game, reinforcing knowledge of C# and C++ in a practical setting.  
+
+- **Power‑Up Scripting:**  
+  Designed and implemented all in‑game power‑ups, learning how to script interactions that directly affect the main characters abilities (e.g., slowing down gameplay, granting invincibility, doubling points temporarily).  
+
+- **Educational Design:**  
+  Integrated food safety and microbiology concepts into gameplay, learning how to balance fun mechanics with meaningful educational outcomes for players!  
+
+- **Team Collaboration:**  
+  Worked effectively in a five‑person team, coordinating tasks through GitHub, MS Teams, Trello and shared documentation tools.  
+
+- **User Engagement:**  
+  Designed quiz systems and kid‑friendly visuals to keep players engaged while reinforcing learning objectives.  
+
+- **Project Management:**  
+  Delivered a complete game in collaboration with an external organisation, strengthening skills in planning, iteration, and communication.
+
+---
+
+## 🔧 Future Improvements
 
 - **More Quiz Options** — Allowing users to enter their age could tailor questions to their experience level.  
 - **Additional Power‑Ups or Hazards** — More mechanics would add depth and variety to gameplay.  
