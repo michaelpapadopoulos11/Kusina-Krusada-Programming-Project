@@ -27,7 +27,10 @@ Along the way, players must avoid harmful microbes and kitchen hazards. If the p
 
 ## 🛠️ Tech Stack
 
-Unity · C# · C++ · GitHub · MS Word · Excel · Teams
+- **Game Engine:** Unity  
+- **Languages:** C#, C++  
+- **Version Control:** GitHub  
+- **Productivity Tools:** MS Word, Excel, Teams
 
 ---
 
